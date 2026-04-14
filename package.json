@@ -1,0 +1,35 @@
+{
+  "name": "automation-hub",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "task:eternal": "ts-node src/tasks/eternal-ai/claim.ts",
+    "task:stocks": "ts-node src/tasks/stock-checker/check.ts",
+    "auth:eternal": "ts-node src/tasks/eternal-ai/login.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gtcelvam/automation-hub.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gtcelvam/automation-hub/issues"
+  },
+  "homepage": "https://github.com/gtcelvam/automation-hub#readme",
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "playwright": "^1.59.1",
+    "playwright-extra": "^4.3.6",
+    "playwright-stealth": "^0.0.1",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.2"
+  },
+  "dependencies": {
+    "puppeteer-extra-plugin-stealth": "^2.11.2"
+  }
+}

@@ -1,0 +1,10 @@
+#folder structure
+/node_modules
+/dist
+
+# Ignore the entire storage directory and its contents
+src/auth/storage/*.json
+
+
+
+folder-structure.txt
