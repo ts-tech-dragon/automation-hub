@@ -1,0 +1,31 @@
+name: Eternal AI Reward Bot
+
+on:
+  schedule:
+    - cron: "0 5 * * *" # 5:00 AM UTC (approx 10:30 AM IST)
+  workflow_dispatch: # Allows you to click a button to run it manually
+
+jobs:
+  claim:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install Playwright Browsers
+        run: npx playwright install chromium --with-deps
+
+      - name: Execute Claim
+        run: npx tsx src/tasks/eternal-ai/claim.ts
+        env:
+          # This injects your secret into the script
+          ETERNAL_SESSION_JSON: ${{ secrets.ETERNAL_SESSION_JSON }}

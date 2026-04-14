@@ -1,3 +1,6 @@
+# Ignore temporary browser profiles
+temp_user_data/
+
 #folder structure
 /node_modules
 /dist
@@ -8,3 +11,4 @@ src/auth/storage/*.json
 
 
 folder-structure.txt
+package-lock.json
