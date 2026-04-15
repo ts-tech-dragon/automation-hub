@@ -1,4 +1,5 @@
 import { Telegram } from "telegraf";
+import { sanitizeForTelegram } from "../../../lib/helpers/index.js";
 import { ENV_VARS } from "../../../lib/constants/index.js";
 
 // Initialize the Telegram client
@@ -6,14 +7,27 @@ const tg = new Telegram(ENV_VARS.TELEGRAM_BOT_TOKEN);
 
 export async function sendTelegramInterview(title: string, content: string) {
   try {
-    // 💡 Formatting tip: We wrap content in <pre> to handle code-heavy Gemini text
-    const message = `<b>🚀 ${title}</b>\n\n${content}`;
+    const cleanContent = sanitizeForTelegram(content);
+    const message = `<b>🚀 ${title}</b>\n\n${cleanContent}`;
 
-    await tg.sendMessage(ENV_VARS.TELEGRAM_CHAT_ID, message, {
-      parse_mode: "HTML",
-    });
+    // 💡 If message is still too long, we split it manually
+    if (message.length > 4000) {
+      console.log("📏 Message too long, splitting...");
+      const part1 = message.substring(0, 4000);
+      const part2 = message.substring(4000);
+      await tg.sendMessage(ENV_VARS.TELEGRAM_CHAT_ID, part1, {
+        parse_mode: "HTML",
+      });
+      await tg.sendMessage(ENV_VARS.TELEGRAM_CHAT_ID, part2, {
+        parse_mode: "HTML",
+      });
+    } else {
+      await tg.sendMessage(ENV_VARS.TELEGRAM_CHAT_ID, message, {
+        parse_mode: "HTML",
+      });
+    }
 
-    console.log("📬 Telegraf: Interview material sent!");
+    console.log(`✅ Sent: ${title}`);
   } catch (error) {
     // Telegraf provides excellent error messages automatically
     console.error("❌ Telegraf Error:", (error as Error).message);
