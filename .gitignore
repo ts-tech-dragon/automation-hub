@@ -11,5 +11,4 @@ src/auth/storage/*.json
 
 
 folder-structure.txt
-package-lock.json
 .env

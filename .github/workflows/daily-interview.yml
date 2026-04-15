@@ -23,6 +23,10 @@ jobs:
       - name: 📦 Install Dependencies
         run: npm install
 
+      - name: 📦 Install Dependencies
+        # This is the "Gold Standard" for CI/CD
+        run: npm ci
+
       - name: 🎯 Run Interview Prep Task
         # Map your GitHub Secrets to Environment Variables
         env:
