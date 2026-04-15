@@ -42,3 +42,25 @@ export async function sendTelegramInterview(title: string, content: string) {
     }
   }
 }
+
+export const sendTelegramStockImage = async (
+  content: any,
+  imagePath: string,
+) => {
+  try {
+    // 📤 NEW: Send the image to Telegram
+    console.log("📤 Sending slide to Telegram...");
+    await tg.sendPhoto(
+      ENV_VARS.TELEGRAM_CHAT_ID,
+      { source: imagePath },
+      {
+        caption: `<b>${content.headline}</b>\n\n${content.caption}`,
+        parse_mode: "HTML",
+      },
+    );
+
+    console.log("✅ Stock update sent to your phone!");
+  } catch (error) {
+    console.error("❌ Telegraf Error:", (error as Error).message);
+  }
+};

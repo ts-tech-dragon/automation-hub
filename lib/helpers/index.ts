@@ -13,3 +13,22 @@ export const sanitizeForTelegram = (text: string) => {
       .replace(/&(?!(amp|lt|gt|quot|apos);)/g, "&amp;")
   );
 };
+
+export const extractJson = (text: string) => {
+  try {
+    // Finds the first '{' and the last '}'
+    const start = text.indexOf("{");
+    const end = text.lastIndexOf("}");
+
+    if (start === -1 || end === -1) throw new Error("No JSON found");
+
+    const jsonStr = text.substring(start, end + 1);
+    return JSON.parse(jsonStr);
+  } catch (e) {
+    console.error(
+      "❌ Extraction Failed. Raw text sample:",
+      text.substring(0, 100),
+    );
+    throw e;
+  }
+};

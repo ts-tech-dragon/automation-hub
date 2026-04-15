@@ -1,0 +1,44 @@
+name: Daily Stock Market Slide
+
+on:
+  schedule:
+    # 4:00 PM IST is 10:30 AM UTC
+    - cron: "30 10 * * *"
+  workflow_dispatch: # Allows manual run
+
+jobs:
+  build-and-run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🖼️ Install Canvas Dependencies
+        # Ubuntu needs these system libraries to compile the 'canvas' package
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: 📦 Install Dependencies
+        run: npm install
+
+      - name: 🚀 Run Stock Bot
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: npx tsx src/tasks/insta-stocks/engine.ts
+
+      - name: 💾 Archive Result
+        # This saves the image in GitHub Actions so you can download it from the web UI
+        uses: actions/upload-artifact@v4
+        with:
+          name: stock-slide
+          path: temp_post.png

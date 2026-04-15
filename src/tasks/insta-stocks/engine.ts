@@ -2,6 +2,7 @@ import "dotenv/config";
 import { getMarketData } from "./fetcher.js";
 import { main as getGeminiSummary } from "./summarizer.js"; // Adjust based on your export
 import { createStockPost } from "./image-gen.js";
+import { sendTelegramStockImage } from "../../core/notifier/telegram.js";
 
 async function runWorkflow() {
   try {
@@ -19,10 +20,10 @@ async function runWorkflow() {
     }
 
     console.log(`🎨 Generating Instagram Post for: ${content.headline}`);
-    await createStockPost(content.headline, content.points);
+    const imagePath = await createStockPost(content.headline, content.points);
 
     console.log(`✅ Success! Temp image created.`);
-    console.log(`📝 CAPTION:\n${content.caption}`);
+    await sendTelegramStockImage(content, imagePath);
   } catch (err) {
     console.error("❌ Workflow failed:", err);
   }

@@ -18,20 +18,21 @@ export const getInterviewProblemPrompt: (tech: string) => string = (
   tech: string,
 ) => {
   const prompt = `
-    Create 1 unique coding challenge for ${tech}.
-    Format:
-    1. Problem Statement
-    2. Constraints
-    3. Starter Code
-    4. Solution (with explanation)
+  Generate 10 Senior-level Interview Q&A for ${tech}.
 
-    Return ONLY JSON:
-    {
-      "title": "...",
-      "problem": "...",
-      "starterCode": "...",
-      "solution": "..."
-    }
-  `;
+  CRITICAL CONSTRAINTS:
+  1. No Markdown: Do NOT use bold (**), italics (*), or lists (-) inside the JSON values.
+  2. Plain Text Only: Keep the answers as raw strings.
+  3. Character Limit: Each answer MUST be under 400 characters. 
+  4. Escaping: Ensure any double quotes inside the text are properly escaped as \\".
+
+  JSON FORMAT:
+  {
+    "tech": "${tech}",
+    "questions": [
+      { "q": "Concise Question?", "a": "Concise technical answer." }
+    ]
+  }
+`;
   return prompt;
 };

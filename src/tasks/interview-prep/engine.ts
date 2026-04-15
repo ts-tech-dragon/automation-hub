@@ -8,37 +8,51 @@ import {
 import { sendTelegramInterview } from "../../core/notifier/telegram.js";
 
 async function runInterviewPrep() {
+  const tech = getRandomTech(); // Or however you select your daily tech
+  console.log(`🚀 Starting Daily Interview Prep for: ${tech}`);
+
+  // ==========================================
+  // TASK 1: Q&A WORKER
+  // ==========================================
   try {
-    const tech = getRandomTech();
-    // 1. Run Q&A Worker
+    console.log("⏳ Generating Q&A...");
     const qaData = await generateQA(tech);
-    let qaMsg = `<b>Focus: ${qaData.tech}</b>\n\n`;
-    qaData.questions.forEach((item: any, i: number) => {
-      qaMsg += `<b>Q${i + 1}:</b> ${item.q}\n<b>A:</b> ${item.a}\n\n`;
+
+    // Format your Q&A message here (using your existing formatting logic)
+    let qaMsg = ``;
+    qaData.questions.forEach((q: any, i: number) => {
+      qaMsg += `<b>Q${i + 1}: ${q.q}</b>\n${q.a}\n\n`;
     });
 
-    // 2. Run Problem Worker
-    const probData = await generateProblemWorker(tech);
-    // 1. Starter Code (Copy-pasteable block)
-    let probMsg = `<b>🚀 Challenge: ${probData.title}</b>\n\n`;
-    probMsg += `<i>${probData.problem}</i>\n\n`;
-
-    probMsg += `<b>Starter Code:</b>\n`;
-    // Wrap in <pre><code class="language-js"> for syntax highlighting
-    probMsg += `<pre><code class="language-javascript">${probData.starterCode}</code></pre>\n\n`;
-
-    // 2. Solution (Hidden until tapped)
-    probMsg += `<b>✅ Solution (Tap to reveal):</b>\n`;
-    probMsg += `<tg-spoiler><pre><code class="language-javascript">${escapeHTML(probData.solution)}</code></pre></tg-spoiler>`;
-
-    // 3. Send to Telegram
-    await sendTelegramInterview(`INTERVIEW PREP: Q&A`, qaMsg);
-    await sendTelegramInterview(`DAILY CODING CHALLENGE`, probMsg);
-
-    console.log("✅ Interview pack sent to Telegram!");
-  } catch (error) {
-    console.log("Error in interview prep workflow:", (error as Error).message);
+    await sendTelegramInterview(`INTERVIEW Q&A: ${tech}`, qaMsg);
+    console.log("✅ Q&A successfully sent!");
+  } catch (error: any) {
+    // If Q&A fails, we catch it HERE, log it, and MOVE ON to the next task.
+    console.error(
+      "❌ Q&A Worker failed, but continuing workflow...",
+      error.message,
+    );
   }
+
+  // ==========================================
+  // TASK 2: PROBLEM WORKER
+  // ==========================================
+  try {
+    console.log("⏳ Generating Problem...");
+    const probData = await generateProblemWorker(tech);
+
+    // Format your Problem message here
+    let probMsg = `<i>${probData.problem}</i>\n\n`;
+    probMsg += `<b>Starter Code:</b>\n<pre><code class="language-javascript">${probData.starterCode}</code></pre>\n\n`;
+    probMsg += `<b>✅ Solution:</b>\n<tg-spoiler><pre><code class="language-javascript">${probData.solution}</code></pre></tg-spoiler>`;
+
+    await sendTelegramInterview(`DAILY CHALLENGE: ${probData.title}`, probMsg);
+    console.log("✅ Problem successfully sent!");
+  } catch (error: any) {
+    console.error("❌ Problem Worker failed.", error.message);
+  }
+
+  console.log("🏁 Interview Prep Workflow Finished.");
 }
 
 runInterviewPrep();
