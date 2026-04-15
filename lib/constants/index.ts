@@ -17,6 +17,9 @@ export const GEMINI_MODELS = {
   // 🖼️ The "Artists" (Specialized)
   IMAGE_3_1: "gemini-3.1-flash-image-preview", // For vision/image tasks
   LIVE_3_1: "gemini-3.1-flash-live-preview", // For real-time audio/voice
+
+  // 🏎️ The "Speedsters" (1,000 Requests/Day)
+  LITE_2_5: "gemini-2.5-flash-lite",
 } as const;
 
 // 💡 Helper to pick the best model for the situation

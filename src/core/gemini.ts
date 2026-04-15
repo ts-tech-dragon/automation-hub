@@ -10,6 +10,7 @@ const FALLBACK_CHAIN = [
   GEMINI_MODELS.FLASH_3,
   GEMINI_MODELS.FLASH_2_5,
   GEMINI_MODELS.FLASH_LITE_3_1,
+  GEMINI_MODELS.LITE_2_5,
 ];
 
 export async function askGemini(prompt: string, isJson = true) {
@@ -26,7 +27,7 @@ export async function askGemini(prompt: string, isJson = true) {
         // 🚀 ALL settings MUST be inside this 'config' object
         config: {
           responseMimeType: isJson ? "application/json" : "text/plain",
-          maxOutputTokens: 1500,
+          maxOutputTokens: 4096, // 🚀 Bump this to 4k to allow full code solutions
           temperature: 0.1,
         },
       });
@@ -35,7 +36,7 @@ export async function askGemini(prompt: string, isJson = true) {
 
       if (!rawText) throw new Error("EMPTY_RESPONSE");
 
-      return isJson ? extractJson(rawText) : rawText;
+      return isJson ? JSON.parse(rawText) : rawText;
     } catch (error: any) {
       // ... your existing error handling ...
       lastError = error;

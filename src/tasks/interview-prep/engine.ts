@@ -18,6 +18,8 @@ async function runInterviewPrep() {
     console.log("⏳ Generating Q&A...");
     const qaData = await generateQA(tech);
 
+    console.log("qaData : ", qaData);
+
     // Format your Q&A message here (using your existing formatting logic)
     let qaMsg = ``;
     qaData.questions.forEach((q: any, i: number) => {
