@@ -1,7 +1,9 @@
 export const ENV_VARS = {
   GEMINI_API_KEY: process.env.GEMINI_API_KEY || "",
+  PUTER_API_KEY: process.env.PUTER_API_KEY || "",
   TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN || "",
   TELEGRAM_CHAT_ID: process.env.TELEGRAM_CHAT_ID || "",
+  MARKETAUX_API_KEY: process.env.MARKETAUX_API_KEY || "",
   MOCK_GEMINI: process.env.MOCK_GEMINI || "true",
 };
 
@@ -20,9 +22,21 @@ export const GEMINI_MODELS = {
 
   // 🏎️ The "Speedsters" (1,000 Requests/Day)
   LITE_2_5: "gemini-2.5-flash-lite",
+  FLASH_IMAGE_2_5: "gemini-2.5-flash-image",
+} as const;
+
+export const PUTER_MODELS = {
+  GPT_1_5: "gpt-image-1.5", //→ Best quality (OpenAI style)
+  GEMINI_3_PRO_IMAGE: "gemini-3-pro-image", // → Nano Banana (very good)
+  GROK_2_IMAGE: "grok-2-image", // → xAI Grok image
+  FLUX_1_1_PRO: "flux-1.1-pro", // → Excellent for realistic/infographics
 } as const;
 
 // 💡 Helper to pick the best model for the situation
 export const DEFAULT_GEMINI_MODEL = GEMINI_MODELS.FLASH_2_5;
 
 export const INSTA_PAGE_NAME = "@tsfinnews";
+
+export const API_URLS = {
+  MARKET_AUX_NEWS: "https://api.marketaux.com/v1/news/all",
+};

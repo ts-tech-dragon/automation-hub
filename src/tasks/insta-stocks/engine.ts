@@ -3,27 +3,39 @@ import { getMarketData } from "./fetcher.js";
 import { main as getGeminiSummary } from "./summarizer.js"; // Adjust based on your export
 import { createStockPost } from "./image-gen.js";
 import { sendTelegramStockImage } from "../../core/notifier/telegram.js";
+import { fetchIndianMarketNews } from "./newsFetcher.js";
+import { generateStockSummaryImage } from "./generator.js";
+import { mockGeminiSummaryResponse } from "../../../lib/constants/mockData.js";
 
 async function runWorkflow() {
   try {
     console.log("📈 Fetching Live Market Data...");
     const marketData = await getMarketData();
 
-    const newsHeadlines = `Nifty reclaimed 24,150; Sensex jumps 1,160 pts. Railtel surged 13%. US-Iran peace talks cool oil prices.`;
-
+    const newsHeadlines = await fetchIndianMarketNews();
     console.log("🤖 Gemini is writing the headline...");
     // 💡 IMPORTANT: Now 'content' will actually contain the data!
     const content = await getGeminiSummary(marketData, newsHeadlines);
+    // const content = mockGeminiSummaryResponse; // Using mock data for testing
 
     if (!content || !content.headline) {
       throw new Error("Gemini returned empty content");
     }
 
-    console.log(`🎨 Generating Instagram Post for: ${content.headline}`);
-    const imagePath = await createStockPost(content.headline, content.points);
+    // console.log(`🎨 Generating Instagram Post for: ${content.headline}`);
+    const imagePath = await createStockPost(content);
+    // const imagePath = (await generateStockSummaryImage(
+    //   marketData,
+    //   newsHeadlines,
+    //   content,
+    // )) as string;
 
-    console.log(`✅ Success! Temp image created.`);
-    await sendTelegramStockImage(content, imagePath);
+    if (imagePath) {
+      console.log(`✅ Success! Temp image created.`);
+      await sendTelegramStockImage(content, imagePath);
+      return;
+    }
+    console.log("Image Path is not created!!!");
   } catch (err) {
     console.error("❌ Workflow failed:", err);
   }

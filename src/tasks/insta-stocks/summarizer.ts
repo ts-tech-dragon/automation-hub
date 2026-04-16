@@ -8,6 +8,7 @@ export async function main(marketData: marketData, newsHeadlines: string) {
     console.log("📡 Connecting to Gemini 3 Flash...");
     const prompt = getDailyStockSummaryPrompt(marketData, newsHeadlines);
     const response = await askGemini(prompt, true);
+
     return response;
   } catch (error: unknown) {
     console.error("❌ Error connecting to Gemini:", (error as Error).message);

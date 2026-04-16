@@ -32,3 +32,47 @@ export const extractJson = (text: string) => {
     throw e;
   }
 };
+
+export function formatNewsForAI(newsList: { title: string }[]) {
+  return newsList
+    .map((item, index) => {
+      return `${index + 1}. ${item.title}`;
+    })
+    .join("\n");
+}
+
+export function measureTextHeight(
+  ctx: any,
+  text: string,
+  maxWidth: number,
+  lineHeight: number,
+) {
+  const words = text.split(" ");
+  let line = "";
+  let lines = 1;
+
+  for (let n = 0; n < words.length; n++) {
+    const testLine = line + words[n] + " ";
+    const metrics = ctx.measureText(testLine);
+    if (metrics.width > maxWidth && n > 0) {
+      line = words[n] + " ";
+      lines++;
+    } else {
+      line = testLine;
+    }
+  }
+  return lines * lineHeight;
+}
+
+export const getFormatedTodayDate = () => {
+  const now = new Date();
+
+  const formattedDate = new Intl.DateTimeFormat("en-GB", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  })
+    .format(now)
+    .replace(/\//g, "-");
+  return formattedDate;
+};
