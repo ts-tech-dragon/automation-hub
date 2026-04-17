@@ -53,7 +53,7 @@ async function runInterviewPrep() {
 
     // ✅ Solution (spoiler + inline code)
     probMsg += `<b>✅ Solution:</b>\n`;
-    probMsg += `<pre>${escapeHTML(probData.solution)}</pre>`;
+    probMsg += `<pre><code class="language-javascript">${escapeHTML(probData.solution)}</code></pre>`;
 
     await sendTelegramInterview(`DAILY CHALLENGE: ${probData.title}`, probMsg);
     console.log("✅ Problem successfully sent!");
