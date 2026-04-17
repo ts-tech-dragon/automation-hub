@@ -76,3 +76,48 @@ export const getFormatedTodayDate = () => {
     .replace(/\//g, "-");
   return formattedDate;
 };
+
+export function repairJSON(raw: string) {
+  try {
+    // Try normal parse first
+    return JSON.parse(raw);
+  } catch (e) {}
+
+  let fixed = raw;
+
+  // ✅ Convert single quotes → double quotes
+  fixed = fixed.replace(/'/g, '"');
+
+  // ✅ Add quotes to keys
+  fixed = fixed.replace(/(\w+):/g, '"$1":');
+
+  // ✅ Close open quotes
+  const quoteCount = (fixed.match(/"/g) || []).length;
+  if (quoteCount % 2 !== 0) {
+    fixed += '"';
+  }
+
+  const openCurly = (fixed.match(/{/g) || []).length;
+  const closeCurly = (fixed.match(/}/g) || []).length;
+  fixed += "}";
+
+  // ✅ Close brackets
+  const openBrackets = (fixed.match(/\[/g) || []).length;
+  const closeBrackets = (fixed.match(/\]/g) || []).length;
+  fixed += "]".repeat(openBrackets - closeBrackets);
+
+  // ✅ Close curly braces
+  // const openCurly = (fixed.match(/{/g) || []).length;
+  // const closeCurly = (fixed.match(/}/g) || []).length;
+  fixed += "}";
+
+  try {
+    return JSON.parse(fixed);
+  } catch (e) {
+    return null;
+  }
+}
+
+export function escapeHTML(str: string) {
+  return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}

@@ -1,7 +1,8 @@
 import "dotenv/config";
 import { GoogleGenAI } from "@google/genai";
 import { GEMINI_MODELS, ENV_VARS } from "../../lib/constants/index.js";
-import { extractJson } from "../../lib/helpers/index.js";
+import { extractJson, repairJSON } from "../../lib/helpers/index.js";
+import { MOCK_BROKEN_RESPONESE } from "../../lib/constants/interview-prep/mocks.js";
 
 // Initialize the new unified client
 const ai = new GoogleGenAI({ apiKey: ENV_VARS.GEMINI_API_KEY });
@@ -22,15 +23,17 @@ export async function askGemini(prompt: string, isJson = true) {
 
       const response = await ai.models.generateContent({
         model: modelName,
-        contents: prompt, // You can just pass the raw string here in the new SDK
+        contents: [{ role: "user", parts: [{ text: prompt }] }], // You can just pass the raw string here in the new SDK
 
         // 🚀 ALL settings MUST be inside this 'config' object
         config: {
           responseMimeType: isJson ? "application/json" : "text/plain",
-          maxOutputTokens: 4096, // 🚀 Bump this to 4k to allow full code solutions
+          // maxOutputTokens: 8192, // 🚀 Bump this to 4k to allow full code solutions
           temperature: 0.1,
         },
       });
+
+      // const response = MOCK_BROKEN_RESPONESE;
 
       const rawText = response.text || "";
 
@@ -41,15 +44,7 @@ export async function askGemini(prompt: string, isJson = true) {
           // If it's already an object, just return it
           if (typeof rawText === "object") return rawText;
 
-          // 🚀 SAFETY NET: Strip Markdown backticks (e.g. ```json ... ```)
-          // This finds everything between the first '{' and the last '}'
-          const jsonMatch = rawText.match(/\{[\s\S]*\}/);
-          const cleanedText = jsonMatch ? jsonMatch[0] : rawText;
-
-          // 🚀 SAFETY NET: Remove trailing commas inside arrays/objects
-          const finalJson = cleanedText.replace(/,\s*([\]\}])/g, "$1");
-
-          return JSON.parse(finalJson);
+          return repairJSON(rawText);
         } catch (e) {
           console.error("❌ JSON Parse Failed. Check AI output above.");
           throw new Error(`INVALID_JSON: ${(e as Error).message}`);

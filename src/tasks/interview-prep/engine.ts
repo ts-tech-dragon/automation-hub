@@ -6,6 +6,7 @@ import {
   getRandomTech,
 } from "../../../lib/helpers/interview-prep/index.js";
 import { sendTelegramInterview } from "../../core/notifier/telegram.js";
+import { MOCK_PROPER_RESPONSE_OBJ } from "../../../lib/constants/interview-prep/mocks.js";
 
 async function runInterviewPrep() {
   const tech = getRandomTech(); // Or however you select your daily tech
@@ -17,13 +18,14 @@ async function runInterviewPrep() {
   try {
     console.log("⏳ Generating Q&A...");
     const qaData = await generateQA(tech);
-
-    console.log("qaData : ", qaData);
+    // const qaData = MOCK_PROPER_RESPONSE_OBJ;
 
     // Format your Q&A message here (using your existing formatting logic)
     let qaMsg = ``;
-    qaData.questions.forEach((q: any, i: number) => {
-      qaMsg += `<b>Q${i + 1}: ${q.q}</b>\n${q.a}\n\n`;
+
+    qaData.questions.forEach((q: { q: string; a: string }, i: number) => {
+      qaMsg += `<b>Q${i + 1}: ${escapeHTML(q.q)}</b>\n`;
+      qaMsg += `<pre><code>${escapeHTML(q.a)}</code></pre>\n\n`;
     });
 
     await sendTelegramInterview(`INTERVIEW Q&A: ${tech}`, qaMsg);
@@ -42,11 +44,16 @@ async function runInterviewPrep() {
   try {
     console.log("⏳ Generating Problem...");
     const probData = await generateProblemWorker(tech);
+    // 🧠 Build message
+    let probMsg = `<i>${escapeHTML(probData.problem)}</i>\n\n`;
 
-    // Format your Problem message here
-    let probMsg = `<i>${probData.problem}</i>\n\n`;
-    probMsg += `<b>Starter Code:</b>\n<pre><code class="language-javascript">${probData.starterCode}</code></pre>\n\n`;
-    probMsg += `<b>✅ Solution:</b>\n<tg-spoiler><pre><code class="language-javascript">${probData.solution}</code></pre></tg-spoiler>`;
+    // ✅ Starter Code (block)
+    probMsg += `<b>Starter Code:</b>\n`;
+    probMsg += `<pre>${escapeHTML(probData.starterCode)}</pre>\n\n`;
+
+    // ✅ Solution (spoiler + inline code)
+    probMsg += `<b>✅ Solution:</b>\n`;
+    probMsg += `<pre>${escapeHTML(probData.solution)}</pre>`;
 
     await sendTelegramInterview(`DAILY CHALLENGE: ${probData.title}`, probMsg);
     console.log("✅ Problem successfully sent!");

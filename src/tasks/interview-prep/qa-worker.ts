@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { ENV_VARS } from "../../../lib/constants/index.js";
 import { MOCK_QA_RESPONSE } from "../../../lib/constants/interview-prep/mocks.js";
 import { getRandomTech } from "../../../lib/helpers/interview-prep/index.js";
@@ -22,5 +23,3 @@ export async function generateQA(tech?: string) {
     throw error;
   }
 }
-
-generateQA();

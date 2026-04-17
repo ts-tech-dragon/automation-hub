@@ -18,11 +18,16 @@ export const getTenQAPrompt: (tech: string) => string = (tech: string) => {
 
     JSON FORMAT:
     {
-        "tech": "${tech}",
-        "questions": [
+      "tech": "${tech}",
+      "questions": [
+        { "q": "Concise Question?", "a": "Concise technical answer." },
         { "q": "Concise Question?", "a": "Concise technical answer." }
-        ]
+      ]
     }
+    NOTE:
+    Return COMPLETE JSON.
+    Do not truncate.
+    Ensure all questions have answers.
   `;
   return prompt;
 };
