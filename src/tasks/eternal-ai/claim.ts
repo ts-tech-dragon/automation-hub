@@ -47,7 +47,7 @@ async function claimRewards() {
       await page.screenshot({ path: "debug-popup-failed.png" });
     }
   } catch (err) {
-    console.error("❌ Task failed:", err.message);
+    console.error("❌ Task failed:", (err as Error).message);
     process.exit(1);
   } finally {
     await browser.close();

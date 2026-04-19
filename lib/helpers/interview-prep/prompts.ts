@@ -53,3 +53,30 @@ export const getInterviewProblemPrompt: (tech: string) => string = (
   `;
   return prompt;
 };
+
+export const getSmallInterviewProblemPrompt = () => {
+  const prompt = `
+    Generate a JSON result for this below query
+    Act as a JavaScript coding tutor. Generate a unique 'Simple' to 'Easy' difficulty JavaScript coding challenge.
+The response must follow this strict structure:
+
+title: A short name for the problem.
+Description: Explain the logic/math behind the problem (e.g., explaining what a Prime number or Factorial is).
+Constraints: Mention any edge cases to handle (e.g., negative numbers, empty strings).
+Solution: Provide a clean, commented JavaScript function.
+Test Cases: Provide 3 console.log() examples.
+Rules: > - Do not repeat common problems like 'Hello World'.
+
+Focus on: Arrays, Strings, Basic Math, or Loops.
+Keep the explanation concise and the code modern (ES6+).
+
+    Return ONLY JSON:
+    {
+      "title": "...",
+      "problem": "...",
+      "starterCode": "...",
+      "solution": "..."
+    }
+  `;
+  return prompt;
+};
