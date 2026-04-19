@@ -11,17 +11,92 @@ const yahooFinance = new YahooFinance({ suppressNotices: ["yahooSurvey"] });
 
 export async function getMarketData() {
   // Fetching NIFTY 50 (^NSEI) and SENSEX (^BSESN)
-  const symbols = ["^NSEI", "^BSESN"];
+  const symbols = [
+    // 🇮🇳 India
+    "^NSEI",
+    "^BSESN",
+    "^NSEBANK",
+
+    // 🛢️ Commodities
+    "BZ=F",
+
+    // 💱 Currency
+    "INR=X",
+
+    // ⚠️ Indian Volatility
+    "^INDIAVIX",
+  ];
   const results: any[] = await yahooFinance.quote(symbols);
 
   const nifty = results.find((r) => r.symbol === "^NSEI");
   const sensex = results.find((r) => r.symbol === "^BSESN");
+  const crudeOil = results.find((r) => r.symbol === "BZ=F");
+  const inr = results.find((r) => r.symbol === "INR=X");
+  const indiaVix = results.find((r) => r.symbol === "^INDIAVIX");
 
   return {
     nifty: `${nifty?.regularMarketPrice} (${nifty?.regularMarketChangePercent?.toFixed(2)}%)`,
     sensex: `${sensex?.regularMarketPrice} (${sensex?.regularMarketChangePercent?.toFixed(2)}%)`,
+    crudeOil: `${crudeOil?.regularMarketPrice} (${crudeOil?.regularMarketChangePercent?.toFixed(2)}%)`,
+    inr: `${inr?.regularMarketPrice} (${inr?.regularMarketChangePercent?.toFixed(2)}%)`,
+    indiaVix: `${indiaVix?.regularMarketPrice} (${indiaVix?.regularMarketChangePercent?.toFixed(2)}%)`,
     timestamp: new Date().toLocaleDateString("en-IN", {
       timeZone: "Asia/Kolkata",
     }),
+  };
+}
+
+async function getWeeklyOHLC() {
+  const today = new Date();
+  const lastWeek = new Date();
+  lastWeek.setDate(today.getDate() - 7);
+
+  const data = await yahooFinance.historical("^NSEI", {
+    period1: lastWeek,
+    period2: today,
+    interval: "1d", // 👈 THIS gives daily OHLC
+  });
+
+  return data.map((d) => ({
+    date: d.date,
+    open: d.open,
+    high: d.high,
+    low: d.low,
+    close: d.close,
+  }));
+}
+
+async function getMetalsWeeklyData() {
+  const today = new Date();
+  const lastWeek = new Date();
+  lastWeek.setDate(today.getDate() - 7);
+
+  const gold = await yahooFinance.historical("GC=F", {
+    period1: lastWeek,
+    period2: today,
+    interval: "1d",
+  });
+
+  const silver = await yahooFinance.historical("SI=F", {
+    period1: lastWeek,
+    period2: today,
+    interval: "1d",
+  });
+
+  return {
+    gold: gold.map((d) => ({
+      date: d.date,
+      open: d.open,
+      high: d.high,
+      low: d.low,
+      close: d.close,
+    })),
+    silver: silver.map((d) => ({
+      date: d.date,
+      open: d.open,
+      high: d.high,
+      low: d.low,
+      close: d.close,
+    })),
   };
 }
