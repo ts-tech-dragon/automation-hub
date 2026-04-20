@@ -34,6 +34,11 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          IMGBB_API_KEY: ${{secrets.IMGBB_API_KEY}}
+          IG_USER_TOKEN: ${{secrets.IG_USER_TOKEN}}
+          FB_USER_TOKEN: ${{secrets.FB_USER_TOKEN}}
+          FB_PAGE_ID: ${{secrets.FB_PAGE_ID}}
+          IG_USER_ID: ${{secrets.IG_USER_ID}}
         run: npx tsx src/tasks/insta-stocks/engine.ts
 
       - name: 💾 Archive Result

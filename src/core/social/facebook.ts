@@ -87,7 +87,7 @@ export async function broadcastUpdate(imageUrl: string, content: content) {
 
     // Try Instagram first and LOG EVERYTHING
     const publicURL = await uploadToImgBB(imageUrl);
-    console.log("public URL : ", publicURL);
+
     try {
       const igId = await postToInstagram(publicURL, content);
       console.log("✅ IG SUCCESS ID:", igId);
