@@ -18,7 +18,7 @@ async function runWorkflow() {
     console.log("🤖 Gemini is writing the headline...");
     // 💡 IMPORTANT: Now 'content' will actually contain the data!
     const content = await getGeminiSummary(marketData, newsHeadlines);
-    // console.log("content : ", content);
+
     // const content = mockGeminiSummaryResponse; // Using mock data for testing
 
     if (!content || !content.headline) {
@@ -35,7 +35,7 @@ async function runWorkflow() {
 
     if (imagePath) {
       console.log(`✅ Success! Temp image created.`);
-      await broadcastUpdate(imagePath, content);
+      // await broadcastUpdate(imagePath, content);
       await sendTelegramStockImage(content, imagePath);
       return;
     }

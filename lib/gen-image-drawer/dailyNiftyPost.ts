@@ -13,7 +13,7 @@ import { instaMarketSummaryPostTheme } from "../constants/theme.js";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // NOW this will work:
-registerFont(path.join(__dirname, "../../assets/fonts/Inter-Bold.ttf"), {
+registerFont(path.join(__dirname, "../../assets/fonts/inter_bold.ttf"), {
   family: "Inter",
 });
 
