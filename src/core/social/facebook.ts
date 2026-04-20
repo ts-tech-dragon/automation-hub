@@ -11,13 +11,13 @@ const TOKEN = ENV_VARS.FB_USER_TOKEN;
  */
 type imageUrl = string;
 type content = { caption: string };
-async function postToInstagram(imageUrl: imageUrl, caption: content) {
+async function postToInstagram(imageUrl: imageUrl, content: content) {
   // Step 1: Create Media Container
   const container = await axios.post(
     `https://graph.facebook.com/v20.0/${IG_ID}/media`,
     {
       image_url: imageUrl,
-      caption: caption.caption,
+      caption: content.caption,
       access_token: TOKEN,
     },
   );
@@ -45,7 +45,7 @@ async function postToInstagram(imageUrl: imageUrl, caption: content) {
 /**
  * 📘 POST TO FACEBOOK (Direct Upload)
  */
-async function postToFacebook(imageUrl: string, caption: string) {
+async function postToFacebook(imageUrl: string, content: content) {
   const userToken = process.env.FB_USER_TOKEN;
   const pageId = process.env.FB_PAGE_ID; // Should be 1056764777524801
 
@@ -73,7 +73,7 @@ async function postToFacebook(imageUrl: string, caption: string) {
     `https://graph.facebook.com/v20.0/${pageId}/photos`,
     {
       url: imageUrl,
-      caption: caption,
+      caption: content.caption,
       access_token: targetPage.access_token, // This is the magic key
     },
   );
@@ -81,7 +81,7 @@ async function postToFacebook(imageUrl: string, caption: string) {
   return fbRes.data.id;
 }
 
-export async function broadcastUpdate(imageUrl: string, caption: string) {
+export async function broadcastUpdate(imageUrl: string, content: content) {
   try {
     console.log("🚀 Debugging Broadcast...");
 
@@ -89,19 +89,19 @@ export async function broadcastUpdate(imageUrl: string, caption: string) {
     const publicURL = await uploadToImgBB(imageUrl);
     console.log("public URL : ", publicURL);
     try {
-      // const igId = await postToInstagram(publicURL, caption);
-      // console.log("✅ IG SUCCESS ID:", igId);
+      const igId = await postToInstagram(publicURL, content);
+      console.log("✅ IG SUCCESS ID:", igId);
     } catch (err: any) {
       console.error("❌ IG FAILED:", err.response?.data || err.message);
     }
 
     // Try Facebook and LOG EVERYTHING
-    try {
-      const fbId = await postToFacebook(publicURL, caption);
-      console.log("✅ FB SUCCESS ID:", fbId);
-    } catch (err: any) {
-      console.error("❌ FB FAILED:", err.response?.data || err.message);
-    }
+    // try {
+    //   const fbId = await postToFacebook(publicURL, content);
+    //   console.log("✅ FB SUCCESS ID:", fbId);
+    // } catch (err: any) {
+    //   console.error("❌ FB FAILED:", err.response?.data || err.message);
+    // }
   } catch (error) {
     console.log("Error : ", (error as Error).message);
   }
