@@ -35,7 +35,7 @@ async function runWorkflow() {
 
     if (imagePath) {
       console.log(`✅ Success! Temp image created.`);
-      // await broadcastUpdate(imagePath, content);
+      await broadcastUpdate(imagePath, content);
       await sendTelegramStockImage(content, imagePath);
       return;
     }
