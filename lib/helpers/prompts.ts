@@ -9,7 +9,7 @@ export const getDailyStockSummaryPrompt = (
       Create a JSON summary of the most important things that happened TODAY (${today}) in indian stock market (use the current date) including ${rawNews} and Nifty current price ${marketData?.nifty}, sensex current price ${marketData?.sensex}, brent crude oil current price ${marketData?.crudeOil}, inr current price ${marketData?.inr}, and india vix current price ${marketData?.indiaVix} which will reflect or affect the Indian stock market tomorrow morning. Focus on Indian market momentum + global momentum. This prompt will be run every night to quickly check market & global cues.
 NOTE: Do your reearch and use your real-time knowledge of today's closing data, news, FII/DII flows, global cues, commodities, geopolitics, earnings, RBI/policy updates, or any event that can move Nifty/Sensex at opening and incorporate that into the summary. Do NOT make up any news or data. Use only real, accurate information that you have access to right now.
 Respond STRICTLY with ONLY a valid JSON object (no extra text, no markdown, no explanations). Use real-time knowledge of today's closing data, news, FII/DII flows, global cues, commodities, geopolitics, earnings, RBI/policy updates, or any event that can move Nifty/Sensex at opening.
-
+Note: on JSON, for the caption key, create the caption output alone in conversation tamil but in english letters(tanglish).
 The JSON must follow this exact structure:
 
   {
@@ -32,8 +32,8 @@ The JSON must follow this exact structure:
 export const generateStockInfographicPrompt = (
   marketData: any,
   rawNews: string,
-  content: string,
 ) => {
+  const today = getFormatedTodayDate();
   return `Create a high-resolution, clean, professional infographic image in Instagram portrait format (1080 × 1350 pixels, 4:5 ratio) for the data added at the last that looks EXACTLY like the reference image provided (same white background, same teal color accents, same box layout with two columns and three rows, same font style, same spacing, same thin connecting lines, same modern business infographic style).
 
 Do NOT change the layout, colors, or structure. Only update the content inside.
@@ -83,7 +83,7 @@ Rules:
 - Use real, accurate numbers and news only.  
 - Generate the complete image directly with all sections filled. Do not output any extra text, explanations, or questions.
 
-Here is the data ${marketData} and ${rawNews} and ${content} that you should use to populate the infographic with the most recent market information.
+Here is the data summary of the most important things that happened TODAY (${today}) in indian stock market (use the current date) including ${rawNews} and Nifty current price ${marketData?.nifty}, sensex current price ${marketData?.sensex}, brent crude oil current price ${marketData?.crudeOil}, inr current price ${marketData?.inr}, and india vix current price ${marketData?.indiaVix} that you should use to populate the infographic with the most recent market information.
 
 Now generate the image.`;
 };

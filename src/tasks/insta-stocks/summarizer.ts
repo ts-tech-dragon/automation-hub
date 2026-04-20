@@ -1,5 +1,8 @@
 import "dotenv/config"; // To load your GEMINI_API_KEY from .env
-import { getDailyStockSummaryPrompt } from "../../../lib/helpers/prompts.js";
+import {
+  getDailyStockSummaryPrompt,
+  generateStockInfographicPrompt,
+} from "../../../lib/helpers/prompts.js";
 import type { marketData } from "../../../types/index.js";
 import { askGemini } from "../../core/gemini.js";
 

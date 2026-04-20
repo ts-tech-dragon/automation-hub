@@ -6,6 +6,8 @@ import { sendTelegramStockImage } from "../../core/notifier/telegram.js";
 import { fetchIndianMarketNews } from "./newsFetcher.js";
 import { generateStockSummaryImage } from "./generator.js";
 import { mockGeminiSummaryResponse } from "../../../lib/constants/mockData.js";
+import { broadcastUpdate } from "../../core/social/facebook.js";
+import { generateProfessionalSlide } from "../../../lib/gen-image-drawer/dailyNiftyPost.js";
 
 async function runWorkflow() {
   try {
@@ -16,6 +18,7 @@ async function runWorkflow() {
     console.log("🤖 Gemini is writing the headline...");
     // 💡 IMPORTANT: Now 'content' will actually contain the data!
     const content = await getGeminiSummary(marketData, newsHeadlines);
+    // console.log("content : ", content);
     // const content = mockGeminiSummaryResponse; // Using mock data for testing
 
     if (!content || !content.headline) {
@@ -23,7 +26,7 @@ async function runWorkflow() {
     }
 
     // console.log(`🎨 Generating Instagram Post for: ${content.headline}`);
-    const imagePath = await createStockPost(content);
+    const imagePath = await generateProfessionalSlide(content);
     // const imagePath = (await generateStockSummaryImage(
     //   marketData,
     //   newsHeadlines,
@@ -32,6 +35,7 @@ async function runWorkflow() {
 
     if (imagePath) {
       console.log(`✅ Success! Temp image created.`);
+      await broadcastUpdate(imagePath, content);
       await sendTelegramStockImage(content, imagePath);
       return;
     }

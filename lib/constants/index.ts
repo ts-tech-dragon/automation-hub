@@ -5,6 +5,12 @@ export const ENV_VARS = {
   TELEGRAM_CHAT_ID: process.env.TELEGRAM_CHAT_ID || "",
   MARKETAUX_API_KEY: process.env.MARKETAUX_API_KEY || "",
   MOCK_GEMINI: process.env.MOCK_GEMINI || "true",
+
+  //Facebook Instagram
+  IG_USER_TOKEN: process.env.IG_USER_TOKEN,
+  FB_USER_TOKEN: process.env.FB_USER_TOKEN,
+  FB_PAGE_ID: process.env.FB_PAGE_ID,
+  IG_USER_ID: process.env.IG_USER_ID,
 };
 
 export const GEMINI_MODELS = {
@@ -35,7 +41,7 @@ export const PUTER_MODELS = {
 // 💡 Helper to pick the best model for the situation
 export const DEFAULT_GEMINI_MODEL = GEMINI_MODELS.FLASH_2_5;
 
-export const INSTA_PAGE_NAME = "@tsfinnews";
+export const INSTA_PAGE_NAME = process.env.INSTA_PAGE_NAME;
 
 export const API_URLS = {
   MARKET_AUX_NEWS: "https://api.marketaux.com/v1/news/all",
