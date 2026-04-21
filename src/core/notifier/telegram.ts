@@ -1,6 +1,8 @@
 import { Telegram } from "telegraf";
-import { sanitizeForTelegram } from "../../../lib/helpers/index.js";
+import { formatJob, sanitizeForTelegram } from "../../../lib/helpers/index.js";
 import { ENV_VARS } from "../../../lib/constants/index.js";
+import { message } from "telegraf/filters";
+import { ComputeTokensResponse } from "@google/genai";
 
 // Initialize the Telegram client
 const tg = new Telegram(ENV_VARS.TELEGRAM_BOT_TOKEN);
@@ -60,6 +62,31 @@ export const sendTelegramStockImage = async (
     );
 
     console.log("✅ Stock update sent to your phone!");
+  } catch (error) {
+    console.error("❌ Telegraf Error:", (error as Error).message);
+  }
+};
+
+export const sendTelegramJobListing = async (
+  message: { title: string; company: string; location: string; link: string }[],
+  base: { src: string; loc: string },
+) => {
+  const { src, loc } = base;
+  try {
+    console.log("Message Length : ", message.length);
+
+    // 📤 NEW: Send the image to Telegram
+    console.log("📤 Sending job listing to Telegram...");
+
+    let formattedMessage = `💼 New ${src} Job Listing for ${loc}\n`;
+
+    formattedMessage += message.map(formatJob).join("------------------");
+
+    await tg.sendMessage(ENV_VARS.TELEGRAM_CHAT_ID, formattedMessage, {
+      parse_mode: "Markdown",
+    });
+
+    console.log("✅ Job listing sent to your phone!");
   } catch (error) {
     console.error("❌ Telegraf Error:", (error as Error).message);
   }

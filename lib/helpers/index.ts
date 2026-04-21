@@ -1,3 +1,8 @@
+import dayjs from "dayjs";
+import "dayjs/locale/en";
+
+dayjs.locale("en");
+
 /**
  * Removes any HTML tags that Telegram doesn't support
  */
@@ -120,4 +125,37 @@ export function repairJSON(raw: string) {
 
 export function escapeHTML(str: string) {
   return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+export function isLocationMatch(
+  scrapedLocation: string,
+  locations: string,
+): boolean {
+  const normalizedScraped = scrapedLocation.toLowerCase();
+
+  return normalizedScraped.includes(locations.toLowerCase());
+}
+
+export function pad(str: string, length: number) {
+  return (str || "").padEnd(length, " ").slice(0, length);
+}
+
+export function formatJob(job: {
+  title: string;
+  company: string;
+  location: string;
+  link: string;
+}) {
+  return `
+🚀 *${job.title}*
+🏢 ${job.company}
+📍 ${job.location}
+⏱ ${dayjs("2026-01-03").format("DD,MMM,YYYY")}
+👉 [Apply Now](${job.link})
+`;
+}
+
+export function splitInHalf(arr: any[]) {
+  const mid = Math.ceil(arr.length / 2);
+  return [arr.slice(0, mid), arr.slice(mid)];
 }

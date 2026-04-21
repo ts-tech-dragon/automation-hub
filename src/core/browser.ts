@@ -11,10 +11,12 @@ chromium.use(stealthPlugin);
 export const getBrowser = async (headless: boolean = true) => {
   const options: any = {
     headless,
+    channel: "chrome",
     args: [
       "--disable-blink-features=AutomationControlled",
       "--no-sandbox",
       "--disable-dev-shm-usage",
+      "--start-maximized",
     ],
   };
 
