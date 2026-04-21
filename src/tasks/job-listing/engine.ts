@@ -13,6 +13,7 @@ async function runJobListing() {
         RUN_INDEED_SCRAPER_PAYLOAD,
         location,
       );
+      if (!jobsList.length) return console.log("No Jobs Found 😐!!!");
       if (jobsList.length > 20) {
         const [firstHalf, secondHalf] = splitInHalf(jobsList) as any;
         sendTelegramJobListing(firstHalf, { src: "Indeed", loc: location });
