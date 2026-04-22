@@ -96,6 +96,9 @@ export const runScrapeIndeed: (
       await moveMouseRandomly(page);
       await humanScroll(page);
 
+      // 📸 DEBUG HERE
+      await page.screenshot({ path: `debug-${pageNum}.png`, fullPage: true });
+
       const cards = await page.$$(".tapItem");
 
       console.log(`Found ${cards.length} jobs`);
