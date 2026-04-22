@@ -1,12 +1,18 @@
 import { chromium } from "playwright-extra";
 import { getBrowser } from "../browser.js";
 
-export const scrapperBrowser = async () => {
+type ScrapperOptions = {
+  storageFile?: string;
+};
+
+export const scrapperBrowser = async (options: ScrapperOptions = {}) => {
+  const { storageFile } = options;
+
   let context;
   let browser;
 
   if (process.platform === "win32") {
-    // ✅ Local → persistent session
+    // ✅ Persistent context (local)
     context = await chromium.launchPersistentContext("C:/playwright-profile", {
       headless: false,
       channel: "chrome",
@@ -22,7 +28,7 @@ export const scrapperBrowser = async () => {
       timezoneId: "Asia/Kolkata",
     });
   } else {
-    // ✅ GitHub Actions → normal browser
+    // ✅ GitHub / CI
     browser = await getBrowser(true);
 
     context = await browser.newContext({
@@ -34,7 +40,7 @@ export const scrapperBrowser = async () => {
     });
   }
 
-  // ✅ Common init script
+  // ✅ stealth tweak
   await context.addInitScript(() => {
     Object.defineProperty(navigator, "webdriver", {
       get: () => undefined,

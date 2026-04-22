@@ -150,7 +150,7 @@ export function formatJob(job: {
 🚀 *${job.title}*
 🏢 ${job.company}
 📍 ${job.location}
-⏱ ${dayjs("2026-01-03").format("DD,MMM,YYYY")}
+⏱ ${dayjs(new Date()).format("DD,MMM,YYYY")}
 👉 [Apply Now](${job.link})
 `;
 }

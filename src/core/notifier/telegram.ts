@@ -70,7 +70,7 @@ export const sendTelegramStockImage = async (
 
 export const sendTelegramJobListing = async (
   message: { title: string; company: string; location: string; link: string }[],
-  base: { src: string; loc: string },
+  base: { src: string; loc?: string },
 ) => {
   const { src, loc } = base;
   try {
@@ -79,7 +79,7 @@ export const sendTelegramJobListing = async (
     // 📤 NEW: Send the image to Telegram
     console.log("📤 Sending job listing to Telegram...");
 
-    let formattedMessage = `💼 New ${src} Job Listing for ${loc}\n`;
+    let formattedMessage = `💼 New ${src} Job Listing for ${loc ?? ""}\n`;
 
     formattedMessage += message.map(formatJob).join("------------------");
 

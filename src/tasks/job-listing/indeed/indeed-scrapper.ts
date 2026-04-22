@@ -1,7 +1,7 @@
 import path from "node:path";
-import { INDEED_SCRAPPER_RESULT_PATH } from "../../../lib/constants/interview-prep/index.js";
-import { isLocationMatch } from "../../../lib/helpers/index.js";
-import { scrapperBrowser } from "../../core/scrapper/index.js";
+import { INDEED_SCRAPPER_RESULT_PATH } from "../../../../lib/constants/interview-prep/index.js";
+import { isLocationMatch } from "../../../../lib/helpers/index.js";
+import { scrapperBrowser } from "../../../core/scrapper/index.js";
 
 // ------------------ CONFIG ------------------
 const RESULT_PATH = path.resolve(INDEED_SCRAPPER_RESULT_PATH);

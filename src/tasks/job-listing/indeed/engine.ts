@@ -1,9 +1,9 @@
 import "dotenv/config";
-import { sendTelegramJobListing } from "../../core/notifier/telegram.js";
-import { MOCK_INTERVIEW_JOBS } from "../../../lib/constants/job-listing/mock.js";
+import { sendTelegramJobListing } from "../../../core/notifier/telegram.js";
+import { MOCK_INTERVIEW_JOBS } from "../../../../lib/constants/job-listing/mock.js";
 import { runScrapeIndeed } from "./indeed-scrapper.js";
-import { RUN_INDEED_SCRAPER_PAYLOAD } from "../../../lib/constants/interview-prep/index.js";
-import { splitInHalf } from "../../../lib/helpers/index.js";
+import { RUN_INDEED_SCRAPER_PAYLOAD } from "../../../../lib/constants/interview-prep/index.js";
+import { splitInHalf } from "../../../../lib/helpers/index.js";
 
 async function runJobListing() {
   try {
