@@ -164,7 +164,7 @@ export async function generateProfessionalSlide(
   ctx.fillText("@tsfinnews", width / 2, 1335);
 
   // EXPORT TO FILE
-  const buffer = canvas.toBuffer("image/png");
+  const buffer = canvas.toBuffer("image/jpeg", { quality: 1 });
   const outputPath = path.join(process.cwd(), "temp_post.png");
   fs.writeFileSync(outputPath, buffer);
 
