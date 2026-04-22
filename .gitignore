@@ -12,3 +12,5 @@ src/auth/storage/*.json
 
 folder-structure.txt
 .env
+debug-1.html
+debug-1.png
