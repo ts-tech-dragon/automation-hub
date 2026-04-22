@@ -40,6 +40,7 @@ export async function sendTelegramInterview(title: string, content: string) {
       await tg.sendMessage(
         ENV_VARS.TELEGRAM_CHAT_ID,
         `🚀 ${title}\n\n${content}`,
+        { parse_mode: "Markdown" },
       );
     }
   }
