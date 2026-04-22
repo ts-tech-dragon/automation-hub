@@ -66,98 +66,107 @@ export const runScrapeIndeed: (
 
   const { browser, context, page } = await scrapperBrowser();
 
-  // ------------------ WARM-UP ------------------
-  console.log("🔥 Warming up session...");
-
-  await page.goto("https://in.indeed.com", {
-    waitUntil: "domcontentloaded",
-  });
-
-  const jobs = [];
   try {
-    for (let pageNum = 1; pageNum <= maxPages; pageNum++) {
-      console.log(`\n📄 Page ${pageNum}`);
+    // ------------------ WARM-UP ------------------
+    console.log("🔥 Warming up session...");
 
-      await delay(4000, 7000);
-      await moveMouseRandomly(page);
+    await page.goto("https://in.indeed.com", {
+      waitUntil: "domcontentloaded",
+    });
 
-      // ------------------ SEARCH ------------------
+    const jobs = [];
+    try {
+      for (let pageNum = 1; pageNum <= maxPages; pageNum++) {
+        console.log(`\n📄 Page ${pageNum}`);
 
-      const url = `https://in.indeed.com/jobs?q=${encodeURIComponent(keyword)}
-                  &l=${encodeURIComponent(locations)}
-                  &fromage=1
-                  &start=${pageNum * 10}
-                  &remotejob=0`;
-      console.log("🔎 Searching jobs...");
+        await delay(4000, 7000);
+        await moveMouseRandomly(page);
 
-      await page.goto(url, { waitUntil: "domcontentloaded" });
-      await delay(5000, 9000);
+        // ------------------ SEARCH ------------------
 
-      await moveMouseRandomly(page);
-      await humanScroll(page);
+        const url = `https://in.indeed.com/jobs?q=${encodeURIComponent(keyword)}
+                    &l=${encodeURIComponent(locations)}
+                    &fromage=1
+                    &start=${pageNum * 10}
+                    &remotejob=0`;
+        console.log("🔎 Searching jobs...");
 
-      const cards = await page.$$(".tapItem");
+        await page.goto(url, { waitUntil: "domcontentloaded" });
+        await delay(5000, 9000);
 
-      console.log(`Found ${cards.length} jobs`);
+        await moveMouseRandomly(page);
+        await humanScroll(page);
 
-      for (const card of cards) {
-        try {
-          await moveMouseRandomly(page);
+        const cards = await page.$$(".tapItem");
 
-          const scrappedLocation = await card
-            .$eval(
-              '[data-testid="text-location"]',
-              (el: { innerText: string }) => el.innerText.trim(),
-            )
-            .catch(() => "");
+        console.log(`Found ${cards.length} jobs`);
 
-          const isLocation = isLocationMatch(scrappedLocation, locations);
+        for (const card of cards) {
+          try {
+            await moveMouseRandomly(page);
 
-          if (!isLocation) continue;
+            const scrappedLocation = await card
+              .$eval(
+                '[data-testid="text-location"]',
+                (el: { innerText: string }) => el.innerText.trim(),
+              )
+              .catch(() => "");
 
-          const title = await card
-            .$eval("h2", (el) => el.innerText.trim())
-            .catch(() => "");
+            const isLocation = isLocationMatch(scrappedLocation, locations);
 
-          const company = await card
-            .$eval(
-              '[data-testid="company-name"]',
-              (el: { innerText: string }) => el.innerText.trim(),
-            )
-            .catch(() => "");
+            if (!isLocation) continue;
 
-          const dateText = await card
-            .$eval(".date", (el: { innerText: string }) => el.innerText.trim())
-            .catch(() => "");
+            const title = await card
+              .$eval("h2", (el) => el.innerText.trim())
+              .catch(() => "");
 
-          const postedHoursAgo = parsePostedTime(dateText);
+            const company = await card
+              .$eval(
+                '[data-testid="company-name"]',
+                (el: { innerText: string }) => el.innerText.trim(),
+              )
+              .catch(() => "");
 
-          const link = await card.$eval("a", (el) => el.href).catch(() => "");
+            const dateText = await card
+              .$eval(".date", (el: { innerText: string }) =>
+                el.innerText.trim(),
+              )
+              .catch(() => "");
 
-          // Simulate reading time
-          await delay(1000, 3000);
+            const postedHoursAgo = parsePostedTime(dateText);
 
-          jobs.push({
-            title,
-            company,
-            location: locations,
-            postedHoursAgo,
-            link,
-            source: "indeed",
-          });
+            const link = await card.$eval("a", (el) => el.href).catch(() => "");
 
-          console.log(`✅ ${title} @ ${company}`);
-        } catch (err) {
-          console.log("❌ Error parsing job", (err as Error).message);
+            // Simulate reading time
+            await delay(1000, 3000);
+
+            jobs.push({
+              title,
+              company,
+              location: locations,
+              postedHoursAgo,
+              link,
+              source: "indeed",
+            });
+
+            console.log(`✅ ${title} @ ${company}`);
+          } catch (err) {
+            console.log("❌ Error parsing job", (err as Error).message);
+          }
         }
       }
+    } catch (error) {
+      console.log("Error : ", (error as Error).message);
     }
-  } catch (error) {
-    console.log("Error : ", (error as Error).message);
-  }
 
-  // fs.writeFileSync(RESULT_PATH, JSON.stringify(jobs, null, 2));
-  await context.close();
-  console.log(`\n🎉 Saved ${jobs.length} jobs`);
-  return jobs;
+    // fs.writeFileSync(RESULT_PATH, JSON.stringify(jobs, null, 2));
+    console.log(`\n🎉 Saved ${jobs.length} jobs`);
+    return jobs;
+  } catch (error) {
+    console.log("indeed-scrapper-error : ", (error as Error).message);
+    return [];
+  } finally {
+    await context?.close().catch(() => {});
+    await browser?.close().catch(() => {});
+  }
 };
