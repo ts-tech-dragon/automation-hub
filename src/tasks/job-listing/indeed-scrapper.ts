@@ -1,3 +1,4 @@
+import fs from "node:fs";
 import path from "node:path";
 import { INDEED_SCRAPPER_RESULT_PATH } from "../../../lib/constants/interview-prep/index.js";
 import { isLocationMatch } from "../../../lib/helpers/index.js";
@@ -97,9 +98,12 @@ export const runScrapeIndeed: (
       await humanScroll(page);
 
       // 📸 DEBUG HERE
-      await page.screenshot({ path: `debug-${pageNum}.png`, fullPage: true });
 
       const cards = await page.$$(".tapItem");
+
+      await page.screenshot({ path: `debug-${pageNum}.png`, fullPage: true });
+      const html = await page.content();
+      fs.writeFileSync(`debug-${pageNum}.html`, html);
 
       console.log(`Found ${cards.length} jobs`);
 

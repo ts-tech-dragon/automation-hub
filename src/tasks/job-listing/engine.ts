@@ -16,11 +16,11 @@ async function runJobListing() {
       if (!jobsList.length) return console.log("No Jobs Found 😐!!!");
       if (jobsList.length > 20) {
         const [firstHalf, secondHalf] = splitInHalf(jobsList) as any;
-        sendTelegramJobListing(firstHalf, { src: "Indeed", loc: location });
-        sendTelegramJobListing(secondHalf, { src: "Indeed", loc: location });
+        // sendTelegramJobListing(firstHalf, { src: "Indeed", loc: location });
+        // sendTelegramJobListing(secondHalf, { src: "Indeed", loc: location });
         return;
       }
-      sendTelegramJobListing(jobsList, { src: "Indeed", loc: location });
+      // sendTelegramJobListing(jobsList, { src: "Indeed", loc: location });
     }
   } catch (error) {
     console.log("run job l6isting error : ", (error as Error).message);
