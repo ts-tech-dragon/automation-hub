@@ -4,6 +4,7 @@ import { sendDeepImageData } from "../../core/notifier/discord.js";
 import { scrapperBrowser } from "../../core/scrapper/index.js";
 import { extractEmailFromTemInEmail } from "./tempInMail.js";
 import {
+  detectCaptcha,
   generateRandomPassword,
   typeHumanLike,
 } from "../../../lib/helpers/web-scrapper/index.js";
@@ -123,12 +124,12 @@ const runDeepImageLogin = async () => {
       await checkbox.check();
     }
 
-    // 6. Human-like pause before submission
-    await delay(2000, 4000);
-    await moveMouseRandomly(serviceTab);
-
     // 7. Click "Sign up"
     await serviceTab.click("#nav-signup button.btn-cta");
+
+    // 6. Human-like pause before submission
+    await delay(2000, 10000);
+    await moveMouseRandomly(serviceTab);
 
     console.log("🚀 Signup form submitted!");
 
@@ -208,6 +209,7 @@ const runDeepImageLogin = async () => {
 
     console.log("🧹 All cookies and site data have been purged.");
   } catch (error) {
+    console.log("CAPTCHA DETECTED!!! 😌😌😌");
     console.log("❌ Error:", (error as Error).message);
   } finally {
     await context?.close().catch(() => {});

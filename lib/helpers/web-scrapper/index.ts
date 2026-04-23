@@ -46,3 +46,17 @@ export async function typeHumanLike(
     await new Promise((resolve) => setTimeout(resolve, randomDelay));
   }
 }
+
+export async function detectCaptcha(page: any) {
+  const content = await page.content();
+
+  const models = {
+    reCAPTCHA: /google\.com\/recaptcha/i.test(content),
+    hCaptcha: /hcaptcha\.com/i.test(content),
+    Turnstile: /challenges\.cloudflare\.com/i.test(content),
+    Arkose: /arkoselabs\.com/i.test(content),
+  };
+
+  const detected = Object.keys(models).find((key) => models[key]);
+  return detected || false;
+}
