@@ -1,0 +1,33 @@
+name: Daily DeeeImage Logs
+
+on:
+  schedule:
+    # This runs at minute 0 of every 3rd hour (0, 3, 6, 9, 12, 15, 18, 21)
+    - cron: "0 */3 * * *"
+  workflow_dispatch:
+
+jobs:
+  run-prep:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: 📦 Install Dependencies
+        run: npm install
+
+      - name: 📦 Install Dependencies
+        # This is the "Gold Standard" for CI/CD
+        run: npm ci
+
+      - name: 🔎 Run Job Search
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: npx tsx src/tasks/deepImage/engine.ts

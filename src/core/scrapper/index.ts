@@ -1,5 +1,13 @@
 import { chromium } from "playwright-extra";
 import { getBrowser } from "../browser.js";
+import stealth from "puppeteer-extra-plugin-stealth";
+
+const stealthPlugin = stealth();
+// Remove evasions that are currently flagged by modern security
+stealthPlugin.enabledEvasions.delete("iframe.contentWindow");
+stealthPlugin.enabledEvasions.delete("media.codecs");
+
+chromium.use(stealthPlugin);
 
 type ScrapperOptions = {
   storageFile?: string;
@@ -16,7 +24,13 @@ export const scrapperBrowser = async (options: ScrapperOptions = {}) => {
     context = await chromium.launchPersistentContext("C:/playwright-profile", {
       headless: false,
       channel: "chrome",
-      args: ["--disable-blink-features=AutomationControlled"],
+      // ✅ THIS REMOVES THE BANNER
+      ignoreDefaultArgs: ["--enable-automation"],
+      args: [
+        "--disable-blink-features=AutomationControlled",
+        "--no-sandbox",
+        "--disable-dev-shm-usage",
+      ],
 
       viewport: { width: 1366, height: 768 },
       screen: { width: 1366, height: 768 },

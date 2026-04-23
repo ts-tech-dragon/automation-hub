@@ -11,6 +11,9 @@ export const ENV_VARS = {
   FB_USER_TOKEN: process.env.FB_USER_TOKEN,
   FB_PAGE_ID: process.env.FB_PAGE_ID,
   IG_USER_ID: process.env.IG_USER_ID,
+
+  //Discord
+  DISCORD_WEBHOOK_URL: process.env.DISCORD_WEBHOOK_URL,
 };
 
 export const GEMINI_MODELS = {

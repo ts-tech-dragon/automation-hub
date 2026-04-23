@@ -159,3 +159,15 @@ export function splitInHalf(arr: any[]) {
   const mid = Math.ceil(arr.length / 2);
   return [arr.slice(0, mid), arr.slice(mid)];
 }
+
+// Random delay
+export const delay = (min = 1000, max = 3000) =>
+  new Promise((res) => setTimeout(res, min + Math.random() * (max - min)));
+
+// Human-like mouse movement
+export const moveMouseRandomly = async (page: any) => {
+  const { width, height } = await page.viewportSize();
+  const x = Math.random() * width;
+  const y = Math.random() * height;
+  await page.mouse.move(x, y, { steps: 10 });
+};
