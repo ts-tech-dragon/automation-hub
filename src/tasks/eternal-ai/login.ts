@@ -1,6 +1,9 @@
 import { chromium } from "playwright-extra";
 import stealth from "puppeteer-extra-plugin-stealth";
-import { SESSION_PATH, ensureAuthFile } from "../../core/auth-helper.js";
+import {
+  ETERNAL_SESSION_PATH,
+  ensureAuthFile,
+} from "../../core/auth-helper.js";
 import readline from "node:readline";
 
 chromium.use(stealth());
@@ -34,8 +37,8 @@ async function captureLogin() {
   rl.close();
 
   // Save the state now
-  await context.storageState({ path: SESSION_PATH });
-  console.log(`✅ Session captured and saved to: ${SESSION_PATH}`);
+  await context.storageState({ path: ETERNAL_SESSION_PATH });
+  console.log(`✅ Session captured and saved to: ${ETERNAL_SESSION_PATH}`);
 
   await context.close();
   console.log("👋 Browser closed. You can now run the claim script.");
