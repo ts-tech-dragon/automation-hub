@@ -25,13 +25,13 @@ async function runInterviewPrep() {
   // ==========================================
   try {
     console.log("⏳ Generating Q&A...");
-    // const qaData = await generateQA(tech);
-    const qaData = MOCK_PROPER_RESPONSE_OBJ;
+    const qaData = await generateQA(tech);
+    // const qaData = MOCK_PROPER_RESPONSE_OBJ;
 
     // Format your Q&A message here (using your existing formatting logic)
     let qaMsg = formatTelegramQAMsg(qaData);
 
-    // await sendTelegramInterview(`INTERVIEW Q&A: ${tech}`, qaMsg);
+    await sendTelegramInterview(`INTERVIEW Q&A: ${tech}`, qaMsg);
 
     await sendDiscordInterview(`INTERVIEW Q&A: ${tech}`, qaData);
     console.log("✅ Q&A successfully sent!");
