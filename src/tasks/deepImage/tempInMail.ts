@@ -29,7 +29,7 @@ export const extractEmailFromTemInEmail = async (
       await page.goto(actualURL, { waitUntil: "domcontentloaded" });
 
       // 3. Await the delay inside the loop so the browser can breathe
-      await delay(3000, 5000);
+      await delay(5000, 15000);
     }
 
     console.log("🎯 Successfully landed on the target page.");
@@ -39,8 +39,6 @@ export const extractEmailFromTemInEmail = async (
     while (!email.includes("ozvmail")) {
       email = await generateNewDeepMail(page);
     }
-
-    console.log("✅ Extracted Email:", email);
 
     await delay(2000, 4000);
     await moveMouseRandomly(page);
