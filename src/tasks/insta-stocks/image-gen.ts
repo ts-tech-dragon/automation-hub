@@ -175,8 +175,8 @@ export async function createStockPost(data: any) {
   ctx.fillText(INSTA_PAGE_NAME, width / 2, height - 40);
 
   // 5. Save
-  const buffer = canvas.toBuffer("image/png");
-  const outputPath = path.resolve("temp_post.png");
+  const buffer = canvas.toBuffer("image/jpeg");
+  const outputPath = path.resolve("temp_post.jpeg");
   fs.writeFileSync(outputPath, buffer);
 
   return outputPath;

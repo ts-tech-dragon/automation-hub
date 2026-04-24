@@ -165,7 +165,7 @@ export async function generateProfessionalSlide(
 
   // EXPORT TO FILE
   const buffer = canvas.toBuffer("image/jpeg", { quality: 1 });
-  const outputPath = path.join(process.cwd(), "temp_post.png");
+  const outputPath = path.join(process.cwd(), "temp_post.jpeg");
   fs.writeFileSync(outputPath, buffer);
 
   return outputPath;

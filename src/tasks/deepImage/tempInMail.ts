@@ -34,11 +34,7 @@ export const extractEmailFromTemInEmail = async (
 
     console.log("🎯 Successfully landed on the target page.");
 
-    const activationEmail = page.getByText("Deep Image - Account Activation");
-
-    if (activationEmail) {
-      email = await generateNewDeepMail(page);
-    }
+    email = await generateNewDeepMail(page);
 
     while (!email.includes("ozvmail")) {
       email = await generateNewDeepMail(page);

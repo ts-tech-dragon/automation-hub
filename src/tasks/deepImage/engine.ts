@@ -136,6 +136,12 @@ const runDeepImageLogin = async () => {
     await delay(2000, 6000);
     await moveMouseRandomly(serviceTab);
 
+    // Use fullPage: true to see everything (modals, banners, etc.)
+    await serviceTab.screenshot({
+      path: "debug-screenshot.png",
+      fullPage: true,
+    });
+
     // Switch back to email tab to wait for confirmation
     await page.bringToFront();
 
@@ -150,6 +156,8 @@ const runDeepImageLogin = async () => {
 
     // 3. Click the actual locator
     await activationEmail.click();
+
+    console.log("📖 Deep Image - Account Activation Mail Opened!");
 
     await delay(2000, 4000);
     await moveMouseRandomly(page);
