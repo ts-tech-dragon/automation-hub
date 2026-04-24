@@ -16,3 +16,34 @@ export const scrollToLoad = async (page: any) => {
     await page.waitForTimeout(1000 + Math.floor(Math.random() * 500));
   }
 };
+
+export function convertToDiscordMarkdown(html: string): string {
+  return (
+    html
+      .replace(/<b>(.*?)<\/b>/g, "**$1**")
+      .replace(/<i>(.*?)<\/i>/g, "*$1*")
+      // ✅ Add 'javascript' (or your tech variable) to the backticks
+      .replace(/<pre><code>(.*?)<\/code><\/pre>/gs, "```javascript\n$1\n```")
+      .replace(/<code>(.*?)<\/code>/g, "`$1`")
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">")
+  );
+}
+
+export function formatTelegramQAMsg(qaData: {
+  questions: { q: string; a: string }[];
+}) {
+  try {
+    // Format your Q&A message here (using your existing formatting logic)
+    let qaMsg = ``;
+
+    qaData.questions.forEach((q: { q: string; a: string }, i: number) => {
+      qaMsg += `<b>Q${i + 1}: ${escapeHTML(q.q)}</b>\n`;
+      qaMsg += `<pre><code>${escapeHTML(q.a)}</code></pre>\n\n`;
+    });
+    return qaMsg;
+  } catch (error) {
+    console.log("Error : ", (error as Error).message);
+    return "Formate Error";
+  }
+}

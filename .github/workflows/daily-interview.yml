@@ -34,4 +34,5 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           MOCK_GEMINI: ${{ secrets.MOCK_GEMINI }} # Optional: Use this to toggle between real and mock responses
+          DISCORD_INTERVIEW_PREP_URL: ${{ secrets.DISCORD_INTERVIEW_PREP_URL }}
         run: npx tsx src/tasks/interview-prep/engine.ts

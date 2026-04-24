@@ -2,6 +2,7 @@ import "dotenv/config";
 import { generateSmallProblemWorker } from "./problem-worker.js";
 import { escapeHTML } from "../../../lib/helpers/interview-prep/index.js";
 import { sendTelegramInterview } from "../../core/notifier/telegram.js";
+import { sendDiscordInterviewProblem } from "../../core/notifier/discord.js";
 
 async function runMiniInterviewPrep() {
   try {
@@ -21,6 +22,7 @@ async function runMiniInterviewPrep() {
       `DAILY SMALL PROBLEM: ${probData.title}`,
       probMsg,
     );
+    await sendDiscordInterviewProblem(probData);
   } catch (error) {
     // If Q&A fails, we catch it HERE, log it, and MOVE ON to the next task.
     console.error(

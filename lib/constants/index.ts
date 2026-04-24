@@ -14,6 +14,7 @@ export const ENV_VARS = {
 
   //Discord
   DISCORD_WEBHOOK_URL: process.env.DISCORD_WEBHOOK_URL,
+  DISCORD_INTERVIEW_PREP_URL: process.env.DISCORD_INTERVIEW_PREP_URL,
 };
 
 export const GEMINI_MODELS = {

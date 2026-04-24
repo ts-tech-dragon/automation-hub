@@ -3,10 +3,18 @@ import { generateQA } from "./qa-worker.js";
 import { generateProblemWorker } from "./problem-worker.js";
 import {
   escapeHTML,
+  formatTelegramQAMsg,
   getRandomTech,
 } from "../../../lib/helpers/interview-prep/index.js";
 import { sendTelegramInterview } from "../../core/notifier/telegram.js";
-import { MOCK_PROPER_RESPONSE_OBJ } from "../../../lib/constants/interview-prep/mocks.js";
+import {
+  MOCK_PROBLEM_RESPONSE,
+  MOCK_PROPER_RESPONSE_OBJ,
+} from "../../../lib/constants/interview-prep/mocks.js";
+import {
+  sendDiscordInterview,
+  sendDiscordInterviewProblem,
+} from "../../core/notifier/discord.js";
 
 async function runInterviewPrep() {
   const tech = getRandomTech(); // Or however you select your daily tech
@@ -17,18 +25,15 @@ async function runInterviewPrep() {
   // ==========================================
   try {
     console.log("⏳ Generating Q&A...");
-    const qaData = await generateQA(tech);
-    // const qaData = MOCK_PROPER_RESPONSE_OBJ;
+    // const qaData = await generateQA(tech);
+    const qaData = MOCK_PROPER_RESPONSE_OBJ;
 
     // Format your Q&A message here (using your existing formatting logic)
-    let qaMsg = ``;
+    let qaMsg = formatTelegramQAMsg(qaData);
 
-    qaData.questions.forEach((q: { q: string; a: string }, i: number) => {
-      qaMsg += `<b>Q${i + 1}: ${escapeHTML(q.q)}</b>\n`;
-      qaMsg += `<pre><code>${escapeHTML(q.a)}</code></pre>\n\n`;
-    });
+    // await sendTelegramInterview(`INTERVIEW Q&A: ${tech}`, qaMsg);
 
-    await sendTelegramInterview(`INTERVIEW Q&A: ${tech}`, qaMsg);
+    await sendDiscordInterview(`INTERVIEW Q&A: ${tech}`, qaData);
     console.log("✅ Q&A successfully sent!");
   } catch (error: any) {
     // If Q&A fails, we catch it HERE, log it, and MOVE ON to the next task.
@@ -44,6 +49,7 @@ async function runInterviewPrep() {
   try {
     console.log("⏳ Generating Problem...");
     const probData = await generateProblemWorker(tech);
+    // const probData = MOCK_PROBLEM_RESPONSE;
     // 🧠 Build message
     let probMsg = `<i>${escapeHTML(probData.problem)}</i>\n\n`;
 
@@ -56,6 +62,7 @@ async function runInterviewPrep() {
     probMsg += `<pre><code class="language-javascript">${escapeHTML(probData.solution)}</code></pre>`;
 
     await sendTelegramInterview(`DAILY CHALLENGE: ${probData.title}`, probMsg);
+    await sendDiscordInterviewProblem(probData);
     console.log("✅ Problem successfully sent!");
   } catch (error: any) {
     console.error("❌ Problem Worker failed.", error.message);
