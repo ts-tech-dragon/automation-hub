@@ -33,7 +33,7 @@ jobs:
         run: npx tsx src/tasks/deepImage/engine.ts
       - name: 📸 Upload Debug Screenshot
 
-        if: failure() # Only uploads if the "Run Job Search" step fails
+        if: always() # Only uploads if the "Run Job Search" step fails
 
         uses: actions/upload-artifact@v4
 
