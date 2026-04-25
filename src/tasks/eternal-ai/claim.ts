@@ -7,7 +7,7 @@ import { delay, moveMouseRandomly } from "../../../lib/helpers/index.js";
 
 async function claimRewards() {
   ensureAuthFile();
-  const browser = await getBrowser(false);
+  const browser = await getBrowser(true);
   const context = await browser.newContext({
     storageState: ETERNAL_SESSION_PATH,
   });
