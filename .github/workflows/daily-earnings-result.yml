@@ -1,4 +1,4 @@
-name: Daily Small Interview Problem
+name: Daily Earing Result
 
 on:
   schedule:
@@ -29,7 +29,7 @@ jobs:
       - name: 📦 Install Dependencies
         run: npm install
 
-      - name: 🚀 Run Small Interview Problem
+      - name: 🚀 Run Daily Earning Result
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
