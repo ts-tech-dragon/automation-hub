@@ -1,0 +1,27 @@
+export const EARNINGS_MOCK_DATA = [
+  {
+    name: "Automot. Stamp&Assem",
+    marketCap: "₹761 Cr",
+    eps: "+169.13%",
+  },
+  { name: "Axis Bank", marketCap: "₹4,24,661 Cr", eps: "+1.37%" },
+  { name: "Bansisons Tea", marketCap: "₹8.9 Cr", eps: "" },
+  {
+    name: "Dolphin Kitchen Uten",
+    marketCap: "₹15.2 Cr",
+    eps: "-99.35%",
+  },
+  { name: "Essen Speciality Fi", marketCap: "₹341 Cr", eps: "-93.44%" },
+  { name: "IDFC First Bank", marketCap: "₹57,833 Cr", eps: "-5%" },
+  { name: "India Cements", marketCap: "₹12,635 Cr", eps: "+308.51%" },
+  { name: "MIC Electronics", marketCap: "₹984 Cr", eps: "-606.67%" },
+  { name: "Mantra Capital", marketCap: "₹55.5 Cr", eps: "-20.8%" },
+  { name: "Noble Polymers", marketCap: "₹1.4 Cr", eps: "-534.15%" },
+  { name: "RBL Bank", marketCap: "₹19,901 Cr", eps: "+176.22%" },
+  { name: "SBFC Finance", marketCap: "₹10,507 Cr", eps: "+27.59%" },
+  { name: "Sampann Utpadan", marketCap: "₹156 Cr", eps: "-81.34%" },
+  { name: "Sejal Glass", marketCap: "₹876 Cr", eps: "" },
+  { name: "Silkflex Polymers", marketCap: "₹217 Cr", eps: "+234.17%" },
+  { name: "Tokyo Finance", marketCap: "₹14.4 Cr", eps: "-72.73%" },
+  { name: "UCO Bank", marketCap: "₹33,217 Cr", eps: "+23.08%" },
+];

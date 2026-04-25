@@ -1,0 +1,39 @@
+name: Daily Small Interview Problem
+
+on:
+  schedule:
+    # 7:00 AM IST (1:30 AM UTC)
+    - cron: "30 1 * * *"
+  workflow_dispatch: # Allows manual run
+
+jobs:
+  build-and-run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🖼️ Install Canvas Dependencies
+        # Ubuntu needs these system libraries to compile the 'canvas' package
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: 📦 Install Dependencies
+        run: npm install
+
+      - name: 🚀 Run Small Interview Problem
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          MOCK_GEMINI: ${{ secrets.MOCK_GEMINI }} # Optional: Use this to toggle between real and mock responses
+          IMGBB_API_KEY: ${{secrets.IMGBB_API_KEY}}
+
+        run: npx tsx src/tasks/insta-earnings-results/engine.ts

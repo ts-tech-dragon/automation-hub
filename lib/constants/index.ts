@@ -12,6 +12,8 @@ export const ENV_VARS = {
   FB_PAGE_ID: process.env.FB_PAGE_ID,
   IG_USER_ID: process.env.IG_USER_ID,
 
+  //IMGBB
+  IMGBB_API_KEY: process.env.IMGBB_API_KEY,
   //Discord
   DISCORD_WEBHOOK_URL: process.env.DISCORD_WEBHOOK_URL,
   DISCORD_INTERVIEW_PREP_URL: process.env.DISCORD_INTERVIEW_PREP_URL,
