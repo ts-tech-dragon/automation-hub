@@ -92,6 +92,7 @@ export async function generateGemini(prompt: string) {
         config: {
           aspectRatio: "4:5", // Perfect for Instagram Portrait
           outputMimeType: "image/png",
+          responseModalities: ["IMAGE"],
         } as any,
       });
       return response; // Adjust this based on how your wrapper processes image responses

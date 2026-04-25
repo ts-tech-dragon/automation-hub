@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { getMarketData } from "./fetcher.js";
+import { getMarketData, getWeeklyOHLC } from "./fetcher.js";
 import { main as getGeminiSummary } from "./summarizer.js"; // Adjust based on your export
 import { createStockPost } from "./image-gen.js";
 import { sendTelegramStockImage } from "../../core/notifier/telegram.js";

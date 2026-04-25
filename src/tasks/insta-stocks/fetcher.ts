@@ -9,23 +9,24 @@ export interface MarketSummary {
 
 const yahooFinance = new YahooFinance({ suppressNotices: ["yahooSurvey"] });
 
+// Fetching NIFTY 50 (^NSEI) and SENSEX (^BSESN)
+const symbols = [
+  // 🇮🇳 India
+  "^NSEI",
+  "^BSESN",
+  "^NSEBANK",
+
+  // 🛢️ Commodities
+  "BZ=F",
+
+  // 💱 Currency
+  "INR=X",
+
+  // ⚠️ Indian Volatility
+  "^INDIAVIX",
+];
+
 export async function getMarketData() {
-  // Fetching NIFTY 50 (^NSEI) and SENSEX (^BSESN)
-  const symbols = [
-    // 🇮🇳 India
-    "^NSEI",
-    "^BSESN",
-    "^NSEBANK",
-
-    // 🛢️ Commodities
-    "BZ=F",
-
-    // 💱 Currency
-    "INR=X",
-
-    // ⚠️ Indian Volatility
-    "^INDIAVIX",
-  ];
   const results: any[] = await yahooFinance.quote(symbols);
 
   const nifty = results.find((r) => r.symbol === "^NSEI");
@@ -46,24 +47,34 @@ export async function getMarketData() {
   };
 }
 
-async function getWeeklyOHLC() {
+export async function getWeeklyOHLC() {
   const today = new Date();
   const lastWeek = new Date();
   lastWeek.setDate(today.getDate() - 7);
 
-  const data = await yahooFinance.historical("^NSEI", {
-    period1: lastWeek,
-    period2: today,
-    interval: "1d", // 👈 THIS gives daily OHLC
-  });
+  let result = "";
 
-  return data.map((d) => ({
-    date: d.date,
-    open: d.open,
-    high: d.high,
-    low: d.low,
-    close: d.close,
-  }));
+  for (let symbol of symbols) {
+    const data = await yahooFinance.historical(symbol, {
+      period1: lastWeek,
+      period2: today,
+      interval: "1d", // 👈 THIS gives daily OHLC
+    });
+
+    const weeklyData = data.map((d) => ({
+      date: d.date,
+      open: d.open,
+      high: d.high,
+      low: d.low,
+      close: d.close,
+    }));
+
+    result += `Yahoo Code : ${symbol}
+        Data : ${JSON.stringify(weeklyData)}
+        -------------------------
+    `;
+  }
+  console.log("Result : ", result);
 }
 
 async function getMetalsWeeklyData() {
