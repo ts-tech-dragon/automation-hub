@@ -66,11 +66,6 @@ function saveHistory(data: ApplyHistory) {
 }
 
 export async function applyToFoundItJobs(foundItURL: string): Promise<void> {
-  if (!fs.existsSync(STORAGE_PATH)) {
-    log("No login session found. Run login script first.", "error");
-    process.exit(1);
-  }
-
   const history = loadHistory();
   log(`History Loaded: ${history.applied.length} applied jobs already.`);
 
@@ -93,23 +88,6 @@ export async function applyToFoundItJobs(foundItURL: string): Promise<void> {
 
     // ✅ Handle cookie banner if present
     await acceptFounditCookie(page);
-    try {
-      const cookieBtn = page.locator("#acceptAll").first();
-      const cookieVisible = await cookieBtn
-        .isVisible({ timeout: 4000 })
-        .catch(() => false);
-
-      if (cookieVisible) {
-        log("Cookie banner detected");
-        await humanDelay(800, 1500);
-        const btnHandle = await cookieBtn.elementHandle();
-        if (btnHandle) {
-          await humanClick(page, btnHandle);
-          log("Accepted cookie policy", "success");
-          await humanDelay(1200, 2000);
-        }
-      }
-    } catch {}
 
     await humanDelay(2000, 4000);
     await humanScroll(page, "down", randInt(100, 300));
@@ -295,21 +273,4 @@ async function handleModal(page: Page, history: ApplyHistory): Promise<number> {
   }
 
   return 1;
-}
-
-async function goToNextPage(page: Page): Promise<boolean> {
-  const nextBtn = page
-    .locator(
-      'button:has-text("Next"), a:has-text("Next"), [aria-label="Next page"]',
-    )
-    .first();
-
-  if (await nextBtn.isVisible().catch(() => false)) {
-    await humanDelay(1000, 2000);
-    await humanClick(page, (await nextBtn.elementHandle()) as ElementHandle);
-    await humanDelay(2500, 4000);
-    return true;
-  }
-
-  return false;
 }
