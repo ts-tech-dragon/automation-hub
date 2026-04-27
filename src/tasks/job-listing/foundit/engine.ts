@@ -2,6 +2,7 @@ import "dotenv/config";
 import { RUN_FOUNDIT_SCRAPPER_PAYLOAD } from "../../../../lib/constants/interview-prep/index.js";
 import { buildFounditSearchUrl } from "../../../../lib/helpers/interview-prep/index.js";
 import { applyToFoundItJobs } from "./apply.js";
+import { delay } from "../../../../lib/helpers/index.js";
 
 const runFounitApply = async () => {
   const urls: string[] = RUN_FOUNDIT_SCRAPPER_PAYLOAD.jobCities.map((loc) => {
@@ -13,7 +14,8 @@ const runFounitApply = async () => {
 
   for (let founitURL of urls) {
     await applyToFoundItJobs(founitURL);
-    console.log("Applied Successfully ");
+    delay(2000, 15000);
+    console.log("Moving to next location ");
   }
 };
 

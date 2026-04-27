@@ -13,6 +13,7 @@ import {
   log,
 } from "../../../../lib/helpers/human.js";
 import { acceptFounditCookie } from "./acceptCookie.js";
+import { delay } from "../../../../lib/helpers/index.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -130,9 +131,8 @@ export async function applyToFoundItJobs(foundItURL: string): Promise<void> {
 
     await humanDelay(3000, 6000);
 
-    saveHistory(history);
     log(`Run completed. Applied this run: ${totalApplied}`, "success");
-    log(`Total historical applied: ${history.applied.length}`, "success");
+    delay(2000, 10000);
   } catch (err) {
     log(`Fatal Error: ${(err as Error).message}`, "error");
 
