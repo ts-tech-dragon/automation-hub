@@ -1,7 +1,7 @@
 import { chromium } from "playwright-extra";
 import stealth from "puppeteer-extra-plugin-stealth";
 import readline from "node:readline";
-import { SESSION_PATH } from "../../../core/auth-helper.js";
+import { LINKEDIN_SESSION_PATH as SESSION_PATH } from "../../../core/auth-helper.js";
 
 chromium.use(stealth());
 

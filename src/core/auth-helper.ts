@@ -1,6 +1,10 @@
 import fs from "node:fs";
 import path from "node:path";
 
+export const LINKEDIN_SESSION_PATH = path.resolve(
+  "src/auth/storage/linkedin-storage.json",
+);
+
 export const ETERNAL_SESSION_PATH = path.resolve(
   "src/auth/storage/eternal_auth.json",
 );

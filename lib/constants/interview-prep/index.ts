@@ -10,8 +10,8 @@ export const INTERVIEW_TECHS = [
 
 export const RUN_INDEED_SCRAPER_PAYLOAD = {
   keyword: "Frontend Developer,React,next.js,javascript,typescript,html,css",
-  // locations: ["chennai", "bengaluru", "coimbatore", "tiruchchirappalli"],
-  locations: ["salem"],
+  locations: ["chennai", "bengaluru", "coimbatore", "tiruchchirappalli"],
+  // locations: ["salem"],
   maxPages: 1,
 };
 
