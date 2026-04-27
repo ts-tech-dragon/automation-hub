@@ -1,0 +1,53 @@
+name: Daily FoundIt Job Search
+
+on:
+  schedule:
+    # 🌅 Morning Run -> 9:00 AM IST
+    - cron: "30 3 * * *"
+
+    # 🌇 Evening Run -> 6:00 PM IST
+    - cron: "30 12 * * *"
+
+  workflow_dispatch:
+
+jobs:
+  run-job-search:
+    runs-on: ubuntu-latest
+
+    timeout-minutes: 25
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: 📦 Install Dependencies
+        run: npm ci
+
+      - name: 🎭 Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: 🔐 Create Foundit Auth Storage File from Secret
+        run: |
+          echo '${{ secrets.FOUNDIT_STORAGE_JSON }}' > temp-foundit-storage.json
+
+      - name: 🚀 Run FoundIt Job Engine
+        env:
+          FOUNDIT_STORAGE_JSON: ${{ secrets.FOUNDIT_STORAGE_JSON }}
+        run: npx tsx src/tasks/job-listing/engine.ts
+
+      - name: 📤 Upload Debug Artifacts (if any)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scraper-debug-files
+          path: |
+            *.png
+            *.html
+            *.json
+            lib/logs/*.png

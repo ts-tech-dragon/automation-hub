@@ -30,3 +30,13 @@ export const RUN_LINKEDIN_SCRAPER_PAYLOAD = {
 };
 
 export const INDEED_SCRAPPER_RESULT_PATH = `lib/results/jobs/indeed-jobs.json`;
+
+export const RUN_FOUNDIT_SCRAPPER_PAYLOAD = {
+  query: "react js,frontend developer,next js,javascript,typescript",
+  location: "coimbatore",
+  expMin: 2,
+  expMax: 3,
+  freshness: 7,
+  maxJobsPerRun: 40,
+  jobCities: ["Bengaluru", "Bangalore", "Chennai", "Coimbatore", "Trichy"],
+};

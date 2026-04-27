@@ -1,4 +1,6 @@
 import crypto from "crypto";
+import fs from "node:fs";
+import path from "node:path";
 
 /**
  * Generates a cryptographically secure random password.
@@ -57,6 +59,45 @@ export async function detectCaptcha(page: any) {
     Arkose: /arkoselabs\.com/i.test(content),
   };
 
-  const detected = Object.keys(models).find((key) => models[key]);
+  const detected = Object.keys(models).find(
+    (key) => models[key as keyof typeof models],
+  );
   return detected || false;
+}
+
+export async function resolveStorageState(
+  localStoragePath?: string,
+  key?: string,
+): Promise<string | null> {
+  const isLocal = process.platform === "win32";
+
+  // ===========================
+  // LOCAL MACHINE
+  // ===========================
+  if (isLocal) {
+    if (localStoragePath && fs.existsSync(localStoragePath)) {
+      console.log("✅ Using local auth file:", localStoragePath);
+      return localStoragePath;
+    }
+
+    console.log("⚠️ Local auth file not found");
+    return null;
+  }
+
+  // ===========================
+  // GITHUB ACTION / CLOUD
+  // ===========================
+  const envStorage = process.env[key as string];
+
+  if (envStorage) {
+    const tempPath = path.resolve("temp-foundit-storage.json");
+
+    fs.writeFileSync(tempPath, envStorage, "utf-8");
+
+    console.log("✅ Created temp auth file from ENV secret");
+    return tempPath;
+  }
+
+  console.log("⚠️ No cloud auth secret found");
+  return null;
 }

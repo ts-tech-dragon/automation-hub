@@ -47,3 +47,57 @@ export function formatTelegramQAMsg(qaData: {
     return "Formate Error";
   }
 }
+
+type BuildFounditUrlOptions = {
+  query: string;
+  location: string;
+  experienceMin?: number;
+  experienceMax?: number;
+  freshness?: number;
+  limit?: number;
+  start?: number;
+  quickApplyOnly?: boolean;
+  jobCities?: string[];
+};
+
+export const buildFounditSearchUrl = ({
+  query = "chennai,coimbatore",
+  location,
+  experienceMin = 2,
+  experienceMax = 3,
+  freshness = 7,
+  limit = 20,
+  start = 1,
+  quickApplyOnly = true,
+  jobCities = [],
+}: BuildFounditUrlOptions) => {
+  const slugQuery = query
+    .split(",")[0]
+    .trim()
+    .replace(/\s+/g, "-")
+    .toLowerCase();
+
+  const slugLocation = location.trim().replace(/\s+/g, "-").toLowerCase();
+
+  const basePath = `https://www.foundit.in/search/${slugQuery}-jobs-in-${slugLocation}`;
+
+  const params = new URLSearchParams({
+    start: String(start),
+    limit: String(limit),
+    query,
+    location,
+    experienceRanges: `${experienceMin}~${experienceMax}`,
+    queryDerived: "true",
+    jobFreshness: String(freshness),
+  });
+
+  if (quickApplyOnly) {
+    params.append("quickApplyJob", "Show Quick Apply Job");
+  }
+
+  if (jobCities.length) {
+    params.append("jobCities", jobCities.join(","));
+  }
+
+  return `${basePath}?${params.toString()}`;
+};
