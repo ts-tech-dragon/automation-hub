@@ -39,7 +39,7 @@ jobs:
       - name: 🚀 Run FoundIt Job Engine
         env:
           FOUNDIT_STORAGE_JSON: ${{ secrets.FOUNDIT_STORAGE_JSON }}
-        run: npx tsx src/tasks/job-listing/engine.ts
+        run: npx tsx src/tasks/job-listing/foundit/engine.ts
 
       - name: 📤 Upload Debug Artifacts (if any)
         if: always()
