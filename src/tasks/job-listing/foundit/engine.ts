@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { RUN_FOUNDIT_SCRAPPER_PAYLOAD } from "../../../../lib/constants/interview-prep/index.js";
 import { buildFounditSearchUrl } from "../../../../lib/helpers/interview-prep/index.js";
 import { applyToFoundItJobs } from "./apply.js";
