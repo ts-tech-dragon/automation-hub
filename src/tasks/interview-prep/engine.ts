@@ -68,6 +68,7 @@ async function runInterviewPrep() {
     console.log("✅ Problem successfully sent!");
   } catch (error: any) {
     console.error("❌ Problem Worker failed.", error.message);
+    await sendErrorToDiscord(error);
   }
 
   console.log("🏁 Interview Prep Workflow Finished.");
