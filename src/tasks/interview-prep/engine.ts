@@ -63,8 +63,11 @@ async function runInterviewPrep() {
     probMsg += `<b>✅ Solution:</b>\n`;
     probMsg += `<pre><code class="language-javascript">${escapeHTML(probData.solution)}</code></pre>`;
 
-    await sendTelegramInterview(`DAILY CHALLENGE: ${probData.title}`, probMsg);
-    await sendDiscordInterviewProblem(probData);
+    await Promise.all([
+      sendTelegramInterview(`DAILY CHALLENGE: ${probData.title}`, probMsg),
+      sendDiscordInterviewProblem(probData),
+    ]);
+
     console.log("✅ Problem successfully sent!");
   } catch (error: any) {
     console.error("❌ Problem Worker failed.", error.message);
