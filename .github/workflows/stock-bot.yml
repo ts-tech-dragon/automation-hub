@@ -39,6 +39,7 @@ jobs:
           FB_USER_TOKEN: ${{secrets.FB_USER_TOKEN}}
           FB_PAGE_ID: ${{secrets.FB_PAGE_ID}}
           IG_USER_ID: ${{secrets.IG_USER_ID}}
+          DISCORD_ERROR_LOGS_URL: ${{ secrets.DISCORD_ERROR_LOGS_URL }}
         run: npx tsx src/tasks/insta-stocks/engine.ts
 
       - name: 💾 Archive Result

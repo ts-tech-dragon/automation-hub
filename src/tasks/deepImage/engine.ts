@@ -1,6 +1,9 @@
 import "dotenv/config";
 import { delay, moveMouseRandomly } from "../../../lib/helpers/index.js";
-import { sendDeepImageData } from "../../core/notifier/discord.js";
+import {
+  sendDeepImageData,
+  sendErrorToDiscord,
+} from "../../core/notifier/discord.js";
 import { scrapperBrowser } from "../../core/scrapper/index.js";
 import { extractEmailFromTemInEmail } from "./tempInMail.js";
 import {
@@ -22,9 +25,14 @@ const runDeepImageLogin = async () => {
   });
 
   try {
-    const email = await extractEmailFromTemInEmail({ page });
+    let email = await extractEmailFromTemInEmail({ page });
     // const email = "abcasfldk@test.com";
     const passwordValue = generateRandomPassword(8); // Use a stronger pass than 123456!
+    let attempt = 1;
+    while (!email && attempt <= 3) {
+      email = await extractEmailFromTemInEmail({ page });
+      attempt++;
+    }
 
     // 1. Open the signup page
     const serviceTab = await context.newPage();
@@ -219,6 +227,7 @@ const runDeepImageLogin = async () => {
   } catch (error) {
     console.log("CAPTCHA DETECTED!!! 😌😌😌");
     console.log("❌ Error:", (error as Error).message);
+    await sendErrorToDiscord(error);
   } finally {
     await context?.close().catch(() => {});
     await browser?.close().catch(() => {});

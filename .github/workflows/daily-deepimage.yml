@@ -30,6 +30,7 @@ jobs:
       - name: 🔎 Run Job Search
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          DISCORD_ERROR_LOGS_URL: ${{ secrets.DISCORD_ERROR_LOGS_URL }}
         run: npx tsx src/tasks/deepImage/engine.ts
       - name: 📸 Upload Debug Screenshot
 

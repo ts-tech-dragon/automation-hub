@@ -112,3 +112,31 @@ export async function sendDiscordInterviewProblem(probData: {
     );
   }
 }
+
+export async function sendErrorToDiscord(error: any, title = "") {
+  const webhookUrl = ENV_VARS.DISCORD_ERROR_LOGS_URL || "";
+  try {
+    const payload = {
+      username: "Error Logger",
+      embeds: [
+        {
+          title: "🚨 Application Error" + title,
+          description: `**Message:** ${error.message}`,
+          color: 15158332, // Decimal color for Red
+          fields: [
+            {
+              name: "Stack Trace",
+              value: `\`\`\`${error.stack.substring(0, 1000)}\`\`\``,
+            },
+            { name: "Timestamp", value: new Date().toISOString() },
+          ],
+          footer: { text: "Node.js Error Monitoring" },
+        },
+      ],
+    };
+
+    await axios.post(webhookUrl, payload);
+  } catch (err) {
+    console.error("Failed to send error to Discord:", (err as Error).message);
+  }
+}

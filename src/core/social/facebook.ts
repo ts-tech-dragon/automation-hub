@@ -1,6 +1,7 @@
 import axios from "axios";
 import { ENV_VARS } from "../../../lib/constants/index.js";
 import { uploadToImgBB } from "../imgbb.js";
+import { sendErrorToDiscord } from "../notifier/discord.js";
 
 const IG_ID = ENV_VARS.IG_USER_ID;
 const FB_ID = ENV_VARS.FB_PAGE_ID;
@@ -93,6 +94,7 @@ export async function broadcastUpdate(imageUrl: string, content: content) {
       console.log("✅ IG SUCCESS ID:", igId);
     } catch (err: any) {
       console.error("❌ IG FAILED:", err.response?.data || err.message);
+      sendErrorToDiscord(err, "POST TO Instagram");
     }
 
     // Try Facebook and LOG EVERYTHING
