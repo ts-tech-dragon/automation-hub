@@ -5,7 +5,9 @@ export const INTERVIEW_TECHS = [
   "Node.js (Backend)",
   "JavaScript (ES6+ & Internals)",
   "Tailwind CSS",
-  "PostgreSQL & Database Design",
+  "Database Design",
+  "GIT Commands",
+  "MONGODB using Mongoose and Express",
 ];
 
 export const RUN_INDEED_SCRAPER_PAYLOAD = {
