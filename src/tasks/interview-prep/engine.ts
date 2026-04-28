@@ -14,6 +14,7 @@ import {
 import {
   sendDiscordInterview,
   sendDiscordInterviewProblem,
+  sendErrorToDiscord,
 } from "../../core/notifier/discord.js";
 
 async function runInterviewPrep() {
@@ -41,6 +42,7 @@ async function runInterviewPrep() {
       "❌ Q&A Worker failed, but continuing workflow...",
       error.message,
     );
+    await sendErrorToDiscord(error);
   }
 
   // ==========================================
