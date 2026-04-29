@@ -11,7 +11,9 @@ export const runNSEScrapper = async () => {
     await page.goto(
       "https://www.nseindia.com/companies-listing/corporate-filings-announcements",
       {
-        waitUntil: "networkidle",
+        // Use 'domcontentloaded' or 'load' instead of 'networkidle'
+        waitUntil: "domcontentloaded",
+        timeout: 60000, // Increase to 60s for GitHub's slower runners
       },
     );
 
@@ -37,5 +39,8 @@ export const runNSEScrapper = async () => {
     return financialResult;
   } catch (error) {
     console.log("❌ NSE Scrapper Error:", (error as Error).message);
+  } finally {
+    await context?.close().catch(() => {});
+    await browser?.close().catch(() => {});
   }
 };
