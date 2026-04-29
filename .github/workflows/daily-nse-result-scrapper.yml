@@ -41,5 +41,5 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium
 
-      - name: Run NSE Engine
-        run: node src/nse/runEngine.js # Update this to your actual entry point
+      - name: 🕦 Run NSE Engine
+        run: npx tsx src/tasks/nse-earnings/engine.ts
