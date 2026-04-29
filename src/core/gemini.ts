@@ -117,3 +117,66 @@ export async function generateGemini(prompt: string) {
   console.error("💀 All Gemini image models failed:", lastError);
   throw lastError;
 }
+
+export async function askPDFResponseGemini(
+  content: string | any[],
+  isJson = true,
+) {
+  let lastError = null;
+
+  // 🛠️ Normalize parts: if it's a string, wrap it. If it's an array, use it.
+  const parts = typeof content === "string" ? [{ text: content }] : content;
+
+  for (const modelName of FALLBACK_CHAIN) {
+    try {
+      console.log(`🤖 Attempting with: ${modelName}...`);
+
+      const response = await ai.models.generateContent({
+        model: modelName,
+        contents: [{ role: "user", parts: parts }], // Use our normalized parts
+        config: {
+          responseMimeType: isJson ? "application/json" : "text/plain",
+          temperature: 0.1,
+        },
+      });
+
+      // ... keep the rest of your existing logic (repairJSON, error handling, etc.)
+      const rawText = response.text || "";
+
+      if (!rawText) throw new Error("EMPTY_RESPONSE");
+
+      if (isJson) {
+        try {
+          // If it's already an object, just return it
+          if (typeof rawText === "object") return rawText;
+
+          return repairJSON(rawText);
+        } catch (e) {
+          console.error("❌ JSON Parse Failed. Check AI output above.");
+          throw new Error(`INVALID_JSON: ${(e as Error).message}`);
+        }
+      }
+
+      return rawText;
+    } catch (error: any) {
+      // ... your existing error handling ...
+      lastError = error;
+      const status = error.status;
+
+      if (
+        status === 503 ||
+        status === 429 ||
+        error.message === "EMPTY_RESPONSE"
+      ) {
+        console.warn(
+          `⚠️ ${modelName} failed (${status || "Empty"}). Trying fallback...`,
+        );
+        continue;
+      }
+      throw error;
+    }
+  }
+
+  console.error("💀 All Gemini models are currently unavailable.");
+  throw lastError;
+}

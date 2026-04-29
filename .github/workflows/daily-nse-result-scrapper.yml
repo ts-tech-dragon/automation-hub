@@ -1,0 +1,45 @@
+name: NSE Scrapper Engine
+
+on:
+  schedule:
+    # Runs every hour at the 30-minute mark
+    # Between 8:30 AM and 11:30 PM IST, Monday to Friday
+    - cron: "30 7-23 * * 1-5"
+      timezone: "Asia/Kolkata"
+
+  # Allows you to run the worker manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  run-engine:
+    runs-on: ubuntu-latest
+
+    env:
+      # Ensures the Node.js code itself also operates in IST
+      TZ: "Asia/Kolkata"
+      # Add your environment variables here
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      DISCORD_ERROR_LOGS_URL: ${{ secrets.DISCORD_ERROR_LOGS_URL }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20" # Use the latest stable version
+          cache: "npm"
+
+      - name: Install Dependencies
+        run: npm install
+
+      # Install Playwright browsers (required for NSE "Handshake")
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run NSE Engine
+        run: node src/nse/runEngine.js # Update this to your actual entry point

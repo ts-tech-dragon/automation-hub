@@ -140,3 +140,54 @@ export async function sendErrorToDiscord(error: any, title = "") {
     console.error("Failed to send error to Discord:", (err as Error).message);
   }
 }
+
+export async function sendNSEResultDiscordNotification(
+  data: any,
+  pdfUrl: string,
+) {
+  const webhookUrl = ENV_VARS.DISCORD_WEBHOOK_URL || "";
+
+  const payload = {
+    username: "NSE Result Bot 📈",
+    embeds: [
+      {
+        title: `Corporate Announcement: ${data.symbol}`,
+        url: pdfUrl,
+        color: data.dividend_declared ? 3066993 : 5814783, // Green if dividend, Blue otherwise
+        description: data.highlights.map((h: string) => `• ${h}`).join("\n"),
+        fields: [
+          {
+            name: "Company",
+            value: data.company_name,
+            inline: true,
+          },
+          {
+            name: "Date",
+            value: data.meeting_date,
+            inline: true,
+          },
+          {
+            name: "Financials (YoY)",
+            value: data.financials.profit_current
+              ? `
+                Profit: ${data.financials.profit_current} Rs
+                \nProfit %: ${data.financials.profit_yoy_chg_pct}%
+                \nEPS: ${data.financials.eps_current} Rs
+                \nEPS %: ${data.financials.eps_yoy_chg_pct}%
+                `
+              : "N/A",
+            inline: false,
+          },
+        ],
+        footer: { text: "NSE Archive Automation" },
+        timestamp: new Date().toISOString(),
+      },
+    ],
+  };
+
+  try {
+    await axios.post(webhookUrl, payload);
+  } catch (err) {
+    console.error("Failed to send error to Discord:", (err as Error).message);
+  }
+}

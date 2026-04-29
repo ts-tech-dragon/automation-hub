@@ -1,7 +1,18 @@
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc.js";
+import timezone from "dayjs/plugin/timezone.js";
 import "dayjs/locale/en";
 
 dayjs.locale("en");
+// Extend dayjs with the plugins
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+export const getTimeInIST = (formate = "DD-MM-YYYY") => {
+  // Set the date specifically to IST
+  const formattedDate = dayjs().tz("Asia/Kolkata").format(formate);
+  return formattedDate;
+};
 
 /**
  * Removes any HTML tags that Telegram doesn't support

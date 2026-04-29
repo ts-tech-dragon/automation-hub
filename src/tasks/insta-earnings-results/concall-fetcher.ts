@@ -68,7 +68,17 @@ export async function concallEarningsFetcher() {
         // Clean up the string (e.g., "Market Cap ₹1,200 Cr" -> "₹1,200 Cr")
         // FIX 1: Add 'await' here to resolve the string
         const marketCapValue = await marketCapFirstChild.innerText();
-        results.push({ name, marketCap: marketCapValue, eps });
+        const marketCapValueNUm = parseFloat(
+          marketCapValue
+            .replace("₹", "")
+            .replace("Cr", "")
+            .replace(/,/g, "")
+            .trim(),
+        );
+
+        if (Boolean(marketCapValueNUm >= 1000)) {
+          results.push({ name, marketCap: marketCapValue, eps });
+        }
         // FIX 2: Await the page closure
         await detailPage.close();
 
@@ -79,7 +89,7 @@ export async function concallEarningsFetcher() {
       }
     }
 
-    console.log("✅ Final Scraped Data:", results);
+    console.log("✅ Final Scraped Data:", results.length);
     return results;
   } catch (err) {
     console.error("❌ Main Task failed:", err);
