@@ -18,18 +18,10 @@ const runNSEEngine = async () => {
     const financialResult = await runNSEScrapper();
     // const financialResult = NSE_MOCK_DATA;
 
-    // 1. Pre-normalize your mock list once (lowercase and trimmed)
-    const normalizedAllowed = CONCALL_MOCK_RESPONSE.map((item) =>
-      item.name.toLowerCase().trim(),
-    );
     const oneHourResult = financialResult.filter((result: any) => {
       const dateTimeMatch = result.an_dt.includes(dataTime);
-      const currentName = result.sm_name.toLowerCase().trim();
-      const nameMatch = normalizedAllowed.some(
-        (allowed) =>
-          currentName.includes(allowed) || allowed.includes(currentName),
-      );
-      if (dateTimeMatch && nameMatch) return result;
+
+      if (dateTimeMatch) return result;
     });
 
     const pdfURLs = oneHourResult.map((item: any) => item.attchmntFile);
