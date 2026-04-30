@@ -30,6 +30,7 @@ export const scrapperBrowser = async (options: ScrapperOptions = {}) => {
         "--disable-blink-features=AutomationControlled",
         "--no-sandbox",
         "--disable-dev-shm-usage",
+        "--start-maximized", // Forces Chromium to start maximized
       ],
 
       viewport: { width: 1366, height: 768 },

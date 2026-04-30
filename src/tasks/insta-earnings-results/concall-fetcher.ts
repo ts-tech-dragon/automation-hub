@@ -76,8 +76,29 @@ export async function concallEarningsFetcher() {
             .trim(),
         );
 
+        if (Boolean(marketCapValueNUm < 1000)) {
+          // FIX 2: Await the page closure
+          await detailPage.close();
+
+          await page.waitForTimeout(500);
+          continue;
+        }
+
+        await detailPage.locator("[role=tablist] button").first().click();
+
+        const tabPanel = detailPage.locator("[role=tabpanel]").first();
+
+        // This waits until the element is present in DOM AND visible (not hidden)
+        await tabPanel.waitFor({ state: "visible", timeout: 5000 });
+        let symbol = "";
+        const nseContainer = detailPage.getByText("NSE:");
+        if (nseContainer) {
+          const nseParentContainer = nseContainer.locator("..");
+          symbol = await nseParentContainer.locator("span").nth(1).innerText();
+        }
+
         if (Boolean(marketCapValueNUm >= 1000)) {
-          results.push({ name, marketCap: marketCapValue, eps });
+          results.push({ name, marketCap: marketCapValue, eps, symbol });
         }
         // FIX 2: Await the page closure
         await detailPage.close();

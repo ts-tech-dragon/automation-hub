@@ -4,13 +4,20 @@ import { EARNINGS_MOCK_DATA } from "../../../lib/constants/insta-earning-results
 import { sendTelegramStockImage } from "../../core/notifier/telegram.js";
 import { concallEarningsFetcher } from "./concall-fetcher.js";
 import { generateEarningsImage } from "./generateEarningImage.js";
+import { isAfter6PMInIST } from "../../../lib/helpers/index.js";
 
 async function runEarningsGenerator() {
   try {
-    const earningResult: any = await concallEarningsFetcher();
-    // const earningResult = EARNINGS_MOCK_DATA;
+    const isEPSRequired = isAfter6PMInIST();
 
-    const earningsURL = await generateEarningsImage(earningResult);
+    const earningResult: any = await concallEarningsFetcher();
+    // const earningResult: any = EARNINGS_MOCK_DATA;
+
+    const earningsURL = await generateEarningsImage(
+      earningResult,
+      isEPSRequired,
+    );
+
     if (earningsURL) {
       await sendTelegramStockImage(EARNING_POST_DESCRIPTION, earningsURL, true);
     }

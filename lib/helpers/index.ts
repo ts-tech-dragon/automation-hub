@@ -14,6 +14,17 @@ export const getTimeInIST = (formate = "DD-MM-YYYY") => {
   return formattedDate;
 };
 
+export function isAfter6PMInIST() {
+  // Get the current time in IST
+  const nowInIST = dayjs().tz("Asia/Kolkata");
+
+  // Create a comparison object for 6:00 PM (18:00) today in IST
+  const sixPM = nowInIST.hour(18).minute(0).second(0).millisecond(0);
+
+  // Return true if now is after 6:00 PM
+  return nowInIST.isAfter(sixPM);
+}
+
 /**
  * Removes any HTML tags that Telegram doesn't support
  */
