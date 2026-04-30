@@ -95,12 +95,16 @@ export async function sendNSEResultTelegramNotification(
   formattedMsg: string,
   pdfUrl: string,
 ) {
-  // Convert Markdown-ish to HTML for Telegram
-  const htmlMsg =
-    formattedMsg.replace(/\*\*(.*?)\*\*/g, "<b>$1</b>").replace(/•/g, "▫️") +
-    `\n\n📄 <a href="${pdfUrl}">View Full Report</a>`;
+  try {
+    // Convert Markdown-ish to HTML for Telegram
+    const htmlMsg =
+      formattedMsg.replace(/\*\*(.*?)\*\*/g, "<b>$1</b>").replace(/•/g, "▫️") +
+      `\n\n📄 <a href="${pdfUrl}">View Full Report</a>`;
 
-  await tg.sendMessage(ENV_VARS.TELEGRAM_CHAT_ID, htmlMsg, {
-    parse_mode: "HTML",
-  });
+    await tg.sendMessage(ENV_VARS.TELEGRAM_CHAT_ID, htmlMsg, {
+      parse_mode: "HTML",
+    });
+  } catch (error) {
+    console.error("❌ Telegraf Error:", (error as Error).message);
+  }
 }
