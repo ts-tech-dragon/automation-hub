@@ -7,7 +7,10 @@ import {
 import { processBatchNsePdfs } from "./processNsePdf.js";
 import { formatNSEResultMessage } from "../../../lib/helpers/nse-results/index.js";
 import { sendNSEResultTelegramNotification } from "../../core/notifier/telegram.js";
-import { sendNSEResultDiscordNotification } from "../../core/notifier/discord.js";
+import {
+  sendErrorToDiscord,
+  sendNSEResultDiscordNotification,
+} from "../../core/notifier/discord.js";
 import { CONCALL_MOCK_RESPONSE } from "../../../lib/constants/insta-earning-results/mock.js";
 
 const runNSEEngine = async () => {
@@ -36,6 +39,7 @@ const runNSEEngine = async () => {
     });
   } catch (error) {
     console.log("RUN NSE Scrapper : ", (error as Error).message);
+    sendErrorToDiscord(error, "NSE RESULT ERROR");
   }
 };
 

@@ -3,6 +3,7 @@ import { formatJob, sanitizeForTelegram } from "../../../lib/helpers/index.js";
 import { ENV_VARS } from "../../../lib/constants/index.js";
 import { message } from "telegraf/filters";
 import { ComputeTokensResponse } from "@google/genai";
+import { sendErrorToDiscord } from "./discord.js";
 
 // Initialize the Telegram client
 const tg = new Telegram(ENV_VARS.TELEGRAM_BOT_TOKEN);
@@ -106,5 +107,6 @@ export async function sendNSEResultTelegramNotification(
     });
   } catch (error) {
     console.error("❌ Telegraf Error:", (error as Error).message);
+    sendErrorToDiscord(error, "NSE RESULT TELEGRAM ERROR");
   }
 }

@@ -113,23 +113,40 @@ export async function sendDiscordInterviewProblem(probData: {
   }
 }
 
-export async function sendErrorToDiscord(error: any, title = "") {
+// Add 'rawResponse' as an optional third parameter
+export async function sendErrorToDiscord(
+  error: any,
+  title = "",
+  rawResponse?: string,
+) {
   const webhookUrl = ENV_VARS.DISCORD_ERROR_LOGS_URL || "";
   try {
+    const fields = [
+      {
+        name: "Stack Trace",
+        // Substring to stay within Discord's 1024 character limit per field
+        value: `\`\`\`${error?.stack?.substring(0, 1000) || "No stack trace available"}\`\`\``,
+      },
+      { name: "Timestamp", value: new Date().toISOString() },
+    ];
+
+    // If a raw response is provided, add it as a new field
+    if (rawResponse) {
+      fields.push({
+        name: "Raw Gemini Response",
+        // Format it as a code block for better readability
+        value: `\`\`\`json\n${rawResponse.substring(0, 1000)}\n\`\`\``,
+      });
+    }
+
     const payload = {
       username: "Error Logger",
       embeds: [
         {
-          title: "🚨 Application Error" + title,
+          title: "🚨 Application Error" + (title ? `: ${title}` : ""),
           description: `**Message:** ${error.message}`,
-          color: 15158332, // Decimal color for Red
-          fields: [
-            {
-              name: "Stack Trace",
-              value: `\`\`\`${error.stack.substring(0, 1000)}\`\`\``,
-            },
-            { name: "Timestamp", value: new Date().toISOString() },
-          ],
+          color: 15158332,
+          fields: fields,
           footer: { text: "Node.js Error Monitoring" },
         },
       ],
@@ -189,5 +206,6 @@ export async function sendNSEResultDiscordNotification(
     await axios.post(webhookUrl, payload);
   } catch (err) {
     console.error("Failed to send error to Discord:", (err as Error).message);
+    sendErrorToDiscord(err, "NSE DISCORD ERROR", data);
   }
 }
