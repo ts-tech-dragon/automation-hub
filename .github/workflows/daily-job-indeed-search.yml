@@ -1,4 +1,4 @@
-name: Daily Job Search
+name: Daily Indeed Job Search
 
 on:
   # schedule:
@@ -30,4 +30,4 @@ jobs:
         env:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-        run: npx tsx src/tasks/job-listing/engine.ts
+        run: npx tsx src/tasks/job-listing/indeed/engine.ts
