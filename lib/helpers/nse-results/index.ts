@@ -1,12 +1,12 @@
 export function formatNSEResultMessage(data: any) {
   const {
-    company_name,
-    symbol,
-    meeting_date,
-    highlights,
-    financials,
-    dividend_declared,
-    dividend_amount,
+    company_name = "",
+    symbol = "",
+    meeting_date = "",
+    highlights = "",
+    financials = {},
+    dividend_declared = "",
+    dividend_amount = "",
   } = data;
 
   let msg = `**🏢 ${company_name} (${symbol})**\n`;

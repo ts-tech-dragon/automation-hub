@@ -29,12 +29,9 @@ const runNSEEngine = async () => {
     const geminiResponse = await processBatchNsePdfs(pdfURLs);
     // const geminiResponse = NSE_RESULT_GEMINI_MOCK;
     pdfURLs.forEach(async (url: string, index: number) => {
+      await sendNSEResultDiscordNotification(geminiResponse[index], url);
       const formatedMsg = formatNSEResultMessage(geminiResponse[index]);
-      await Promise.all([
-        sendNSEResultTelegramNotification(formatedMsg, url),
-        sendNSEResultDiscordNotification(geminiResponse[index], url),
-      ]);
-
+      await sendNSEResultTelegramNotification(formatedMsg, url);
       console.log("Results Send Successfully!!!");
     });
   } catch (error) {
