@@ -136,6 +136,7 @@ export async function idleMouseMovement(page: any) {
  */
 export async function launchHumanBrowser(
   localStoragePath: string | null = null,
+  ENV_KEY: string,
 ) {
   const isLocal = process.platform === "win32";
 
@@ -165,7 +166,7 @@ export async function launchHumanBrowser(
 
   const finalStoragePath = await resolveStorageState(
     localStoragePath as string,
-    "FOUNDIT_STORAGE_JSON",
+    ENV_KEY,
   );
 
   if (finalStoragePath) {

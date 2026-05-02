@@ -14,6 +14,7 @@ import {
 } from "../../../../lib/helpers/human.js";
 import { acceptFounditCookie } from "./acceptCookie.js";
 import { delay } from "../../../../lib/helpers/index.js";
+import { ENV_VARS } from "../../../../lib/constants/index.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -72,6 +73,7 @@ export async function applyToFoundItJobs(foundItURL: string): Promise<void> {
 
   const { browser, context, page } = (await launchHumanBrowser(
     STORAGE_PATH,
+    ENV_VARS.FOUNDIT_STORAGE_JSON,
   )) as {
     browser: Browser;
     context: BrowserContext;
