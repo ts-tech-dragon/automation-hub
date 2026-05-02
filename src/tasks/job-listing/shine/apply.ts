@@ -43,6 +43,49 @@ const runApplyShine = async (shineURL: string) => {
     await humanScroll(page, "down", randInt(100, 300));
     await humanDelay(1000, 2000);
 
+    if (page.url().includes("login") || page.url().includes("signin")) {
+      log("Session expired. Please login again.", "error");
+      process.exit(1);
+    }
+
+    let totalApplied = 0;
+
+    for (let i = 0; i < 20; i++) {
+      await humanScroll(page, "down", randInt(100, 300));
+      const applyCards = page.locator(`[data-card-index='${i}']`);
+      await applyCards.waitFor({ state: "visible" });
+      if (!applyCards) continue;
+      const applyButton = applyCards
+        .locator("button")
+        .filter({ hasText: "Apply" });
+      await applyButton.waitFor({ state: "visible" });
+      await applyButton.click();
+      log("Clicked Apply. Monitoring for questionnaire...");
+
+      const questionnaire = page.locator(".questionnaireWrap");
+      // 2. Conditional Check
+      // We use isVisible() after a short delay to see if it's actually there
+      await humanDelay(2000, 3000);
+      if (await questionnaire.isVisible()) {
+        const closeButton = page.locator('button[aria-label="Close Button"]');
+        log("Questionnaire detected. Closing modal to continue...");
+
+        // Use your humanClick helper for the close button
+        await humanClick(page, closeButton);
+        // Wait for it to be removed from the view
+        await questionnaire.waitFor({ state: "hidden" });
+        await humanDelay(500, 1000);
+        console.log("Questionnaire Model Closed...");
+        continue;
+      }
+      await humanDelay(2000, 4000);
+      await humanScroll(page, "down", randInt(100, 300));
+      await humanDelay(1000, 2000);
+      totalApplied++;
+    }
+    console.log(`Applied for ${totalApplied} Jobs 💌💥`);
+  } catch (error) {
+    console.log("runApplyShine error : ", (error as Error).message);
     // --- SCREENSHOT LOGIC START ---
     const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
     const screenshotPath = path.join(`shine_load_${timestamp}.png`);
@@ -51,14 +94,6 @@ const runApplyShine = async (shineURL: string) => {
       fullPage: true,
     });
     log(`📸 Screenshot captured at: ${screenshotPath}`);
-
-    if (page.url().includes("login") || page.url().includes("signin")) {
-      log("Session expired. Please login again.", "error");
-      process.exit(1);
-    }
-    return;
-  } catch (error) {
-    console.log("runApplyShine error : ", (error as Error).message);
   } finally {
     await browser.close();
     await context.close();

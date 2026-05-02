@@ -42,3 +42,12 @@ export const RUN_FOUNDIT_SCRAPPER_PAYLOAD = {
   maxJobsPerRun: 40,
   jobCities: ["Bengaluru", "Bangalore", "Chennai", "Coimbatore", "Trichy"],
 };
+
+export const RUN_SHINE_SCRAPPER_PAYLOAD = {
+  jobCities: [
+    { loc: "bangalore", code: "243" },
+    { loc: "chennai", code: "244" },
+    { loc: "coimbatore", code: "361" },
+    { loc: "tiruchirappalli", code: "367" },
+  ],
+};
