@@ -12,6 +12,7 @@ import {
   sendNSEResultDiscordNotification,
 } from "../../core/notifier/discord.js";
 import { CONCALL_MOCK_RESPONSE } from "../../../lib/constants/insta-earning-results/mock.js";
+import { saveDailyResults } from "../../db/services/index.js";
 
 const runNSEEngine = async () => {
   const dataTime = getTimeInIST("DD-MMM-YYYY HH");
@@ -31,6 +32,8 @@ const runNSEEngine = async () => {
     if (!pdfURLs.length) return console.log("No Results Found!!!");
     const geminiResponse = await processBatchNsePdfs(pdfURLs);
     // const geminiResponse = NSE_RESULT_GEMINI_MOCK;
+
+    await saveDailyResults(geminiResponse);
     pdfURLs.forEach(async (url: string, index: number) => {
       await sendNSEResultDiscordNotification(geminiResponse[index], url);
       const formatedMsg = formatNSEResultMessage(geminiResponse[index]);
