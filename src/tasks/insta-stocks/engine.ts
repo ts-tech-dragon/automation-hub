@@ -8,8 +8,11 @@ import { generateStockSummaryImage } from "./generator.js";
 import { mockGeminiSummaryResponse } from "../../../lib/constants/mockData.js";
 import { broadcastUpdate } from "../../core/social/facebook.js";
 import { generateProfessionalSlide } from "../../../lib/gen-image-drawer/dailyNiftyPost.js";
+import { isMarketHoliday } from "../../../lib/helpers/insta-earning-results/index.js";
 
 async function runWorkflow() {
+  const isHoliday = isMarketHoliday();
+  if (isHoliday) return null;
   try {
     console.log("📈 Fetching Live Market Data...");
     const marketData = await getMarketData();

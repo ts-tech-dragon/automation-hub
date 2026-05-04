@@ -2,6 +2,27 @@ import dayjs from "dayjs";
 
 const TODAY = dayjs(new Date()).format("DD,MMM,YYYY");
 
+export const MARKET_HOLIDAYS = {
+  marketHolidays: [
+    "2026-01-15",
+    "2026-01-26",
+    "2026-03-03",
+    "2026-03-26",
+    "2026-03-31",
+    "2026-04-03",
+    "2026-04-14",
+    "2026-05-01",
+    "2026-05-28",
+    "2026-06-26",
+    "2026-09-14",
+    "2026-10-02",
+    "2026-10-20",
+    "2026-11-10",
+    "2026-11-24",
+    "2026-12-25",
+  ],
+};
+
 export const EARNING_POST_DESCRIPTION = {
   headline: `🚀 Daily Earnings Watchlist | ${TODAY} }`,
   caption: `Stay ahead of the market! 📊 Here are the key companies scheduled to announce their financial results today.\n\n📅 <b>Date:</b> ${TODAY}\n💰 <b>Focus:</b> Earnings impact and Market Cap analysis.\n\nWhich of these stocks are you tracking for today's session? Let us know in the comments! 👇\n\n#StockMarketIndia #EarningsCalendar #Nifty50 #Investing #StockAnalysis #MarketUpdates #TradingStrategy #tsfinnews`,
