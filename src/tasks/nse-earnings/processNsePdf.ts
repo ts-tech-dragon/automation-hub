@@ -23,6 +23,8 @@ export async function processBatchNsePdfs(pdfUrls: any[]) {
   // 3. Combine PDFs and Prompt into the "parts" array
   const parts = [...pdfParts, { text: ANALYZE_NSE_PROMPT }];
 
+  console.log("Calling Gemini API...🤖");
+
   // 3. Send everything in ONE call
   const result = await askPDFResponseGemini(parts, true);
   return result;
