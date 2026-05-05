@@ -1,4 +1,4 @@
-name: Daily Small Interview Problem
+name: Interview Small Prob Engine
 
 on:
   schedule:
@@ -29,7 +29,7 @@ jobs:
       - name: 📦 Install Dependencies
         run: npm install
 
-      - name: 🚀 Run Small Interview Problem
+      - name: 🚀 Run Small Problem Engine
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
