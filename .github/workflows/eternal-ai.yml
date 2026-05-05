@@ -1,8 +1,8 @@
 name: Eternal AI Reward Bot
 
 on:
-  schedule:
-    - cron: "0 3 * * *" # 5:00 AM UTC (approx 08:30 AM IST)
+  # schedule:
+  #   - cron: "0 3 * * *" # 5:00 AM UTC (approx 08:30 AM IST)
   workflow_dispatch: # Allows you to click a button to run it manually
 
 jobs:

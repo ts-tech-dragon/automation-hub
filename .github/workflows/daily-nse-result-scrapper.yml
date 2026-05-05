@@ -1,10 +1,10 @@
 name: NSE Scrapper Engine
 
 on:
-  schedule:
-    # 3:00 AM UTC (8:30 AM IST) to 6:00 PM UTC (11:30 PM IST)
-    # This runs at the top of the hour UTC, which is the :30 mark in IST
-    - cron: "0 3-18 * * 1-5"
+  # schedule:
+  #   # 3:00 AM UTC (8:30 AM IST) to 6:00 PM UTC (11:30 PM IST)
+  #   # This runs at the top of the hour UTC, which is the :30 mark in IST
+  #   - cron: "0 3-18 * * 1-5"
   workflow_dispatch: # Allows manual run
 jobs:
   run-prep:
