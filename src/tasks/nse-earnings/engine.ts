@@ -61,11 +61,22 @@ const runNSEEngine = async () => {
   }
 };
 
+const oneTimeRunner = async () => {
+  try {
+    await runNSEEngine();
+    // 4. Close DB ONLY once the entire 1-hour session is finished
+    await closeDB();
+    console.log("🏁 Connection Closed.");
+  } catch (error) {
+    console.log("oneTimeRunner engine error : ", (error as Error).message);
+  }
+};
+
 const RUN_DURATION = 60 * 60 * 1000; // 1 hour
 const SLEEP_INTERVAL = 5 * 60 * 1000; // 5 minutes
 
 async function monitorMarketEngine() {
-  if (isAfter330PMInIST()) return await runNSEEngine();
+  if (isAfter330PMInIST()) return await oneTimeRunner();
   const startTime = Date.now();
   console.log("🚀 Starting NSE Monitoring Session...");
   while (Date.now() - startTime < RUN_DURATION) {
