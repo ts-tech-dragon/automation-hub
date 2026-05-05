@@ -1,3 +1,4 @@
+import { isAfter330PMInIST } from "../../../lib/helpers/index.js";
 import connectDB, { closeDB } from "../index.js";
 import type { IEarningsResult } from "../models/index.js";
 
@@ -17,6 +18,7 @@ export const saveDailyResults = async (data: IEarningsResult[]) => {
           : item.financials.profit_yoy_chg_pct > 20
             ? "BEARISH"
             : "Neutral/Bearish",
+      isAfterMarketHours: isAfter330PMInIST(),
     }));
     const result = db.collection("daily_earnings").insertMany(docsToInsert);
     console.log("Data Added to DB Successfully!!!");

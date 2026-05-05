@@ -46,7 +46,6 @@ const runNSEEngine = async () => {
     const pdfURLs = newResults.map((item: any) => item.attchmntFile);
 
     const geminiResponse = await processBatchNsePdfs(pdfURLs);
-    console.log("new results : ", geminiResponse);
     // const geminiResponse = NSE_RESULT_GEMINI_MOCK;
 
     await saveDailyResults(geminiResponse);
