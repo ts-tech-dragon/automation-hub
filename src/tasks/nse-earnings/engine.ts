@@ -1,4 +1,4 @@
-import { getTimeInIST } from "../../../lib/helpers/index.js";
+import { getTimeInIST, isAfter330PMInIST } from "../../../lib/helpers/index.js";
 import { runNSEScrapper } from "./nseScrapper.js";
 import {
   NSE_MOCK_DATA,
@@ -65,6 +65,7 @@ const RUN_DURATION = 60 * 60 * 1000; // 1 hour
 const SLEEP_INTERVAL = 5 * 60 * 1000; // 5 minutes
 
 async function monitorMarketEngine() {
+  if (isAfter330PMInIST()) return await runNSEEngine();
   const startTime = Date.now();
   console.log("🚀 Starting NSE Monitoring Session...");
   while (Date.now() - startTime < RUN_DURATION) {

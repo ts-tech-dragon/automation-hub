@@ -30,7 +30,7 @@ export function isAfter330PMInIST() {
   const nowInIST = dayjs().tz("Asia/Kolkata");
 
   // Create a comparison object for 6:00 PM (18:00) today in IST
-  const three_thirty_pm = nowInIST.hour(18).minute(0).second(0).millisecond(0);
+  const three_thirty_pm = nowInIST.hour(15).minute(15).second(0).millisecond(0);
 
   // Return true if now is after 6:00 PM
   return nowInIST.isAfter(three_thirty_pm);
