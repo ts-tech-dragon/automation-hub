@@ -1,9 +1,9 @@
 name: Daily Small Interview Problem
 
 on:
-  # schedule:
-  #   # 4:00 PM IST is 10:30 AM UTC
-  #   - cron: "0 11 * * *"
+  schedule:
+    # 4:00 PM IST is 10:30 AM UTC
+    - cron: "0 11 * * *"
   workflow_dispatch: # Allows manual run
 
 jobs:

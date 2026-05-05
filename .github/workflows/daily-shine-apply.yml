@@ -1,12 +1,12 @@
 name: Shine Daily Job Apply
 
 on:
-  # schedule:
-  #   # 🌅 Morning Run -> 5:00 AM IST (11:30 PM UTC)
-  #   - cron: "30 00 * * *"
+  schedule:
+    # 🌅 Morning Run -> 5:00 AM IST (11:30 PM UTC)
+    - cron: "30 00 * * *"
 
-  #   # 🌇 Evening Run -> 6:00 PM IST
-  #   - cron: "30 11 * * *"
+    # 🌇 Evening Run -> 6:00 PM IST
+    - cron: "30 11 * * *"
   workflow_dispatch: # Allows manual trigger from GitHub UI
 
 jobs:
