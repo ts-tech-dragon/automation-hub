@@ -65,60 +65,239 @@ export async function generateEarningsImage(
     <html>
     <head>
       <script src="https://cdn.tailwindcss.com"></script>
-      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
       <style>
-        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: white; }
-        .glow { text-shadow: 0 0 10px rgba(45, 212, 191, 0.5); }
-        .row-alt { background-color: rgba(30, 41, 59, 0.5); }
+        * { box-sizing: border-box; }
+        body {
+          font-family: 'Inter', sans-serif;
+          background: radial-gradient(ellipse at 20% 20%, #0d2137 0%, #0a0f1e 40%, #050810 100%);
+          color: white;
+          min-height: 100vh;
+        }
+
+        .glass-card {
+          background: linear-gradient(135deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.02) 100%);
+          border: 1px solid rgba(255,255,255,0.12);
+          backdrop-filter: blur(24px);
+          -webkit-backdrop-filter: blur(24px);
+          box-shadow:
+            0 0 0 1px rgba(45, 212, 191, 0.08) inset,
+            0 32px 64px rgba(0,0,0,0.5),
+            0 4px 16px rgba(0,0,0,0.3);
+        }
+
+        .header-glass {
+          background: linear-gradient(135deg, rgba(45, 212, 191, 0.12) 0%, rgba(56, 189, 248, 0.06) 100%);
+          border-bottom: 1px solid rgba(45, 212, 191, 0.2);
+          position: relative;
+          overflow: hidden;
+        }
+
+        .header-glass::before {
+          content: '';
+          position: absolute;
+          top: -60%;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 70%;
+          height: 120%;
+          background: radial-gradient(ellipse, rgba(45, 212, 191, 0.15) 0%, transparent 70%);
+          pointer-events: none;
+        }
+
+        .title-glow {
+          text-shadow:
+            0 0 20px rgba(45, 212, 191, 0.6),
+            0 0 40px rgba(45, 212, 191, 0.3),
+            0 0 80px rgba(45, 212, 191, 0.15);
+        }
+
+        .date-pill {
+          display: inline-block;
+          background: rgba(45, 212, 191, 0.1);
+          border: 1px solid rgba(45, 212, 191, 0.25);
+          border-radius: 999px;
+          padding: 4px 20px;
+          font-size: 0.85rem;
+          color: rgba(153, 246, 228, 0.9);
+          letter-spacing: 0.08em;
+          backdrop-filter: blur(8px);
+        }
+
+        thead tr {
+          background: linear-gradient(90deg, rgba(45, 212, 191, 0.1) 0%, rgba(45, 212, 191, 0.04) 100%);
+        }
+
+        thead th {
+          color: rgba(94, 234, 212, 1);
+          font-size: 0.7rem;
+          font-weight: 700;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          padding: 14px 20px;
+          border-bottom: 1px solid rgba(45, 212, 191, 0.2);
+        }
+
+        tbody tr {
+          border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+          transition: background 0.2s ease;
+        }
+
+        tbody tr:hover {
+          background: rgba(45, 212, 191, 0.05);
+        }
+
+        tbody tr.row-alt {
+          background: rgba(255, 255, 255, 0.02);
+        }
+
+        tbody tr.row-alt:hover {
+          background: rgba(45, 212, 191, 0.06);
+        }
+
+        td {
+          padding: 14px 20px;
+          font-size: 0.92rem;
+        }
+
+        .company-name {
+          font-weight: 600;
+          color: rgba(241, 245, 249, 1);
+          letter-spacing: 0.01em;
+        }
+
+        .mono-val {
+          font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+          font-size: 0.88rem;
+          font-weight: 500;
+          color: rgba(226, 232, 240, 0.95);
+        }
+
+        .rupee-badge {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 22px;
+          height: 22px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, rgba(52, 211, 153, 0.25), rgba(16, 185, 129, 0.1));
+          border: 1px solid rgba(52, 211, 153, 0.3);
+          color: rgba(110, 231, 183, 1);
+          font-size: 0.7rem;
+          font-weight: 700;
+          flex-shrink: 0;
+        }
+
+        .divider {
+          width: 1px;
+          background: linear-gradient(to bottom, transparent, rgba(45, 212, 191, 0.2) 20%, rgba(45, 212, 191, 0.2) 80%, transparent);
+          align-self: stretch;
+          margin: 8px 0;
+        }
+
+        .footer-glass {
+          background: linear-gradient(90deg, rgba(0,0,0,0.3) 0%, rgba(15,23,42,0.4) 100%);
+          border-top: 1px solid rgba(255, 255, 255, 0.06);
+          padding: 16px 24px;
+        }
+
+        .footer-item {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          color: rgba(148, 163, 184, 0.85);
+          font-size: 0.8rem;
+          font-weight: 500;
+          letter-spacing: 0.03em;
+        }
+
+        .footer-item img {
+          opacity: 0.75;
+          filter: drop-shadow(0 0 4px rgba(45, 212, 191, 0.3));
+        }
+
+        .nifty-cell {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .nifty-badge {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, rgba(52, 211, 153, 0.2), rgba(16, 185, 129, 0.08));
+          border: 1px solid rgba(52, 211, 153, 0.35);
+          font-size: 0.75rem;
+        }
+
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          table-layout: fixed;
+        }
+
+        .outer-wrapper {
+          padding: 28px;
+          min-height: 100vh;
+        }
       </style>
     </head>
-    <body class="p-8 w-full">
-      <div class="border border-slate-700 rounded-2xl overflow-hidden bg-slate-900/80 backdrop-blur-md">
-        <div class="p-6 text-center border-b border-slate-700">
-          <h1 class="text-3xl font-bold text-teal-400 glow tracking-tight uppercase">
-            Daily Upcoming Earnings & Watchlist
-          </h1>
-          <p class="text-xl text-white-400 mt-2 font-mono"> ${dateStr}</p>
-        </div>
-        
-      
+    <body>
+      <div class="outer-wrapper">
+      <div class="glass-card" style="border-radius: 20px; overflow: hidden;">
 
-        <div class="flex items-start justify-center gap-2">
-          <table class="flex-1 text-left">
-            <thead class="bg-teal-500/10 text-teal-300 uppercase text-md font-bold">
+        <div class="header-glass" style="padding: 28px 32px; text-align: center;">
+          <div style="position: relative; z-index: 1;">
+            <h1 class="title-glow" style="font-size: 1.7rem; font-weight: 800; color: rgba(94, 234, 212, 1); letter-spacing: 0.06em; text-transform: uppercase; margin: 0 0 10px;">
+              Daily Upcoming Earnings &amp; Watchlist
+            </h1>
+            <div class="date-pill">
+              <span style="font-weight: 600;">${dateStr}</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: stretch; gap: 0;">
+
+          <table>
+            <thead>
               <tr>
-                <th class="px-8 py-4">Company Name</th>
-                <th class="px-8 py-4 text-right">Market Cap (INR CR)</th>
-                ${Boolean(isEPSRequired) ? '<th class="px-8 py-4 text-right">EPS</th>' : ""}
-                <th class="px-8 py-4">Nifty 50</th>
+                <th style="width: 45%;">Company Name</th>
+                <th style="text-align: right; width: 35%;">Market Cap (INR CR)</th>
+                ${Boolean(isEPSRequired) ? '<th style="text-align: right; width: 15%;">EPS</th>' : ""}
+                <th style="text-align: center; width: 10%;">N50</th>
               </tr>
             </thead>
-            <tbody class="text-lg">
+            <tbody>
               ${dataSet1
                 .map(
                   (stock, index) => `
-                <tr class="${index % 2 === 0 ? "" : "row-alt"} border-b border-slate-800/50">
-                  <td class="px-8 py-5 font-semibold text-slate-100">${stock.name}</td>
-                  <td class="px-8 py-5 text-right font-mono">
-                    <span class="inline-flex items-center gap-2">
-                      <span class="w-6 h-6 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center text-xs">₹</span>
-                      ${stock.marketCap}
+                <tr class="${index % 2 === 0 ? "" : "row-alt"}">
+                  <td class="company-name">${stock.name}</td>
+                  <td style="text-align: right;">
+                    <span style="display: inline-flex; align-items: center; gap: 8px; justify-content: flex-end;">
+                      <span class="rupee-badge">₹</span>
+                      <span class="mono-val">${stock.marketCap}</span>
                     </span>
                   </td>
                   ${
                     Boolean(isEPSRequired)
-                      ? `<td class="px-8 py-5 text-right font-mono">
-                    <span class="inline-flex items-center gap-2">
-                      <span class="w-6 h-6 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center text-xs">₹</span>
-                      ${stock.eps}
+                      ? `<td style="text-align: right;">
+                    <span style="display: inline-flex; align-items: center; gap: 8px; justify-content: flex-end;">
+                      <span class="rupee-badge">₹</span>
+                      <span class="mono-val">${stock.eps}</span>
                     </span>
                   </td>`
                       : ""
                   }
-                  <td class="px-8 py-5 text-right font-mono">
-                    <span class="inline-flex items-center gap-2">
-                      ${stock.isNifty ? "✅" : ""}
-                    </span>
+                  <td>
+                    <div class="nifty-cell">
+                      ${stock.isNifty ? '<span class="nifty-badge">✅</span>' : ""}
+                    </div>
                   </td>
                 </tr>
               `,
@@ -126,43 +305,44 @@ export async function generateEarningsImage(
                 .join("")}
             </tbody>
           </table>
-          
-          
-          <table class="flex-1 text-left">
-            <thead class="bg-teal-500/10 text-teal-300 uppercase text-md font-bold">
+
+          <div class="divider"></div>
+
+          <table>
+            <thead>
               <tr>
-                <th class="px-8 py-4">Company Name</th>
-                <th class="px-8 py-4 text-right">Market Cap (INR CR)</th>
-                ${Boolean(isEPSRequired) ? '<th class="px-8 py-4 text-right">EPS</th>' : ""}
-                <th class="px-8 py-4">Nifty 50</th>
+                <th style="width: 45%;">Company Name</th>
+                <th style="text-align: right; width: 35%;">Market Cap (INR CR)</th>
+                ${Boolean(isEPSRequired) ? '<th style="text-align: right; width: 15%;">EPS</th>' : ""}
+                <th style="text-align: center; width: 10%;">N50</th>
               </tr>
             </thead>
-            <tbody class="text-lg">
+            <tbody>
               ${dataSet2
                 .map(
                   (stock, index) => `
-                <tr class="${index % 2 === 0 ? "" : "row-alt"} border-b border-slate-800/50">
-                  <td class="px-8 py-5 font-semibold text-slate-100">${stock.name}</td>
-                  <td class="px-8 py-5 text-right font-mono">
-                    <span class="inline-flex items-center gap-2">
-                      <span class="w-6 h-6 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center text-xs">₹</span>
-                      ${stock.marketCap}
+                <tr class="${index % 2 === 0 ? "" : "row-alt"}">
+                  <td class="company-name">${stock.name}</td>
+                  <td style="text-align: right;">
+                    <span style="display: inline-flex; align-items: center; gap: 8px; justify-content: flex-end;">
+                      <span class="rupee-badge">₹</span>
+                      <span class="mono-val">${stock.marketCap}</span>
                     </span>
                   </td>
                   ${
                     Boolean(isEPSRequired)
-                      ? `<td class="px-8 py-5 text-right font-mono">
-                    <span class="inline-flex items-center gap-2">
-                      <span class="w-6 h-6 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center text-xs">₹</span>
-                      ${stock.eps}
+                      ? `<td style="text-align: right;">
+                    <span style="display: inline-flex; align-items: center; gap: 8px; justify-content: flex-end;">
+                      <span class="rupee-badge">₹</span>
+                      <span class="mono-val">${stock.eps}</span>
                     </span>
                   </td>`
                       : ""
                   }
-                  <td class="px-8 py-5 text-right font-mono">
-                    <span class="inline-flex items-center gap-2">
-                      ${stock.isNifty ? "✅" : ""}
-                    </span>
+                  <td>
+                    <div class="nifty-cell">
+                      ${stock.isNifty ? '<span class="nifty-badge">✅</span>' : ""}
+                    </div>
                   </td>
                 </tr>
               `,
@@ -170,23 +350,27 @@ export async function generateEarningsImage(
                 .join("")}
             </tbody>
           </table>
+
         </div>
 
-        
-        <div class="p-6 bg-slate-950/50 text-center text-slate-400 text-sm flex items-center justify-center gap-4">
-            <div class="flex items-center gap-2">
-            <img src="data:image/png;base64,${fbBase64}" style="width:20px;height:20px;" />
+        <div class="footer-glass" style="display: flex; align-items: center; justify-content: center; gap: 32px;">
+          <div class="footer-item">
+            <img src="data:image/png;base64,${fbBase64}" style="width:18px;height:18px;" />
             <span>tsfinnews</span>
-            </div>
-            <div class="flex items-center gap-2">
-            <img src="data:image/png;base64,${igBase64}" style="width:20px;height:20px;" />
+          </div>
+          <div style="width: 4px; height: 4px; border-radius: 50%; background: rgba(45,212,191,0.3);"></div>
+          <div class="footer-item">
+            <img src="data:image/png;base64,${igBase64}" style="width:18px;height:18px;" />
             <span>@tsfinnews</span>
-            </div>
-            <div class="flex items-center gap-2">
-            <img src="data:image/png;base64,${thBase64}" style="width:20px;height:20px;" />
+          </div>
+          <div style="width: 4px; height: 4px; border-radius: 50%; background: rgba(45,212,191,0.3);"></div>
+          <div class="footer-item">
+            <img src="data:image/png;base64,${thBase64}" style="width:18px;height:18px;" />
             <span>@tsfinnews</span>
-            </div>
-       </div>
+          </div>
+        </div>
+
+      </div>
       </div>
     </body>
     </html>

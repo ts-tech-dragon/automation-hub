@@ -24,8 +24,15 @@ export const MARKET_HOLIDAYS = {
 };
 
 export const EARNING_POST_DESCRIPTION = {
-  headline: `🚀 Daily Earnings Watchlist | ${TODAY} }`,
-  caption: `Stay ahead of the market! 📊 Here are the key companies scheduled to announce their financial results today.\n\n📅 <b>Date:</b> ${TODAY}\n💰 <b>Focus:</b> Earnings impact and Market Cap analysis.\n\nWhich of these stocks are you tracking for today's session? Let us know in the comments! 👇\n\n#StockMarketIndia #EarningsCalendar #Nifty50 #Investing #StockAnalysis #MarketUpdates #TradingStrategy #tsfinnews`,
+  headline: `📈 Earnings Results Update | ${TODAY}`,
+  caption:
+    `The numbers are in! 📊 Here’s a breakdown of today's key financial results and how they impacted the market.\n\n` +
+    `📅 <b>Date:</b> ${TODAY}\n` +
+    `💰 <b>Focus:</b> Net Profit, Revenue Growth, and Margin Analysis.\n\n` +
+    `✨ <b>Get daily market pulses and technical setups:</b>\n` +
+    `👉 <b>Follow @tsfinnews</b> for real-time updates! 🚀\n\n` +
+    `Which of these results surprised you the most? Are you bullish or bearish on these sectors for the next session? Let us know below! 👇\n\n` +
+    `#StockMarketIndia #EarningsResults #QuarterlyUpdate #Nifty50 #Investing #FundamentalAnalysis #MarketUpdates #TradingStrategy #tsfinnews`,
 };
 
 export const NIFTY_50_STOCKS = {
