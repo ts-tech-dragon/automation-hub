@@ -6,11 +6,14 @@ export const ENV_VARS = {
   MARKETAUX_API_KEY: process.env.MARKETAUX_API_KEY || "",
   MOCK_GEMINI: process.env.MOCK_GEMINI || "true",
 
-  //Facebook Instagram
+  //Facebook Instagram Threads
   IG_USER_TOKEN: process.env.IG_USER_TOKEN,
   FB_USER_TOKEN: process.env.FB_USER_TOKEN,
+  TH_USER_TOKEN: process.env.TH_USER_TOKEN,
+
   FB_PAGE_ID: process.env.FB_PAGE_ID,
   IG_USER_ID: process.env.IG_USER_ID,
+  TH_USER_ID: process.env.TH_USER_ID,
 
   //IMGBB
   IMGBB_API_KEY: process.env.IMGBB_API_KEY,

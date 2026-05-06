@@ -6,6 +6,8 @@ import { sendErrorToDiscord } from "../notifier/discord.js";
 const IG_ID = ENV_VARS.IG_USER_ID;
 const FB_ID = ENV_VARS.FB_PAGE_ID;
 const TOKEN = ENV_VARS.FB_USER_TOKEN;
+const THREADS_TOKEN = ENV_VARS.TH_USER_TOKEN;
+const THREADS_ID = ENV_VARS.TH_USER_ID;
 
 /**
  * 📢 POST TO INSTAGRAM (2-Step Process)
@@ -35,6 +37,42 @@ async function postToInstagram(imageUrl: imageUrl, content: content) {
     {
       creation_id: creationId,
       access_token: TOKEN,
+    },
+  );
+
+  console.log("Publist : ", publish.data);
+
+  return publish.data.id;
+}
+
+/**
+ * 🔲 POST TO Threads (Direct Upload)
+ */
+
+async function postToThreads(imageUrl: imageUrl, content: content) {
+  // Step 1: Create Media Container
+  const container = await axios.post(
+    `https://graph.threads.net/v1.0/${THREADS_ID}/threads`,
+    {
+      image_url: imageUrl,
+      text: content.caption,
+      access_token: THREADS_TOKEN,
+      media_type: "IMAGE",
+    },
+  );
+
+  const creationId = container.data.id;
+  console.log("📸 Threads Container Created:", creationId);
+
+  // Wait 10 seconds for Meta to process the image
+  await new Promise((resolve) => setTimeout(resolve, 10000));
+
+  // Step 2: Publish Container
+  const publish = await axios.post(
+    `https://graph.threads.net/v1.0/${THREADS_ID}/threads_publish`,
+    {
+      creation_id: creationId,
+      access_token: THREADS_TOKEN,
     },
   );
 
@@ -95,6 +133,15 @@ export async function broadcastUpdate(imageUrl: string, content: content) {
     } catch (err: any) {
       console.error("❌ IG FAILED:", err.response?.data || err.message);
       sendErrorToDiscord(err, "POST TO Instagram");
+    }
+
+    // Try Threads LOG EVERYTHING
+    try {
+      const igId = await postToThreads(publicURL, content);
+      console.log("✅ Threads SUCCESS ID:", igId);
+    } catch (err: any) {
+      console.error("❌ Threads FAILED:", err.response?.data || err.message);
+      sendErrorToDiscord(err, "POST TO Threads");
     }
 
     // Try Facebook and LOG EVERYTHING
