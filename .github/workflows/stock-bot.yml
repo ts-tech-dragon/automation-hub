@@ -1,10 +1,12 @@
 name: Daily Stock Market Slide
 
 on:
-  schedule:
-    # 4:00 PM IST (10:30 AM UTC) - Runs Monday through Friday
-    - cron: "30 6 * * 1-5"
-  workflow_dispatch: # Allows manual run
+  # Trigger 1: For manual button in GitHub UI
+  workflow_dispatch:
+
+  # Trigger 2: For external API calls (Apps Script)
+  repository_dispatch:
+    types: [market_summary_trigger]
 
 jobs:
   build-and-run:
