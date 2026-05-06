@@ -14,7 +14,10 @@ async function runEarningsGenerator() {
     const earningResult: any = await concallEarningsFetcher();
     // const earningResult: any = EARNINGS_MOCK_DATA;
 
-    const earningsURL = await generateEarningsImage(earningResult, false);
+    const earningsURL = await generateEarningsImage(
+      earningResult,
+      isEPSRequired,
+    );
 
     if (earningsURL) {
       const description = `${EARNING_POST_DESCRIPTION.headline}\n${EARNING_POST_DESCRIPTION.caption}`;
