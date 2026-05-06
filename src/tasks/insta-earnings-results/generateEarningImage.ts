@@ -10,9 +10,11 @@ import { NIFTY_50_STOCKS } from "../../../lib/constants/insta-earning-results/in
 // Adjust these paths based on where your script is running from
 const fbIconPath = path.join(process.cwd(), "assets/icons/fb_icon.png");
 const igIconPath = path.join(process.cwd(), "assets/icons/ig_icon.png");
+const thIconPath = path.join(process.cwd(), "assets/icons/th_icon.png");
 
 const fbBase64 = fs.readFileSync(fbIconPath).toString("base64");
 const igBase64 = fs.readFileSync(igIconPath).toString("base64");
+const thBase64 = fs.readFileSync(thIconPath).toString("base64");
 
 export async function generateEarningsImage(
   data: {
@@ -87,7 +89,7 @@ export async function generateEarningsImage(
               <tr>
                 <th class="px-8 py-4">Company Name</th>
                 <th class="px-8 py-4 text-right">Market Cap (INR CR)</th>
-                ${isEPSRequired && '<th class="px-8 py-4 text-right">EPS</th>'}
+                ${Boolean(isEPSRequired) ? '<th class="px-8 py-4 text-right">EPS</th>' : ""}
                 <th class="px-8 py-4">Nifty 50</th>
               </tr>
             </thead>
@@ -104,13 +106,14 @@ export async function generateEarningsImage(
                     </span>
                   </td>
                   ${
-                    isEPSRequired &&
-                    `<td class="px-8 py-5 text-right font-mono">
+                    Boolean(isEPSRequired)
+                      ? `<td class="px-8 py-5 text-right font-mono">
                     <span class="inline-flex items-center gap-2">
                       <span class="w-6 h-6 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center text-xs">₹</span>
                       ${stock.eps}
                     </span>
                   </td>`
+                      : ""
                   }
                   <td class="px-8 py-5 text-right font-mono">
                     <span class="inline-flex items-center gap-2">
@@ -130,7 +133,7 @@ export async function generateEarningsImage(
               <tr>
                 <th class="px-8 py-4">Company Name</th>
                 <th class="px-8 py-4 text-right">Market Cap (INR CR)</th>
-                ${isEPSRequired && '<th class="px-8 py-4 text-right">EPS</th>'}
+                ${Boolean(isEPSRequired) ? '<th class="px-8 py-4 text-right">EPS</th>' : ""}
                 <th class="px-8 py-4">Nifty 50</th>
               </tr>
             </thead>
@@ -147,13 +150,14 @@ export async function generateEarningsImage(
                     </span>
                   </td>
                   ${
-                    isEPSRequired &&
-                    `<td class="px-8 py-5 text-right font-mono">
+                    Boolean(isEPSRequired)
+                      ? `<td class="px-8 py-5 text-right font-mono">
                     <span class="inline-flex items-center gap-2">
                       <span class="w-6 h-6 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center text-xs">₹</span>
                       ${stock.eps}
                     </span>
                   </td>`
+                      : ""
                   }
                   <td class="px-8 py-5 text-right font-mono">
                     <span class="inline-flex items-center gap-2">
@@ -178,7 +182,11 @@ export async function generateEarningsImage(
             <img src="data:image/png;base64,${igBase64}" style="width:20px;height:20px;" />
             <span>@tsfinnews</span>
             </div>
-        </div>
+            <div class="flex items-center gap-2">
+            <img src="data:image/png;base64,${thBase64}" style="width:20px;height:20px;" />
+            <span>@tsfinnews</span>
+            </div>
+       </div>
       </div>
     </body>
     </html>
