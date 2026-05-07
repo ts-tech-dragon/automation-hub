@@ -185,12 +185,12 @@ export async function sendNSEResultDiscordNotification(
           },
           {
             name: "Financials (YoY)",
-            value: data.financials.profit_current
+            value: data?.financials?.profit_current
               ? `
-                Profit: ${data.financials.profit_current} Rs
-                \nProfit %: ${data.financials.profit_yoy_chg_pct}%
-                \nEPS: ${data.financials.eps_current} Rs
-                \nEPS %: ${data.financials.eps_yoy_chg_pct}%
+                Profit: ${data.financials.profit_current ?? "N/A"} Rs
+                \nProfit %: ${data.financials.profit_yoy_chg_pct ?? "N/A"}%
+                \nEPS: ${data.financials.eps_current ?? "N/A"} Rs
+                \nEPS %: ${data.financials.eps_yoy_chg_pct ?? "N/A"}%
                 `
               : "N/A",
             inline: false,

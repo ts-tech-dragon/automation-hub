@@ -120,12 +120,21 @@ async function postToFacebook(imageUrl: string, content: content) {
   return fbRes.data.id;
 }
 
-export async function broadcastUpdate(imageUrl: string, content: content) {
+export async function broadcastUpdate(
+  imageUrl: string,
+  content: content,
+  isUrlCreated = false,
+) {
   try {
     console.log("🚀 Debugging Broadcast...");
 
     // Try Instagram first and LOG EVERYTHING
-    const publicURL = await uploadToImgBB(imageUrl);
+    let publicURL;
+    if (isUrlCreated) {
+      publicURL = imageUrl;
+    } else {
+      publicURL = await uploadToImgBB(imageUrl);
+    }
 
     try {
       const igId = await postToInstagram(publicURL, content);

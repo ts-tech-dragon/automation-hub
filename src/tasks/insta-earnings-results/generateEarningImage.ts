@@ -382,6 +382,7 @@ export async function generateEarningsImage(
     // 3. Take a screenshot of the specific element
     const container = await page.locator("body");
     const imageBuffer = await container.screenshot({
+      type: "jpeg", // Change this from default 'png'
       animations: "disabled",
       omitBackground: true, // Makes the edges clean if you want to overlay it
     });

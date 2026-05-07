@@ -21,7 +21,7 @@ async function runEarningsGenerator() {
 
     if (earningsURL) {
       const description = `${EARNING_POST_DESCRIPTION.headline}\n${EARNING_POST_DESCRIPTION.caption}`;
-      await broadcastUpdate(earningsURL, { caption: description });
+      await broadcastUpdate(earningsURL, { caption: description }, true);
       await sendTelegramStockImage(EARNING_POST_DESCRIPTION, earningsURL, true);
     }
   } catch (error) {
