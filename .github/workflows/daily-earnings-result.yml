@@ -37,5 +37,12 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           MOCK_GEMINI: ${{ secrets.MOCK_GEMINI }} # Optional: Use this to toggle between real and mock responses
           IMGBB_API_KEY: ${{secrets.IMGBB_API_KEY}}
+          IG_USER_TOKEN: ${{secrets.IG_USER_TOKEN}}
+          TH_USER_TOKEN: ${{secrets.TH_USER_TOKEN}}
+          FB_USER_TOKEN: ${{secrets.FB_USER_TOKEN}}
+          FB_PAGE_ID: ${{secrets.FB_PAGE_ID}}
+          IG_USER_ID: ${{secrets.IG_USER_ID}}
+          TH_USER_ID: ${{secrets.TH_USER_ID}}
+          DISCORD_ERROR_LOGS_URL: ${{ secrets.DISCORD_ERROR_LOGS_URL }}
 
         run: npx tsx src/tasks/insta-earnings-results/engine.ts

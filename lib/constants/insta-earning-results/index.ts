@@ -31,8 +31,8 @@ export const EARNING_POST_DESCRIPTION = {
     `💰 <b>Focus:</b> Net Profit, Revenue Growth, and Margin Analysis.\n\n` +
     `✨ <b>Get daily market pulses and technical setups:</b>\n` +
     `👉 <b>Follow @tsfinnews</b> for real-time updates! 🚀\n\n` +
-    `Which of these results surprised you the most? Are you bullish or bearish on these sectors for the next session? Let us know below! 👇\n\n` +
-    `#StockMarketIndia #EarningsResults #QuarterlyUpdate #Nifty50 #Investing #FundamentalAnalysis #MarketUpdates #TradingStrategy #tsfinnews`,
+    `Which of these results surprised you the most? \n\n` +
+    `#StockMarketIndia #EarningsResults #QuarterlyUpdate #Nifty50 #Investing`,
 };
 
 export const NIFTY_50_STOCKS = {

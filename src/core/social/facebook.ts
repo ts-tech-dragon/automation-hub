@@ -152,6 +152,6 @@ export async function broadcastUpdate(imageUrl: string, content: content) {
     //   console.error("❌ FB FAILED:", err.response?.data || err.message);
     // }
   } catch (error) {
-    console.log("Error : ", (error as Error).message);
+    console.log("broadcastUpdate Error : ", (error as Error).message);
   }
 }
