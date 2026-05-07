@@ -1,0 +1,47 @@
+name: Daily Morning Quote
+
+on:
+  # Trigger 1: For manual button in GitHub UI
+  workflow_dispatch:
+
+  # Trigger 2: For external API calls (Apps Script)
+  repository_dispatch:
+    types: [daily_morning_quote_trigger]
+
+jobs:
+  build-and-run:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🖼️ Install Canvas Dependencies
+        # Ubuntu needs these system libraries to compile the 'canvas' package
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: 📦 Install Dependencies
+        run: npm install
+
+      - name: 🚀 Run Daily Morning Quote
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          IMGBB_API_KEY: ${{secrets.IMGBB_API_KEY}}
+          IG_USER_TOKEN: ${{secrets.IG_USER_TOKEN}}
+          TH_USER_TOKEN: ${{secrets.TH_USER_TOKEN}}
+          FB_USER_TOKEN: ${{secrets.FB_USER_TOKEN}}
+          FB_PAGE_ID: ${{secrets.FB_PAGE_ID}}
+          IG_USER_ID: ${{secrets.IG_USER_ID}}
+          TH_USER_ID: ${{secrets.TH_USER_ID}}
+          DISCORD_ERROR_LOGS_URL: ${{ secrets.DISCORD_ERROR_LOGS_URL }}
+
+        run: npx tsx src/tasks/morning-quote/engine.ts
