@@ -52,13 +52,6 @@ export async function generateEarningsImage(
       }
     });
 
-    // console.log("data : ", data);
-
-    const mid = Math.floor(data.length / 2);
-
-    const dataSet1 = data.slice(0, mid);
-    const dataSet2 = data.slice(mid);
-
     // 1. Create the HTML Template with Tailwind CSS for styling
     const htmlContent = `
     <!DOCTYPE html>
@@ -273,7 +266,7 @@ export async function generateEarningsImage(
               </tr>
             </thead>
             <tbody>
-              ${dataSet1
+              ${data
                 .map(
                   (stock, index) => `
                 <tr class="${index % 2 === 0 ? "" : "row-alt"}">
@@ -305,52 +298,6 @@ export async function generateEarningsImage(
                 .join("")}
             </tbody>
           </table>
-
-          <div class="divider"></div>
-
-          <table>
-            <thead>
-              <tr>
-                <th style="width: 45%;">Company Name</th>
-                <th style="text-align: right; width: 35%;">Market Cap (INR CR)</th>
-                ${Boolean(isEPSRequired) ? '<th style="text-align: right; width: 15%;">EPS</th>' : ""}
-                <th style="text-align: center; width: 10%;">N50</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${dataSet2
-                .map(
-                  (stock, index) => `
-                <tr class="${index % 2 === 0 ? "" : "row-alt"}">
-                  <td class="company-name">${stock.name}</td>
-                  <td style="text-align: right;">
-                    <span style="display: inline-flex; align-items: center; gap: 8px; justify-content: flex-end;">
-                      <span class="rupee-badge">₹</span>
-                      <span class="mono-val">${stock.marketCap}</span>
-                    </span>
-                  </td>
-                  ${
-                    Boolean(isEPSRequired)
-                      ? `<td style="text-align: right;">
-                    <span style="display: inline-flex; align-items: center; gap: 8px; justify-content: flex-end;">
-                      <span class="rupee-badge">₹</span>
-                      <span class="mono-val">${stock.eps}</span>
-                    </span>
-                  </td>`
-                      : ""
-                  }
-                  <td>
-                    <div class="nifty-cell">
-                      ${stock.isNifty ? '<span class="nifty-badge">✅</span>' : ""}
-                    </div>
-                  </td>
-                </tr>
-              `,
-                )
-                .join("")}
-            </tbody>
-          </table>
-
         </div>
 
         <div class="footer-glass" style="display: flex; align-items: center; justify-content: center; gap: 32px;">

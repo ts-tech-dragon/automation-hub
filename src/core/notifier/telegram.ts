@@ -67,6 +67,34 @@ export const sendTelegramStockImage = async (
   }
 };
 
+export const sendTelegramStockGallery = async (
+  content: any,
+  imagePaths: string[], // Array of image URLs or paths
+  url?: boolean,
+) => {
+  try {
+    console.log(
+      `📤 Sending gallery with ${imagePaths.length} slides to Telegram...`,
+    );
+
+    // Map each image path into an InputMediaPhoto object
+    const mediaGroup: any[] = imagePaths.map((imagePath, index) => ({
+      type: "photo",
+      media: url ? { url: imagePath } : { source: imagePath },
+      // Only attach the caption to the FIRST image of the group
+      caption:
+        index === 0 ? `<b>${content.headline}</b>\n\n${content.caption}` : "",
+      parse_mode: "HTML",
+    }));
+
+    await tg.sendMediaGroup(ENV_VARS.TELEGRAM_CHAT_ID, mediaGroup);
+
+    console.log("✅ Stock gallery sent to your phone!");
+  } catch (error) {
+    console.error("❌ Telegraf Gallery Error:", (error as Error).message);
+  }
+};
+
 export const sendTelegramJobListing = async (
   message: { title: string; company: string; location: string; link: string }[],
   base: { src: string; loc?: string },
