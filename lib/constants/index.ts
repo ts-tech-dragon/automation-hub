@@ -1,3 +1,6 @@
+import path from "node:path";
+import fs from "node:fs";
+
 export const ENV_VARS = {
   GEMINI_API_KEY: process.env.GEMINI_API_KEY || "",
   PUTER_API_KEY: process.env.PUTER_API_KEY || "",
@@ -25,6 +28,8 @@ export const ENV_VARS = {
   SHINE_STORAGE_JSON: "SHINE_STORAGE_JSON",
   //MONGODB
   MONGODB_URI: process.env.MONGODB_URI,
+  //MARKET PULSE
+  MARKET_PULSE_API_KEY: process.env.MARKET_PULSE_API_KEY,
 };
 
 export const GEMINI_MODELS = {
@@ -59,4 +64,20 @@ export const INSTA_PAGE_NAME = process.env.INSTA_PAGE_NAME;
 
 export const API_URLS = {
   MARKET_AUX_NEWS: "https://api.marketaux.com/v1/news/all",
+};
+
+// 1. Convert local icons to Base64 strings
+// Adjust these paths based on where your script is running from
+const fbIconPath = path.join(process.cwd(), "assets/icons/fb_icon.png");
+const igIconPath = path.join(process.cwd(), "assets/icons/ig_icon.png");
+const thIconPath = path.join(process.cwd(), "assets/icons/th_icon.png");
+
+const fbBase64 = fs.readFileSync(fbIconPath).toString("base64");
+const igBase64 = fs.readFileSync(igIconPath).toString("base64");
+const thBase64 = fs.readFileSync(thIconPath).toString("base64");
+
+export const TSFINNEWS_ICONS = {
+  facebook: fbBase64,
+  instagram: igBase64,
+  threads: thBase64,
 };

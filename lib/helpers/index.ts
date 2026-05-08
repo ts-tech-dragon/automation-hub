@@ -8,10 +8,14 @@ dayjs.locale("en");
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-export const getTimeInIST = (formate = "DD-MM-YYYY") => {
-  // Set the date specifically to IST
-  const formattedDate = dayjs().tz("Asia/Kolkata").format(formate);
-  return formattedDate;
+export const getTimeInIST = (formate = "DD-MM-YYYY", daysAgo = 0) => {
+  // Subtract specified days then format in IST
+  const targetDate = dayjs()
+    .tz("Asia/Kolkata")
+    .subtract(daysAgo, "day")
+    .format(formate);
+
+  return targetDate;
 };
 
 export function isAfter6PMInIST() {
