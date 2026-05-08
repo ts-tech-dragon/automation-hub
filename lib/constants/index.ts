@@ -29,7 +29,7 @@ export const ENV_VARS = {
   //MONGODB
   MONGODB_URI: process.env.MONGODB_URI,
   //MARKET PULSE
-  MARKET_PULSE_API_KEY: process.env.MARKET_PULSE_API_KEY,
+  MARKET_AUX_API_KEY: process.env.MARKET_AUX_API_KEY,
 };
 
 export const GEMINI_MODELS = {

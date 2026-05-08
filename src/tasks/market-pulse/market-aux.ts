@@ -7,7 +7,7 @@ export const getMarketAuxData = async () => {
 
   try {
     const { data } = await axios.get(
-      `https://api.marketaux.com/v1/news/all?countries=in&filter_entities=true&limit=3&published_after=${TODAY}T09:09&api_token=${ENV_VARS.MARKET_PULSE_API_KEY}`,
+      `https://api.marketaux.com/v1/news/all?countries=in&filter_entities=true&limit=3&published_after=${TODAY}T09:09&api_token=${ENV_VARS.MARKET_AUX_API_KEY}`,
     );
 
     return data ?? { data: [] };
