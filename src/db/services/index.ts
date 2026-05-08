@@ -10,22 +10,50 @@ export const saveDailyResults = async (data: IEarningsResult[]) => {
   const db = await connectDB();
   if (!db) return console.log("Not able to connect with DB 😢");
   try {
-    // Transform and add metadata for better filtering later
-    const docsToInsert = data.map((item) => ({
-      ...item,
-      meeting_date: getFakeIstDate(item.meeting_date), // Ensure this is a real Date object
-      scraped_at: getFakeIstDate(), // When we scraped this data
-      processed_for_instagram: false,
-      sentiment:
-        item.financials.profit_yoy_chg_pct > 20
-          ? "Bullish"
-          : item.financials.profit_yoy_chg_pct < 20
-            ? "BEARISH"
-            : "Neutral/Bearish",
-      isAfterMarketHours: isAfter330PMInIST(),
-    }));
-    const result = db.collection("daily_earnings").insertMany(docsToInsert);
-    console.log("Data Added to DB Successfully!!!");
+    const bulkStockUpdate = data.map((item) => {
+      return {
+        updateOne: {
+          filter: { symbol: item.symbol },
+          update: {
+            $set: {
+              // Updates every time the scraper sees this stock
+              meeting_date: getFakeIstDate(item.meeting_date),
+              scraped_at: getFakeIstDate(),
+              isAfterMarketHours: isAfter330PMInIST(),
+
+              // Updating financials every run ensures we have the latest numbers
+              financials: item.financials,
+              dividend_declared: item.dividend_declared,
+              dividend_amount: item.dividend_amount,
+
+              // Adjusted Sentiment logic (feel free to change thresholds)
+              sentiment:
+                item.financials.profit_yoy_chg_pct > 20
+                  ? "Bullish"
+                  : item.financials.profit_yoy_chg_pct < 0
+                    ? "Bearish" // Changed from BEARISH to match standard casing
+                    : "Neutral",
+            },
+            $setOnInsert: {
+              // ONLY runs once when the stock is first added today
+              company_name: item.company_name,
+              symbol: item.symbol,
+              processed_for_instagram: false, // Ensures it doesn't reset on updates
+            },
+          },
+          upsert: true, // Crucial: This tells MongoDB to insert if the symbol is not found
+        },
+      };
+    });
+
+    // 🚀 Added 'await' here
+    const result = await db
+      .collection("daily_earnings")
+      .bulkWrite(bulkStockUpdate);
+    console.log(
+      `✅ Data Added to DB Successfully! Upserted: ${result.upsertedCount}, Modified: ${result.modifiedCount}`,
+    );
+
     return result;
   } catch (error) {
     console.log("saveDailyResults Error : ", (error as Error).message);

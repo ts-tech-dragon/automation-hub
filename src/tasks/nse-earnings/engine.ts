@@ -1,4 +1,8 @@
-import { getTimeInIST, isAfter330PMInIST } from "../../../lib/helpers/index.js";
+import {
+  getTimeInIST,
+  isAfter330PMInIST,
+  isWeekendInIST,
+} from "../../../lib/helpers/index.js";
 import { runNSEScrapper } from "./nseScrapper.js";
 import {
   NSE_MOCK_DATA,
@@ -14,6 +18,7 @@ import {
 import { CONCALL_MOCK_RESPONSE } from "../../../lib/constants/insta-earning-results/mock.js";
 import { saveDailyResults } from "../../db/services/index.js";
 import { closeDB } from "../../db/index.js";
+import { isMarketHoliday } from "../../../lib/helpers/insta-earning-results/index.js";
 
 const sessionStocks = new Set<String>();
 
@@ -47,8 +52,8 @@ const runNSEEngine = async () => {
 
     const geminiResponse = await processBatchNsePdfs(pdfURLs);
     // const geminiResponse = NSE_RESULT_GEMINI_MOCK;
+    await saveDailyResults(geminiResponse as any);
 
-    await saveDailyResults(geminiResponse);
     pdfURLs.forEach(async (url: string, index: number) => {
       await sendNSEResultDiscordNotification(geminiResponse[index], url);
       const formatedMsg = formatNSEResultMessage(geminiResponse[index]);
@@ -76,7 +81,8 @@ const RUN_DURATION = 60 * 60 * 1000; // 1 hour
 const SLEEP_INTERVAL = 5 * 60 * 1000; // 5 minutes
 
 async function monitorMarketEngine() {
-  if (isAfter330PMInIST()) return await oneTimeRunner();
+  if (isAfter330PMInIST() || isWeekendInIST() || isMarketHoliday())
+    return await oneTimeRunner();
   const startTime = Date.now();
   console.log("🚀 Starting NSE Monitoring Session...");
   while (Date.now() - startTime < RUN_DURATION) {

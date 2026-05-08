@@ -18,6 +18,12 @@ export const getTimeInIST = (formate = "DD-MM-YYYY", daysAgo = 0) => {
   return targetDate;
 };
 
+export const isWeekendInIST = () => {
+  const nowInIST = dayjs().tz("Asia/Kolkata");
+  const dayOfWeek = nowInIST.day();
+  return dayOfWeek === 0 || dayOfWeek === 6; // 0 = Sunday, 6 = Saturday
+};
+
 export function isAfter6PMInIST() {
   // Get the current time in IST
   const nowInIST = dayjs().tz("Asia/Kolkata");
