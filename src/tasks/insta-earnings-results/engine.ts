@@ -6,6 +6,8 @@ import { concallEarningsFetcher } from "./concall-fetcher.js";
 import { generateEarningsImage } from "./generateEarningImage.js";
 import { isAfter6PMInIST } from "../../../lib/helpers/index.js";
 import { broadcastMultipleUpdates } from "../../core/social/facebook.js";
+import { syncConcallDataToDB } from "../../db/services/index.js";
+import { closeDB } from "../../db/index.js";
 
 async function runEarningsGenerator() {
   try {
@@ -46,6 +48,9 @@ async function runEarningsGenerator() {
       earningsURLArr,
       true,
     );
+    await syncConcallDataToDB(earningResult);
+
+    await closeDB();
   } catch (error) {
     console.log("runEarningsGenerator Error : ", (error as Error).message);
   }

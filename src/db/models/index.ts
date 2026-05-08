@@ -13,3 +13,10 @@ export interface IEarningsResult {
     eps_yoy_chg_pct: number;
   };
 }
+
+export interface IConcallEarningsResult {
+  symbol: string;
+  name: string;
+  marketCap: string;
+  eps: string;
+}
