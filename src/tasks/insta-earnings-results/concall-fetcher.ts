@@ -1,3 +1,4 @@
+import { sortDataByMarketCap } from "../../../lib/helpers/nse-results/index.js";
 import { scrapperBrowser } from "../../core/scrapper/index.js";
 
 export async function concallEarningsFetcher() {
@@ -146,10 +147,10 @@ export async function concallEarningsFetcher() {
     //second page scrape
     await scrapeData();
     console.log("✅ Final Scraped Data:", results.length);
-    return results;
+    return sortDataByMarketCap(results);
   } catch (err) {
     console.error("❌ Main Task failed:", err);
-    return results; // Return whatever results we have, even if it's an empty array
+    return sortDataByMarketCap(results); // Return whatever results we have, even if it's an empty array
   } finally {
     await context?.close().catch(() => {});
     await browser?.close().catch(() => {});

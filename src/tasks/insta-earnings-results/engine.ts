@@ -41,13 +41,13 @@ async function runEarningsGenerator() {
 
     if (earningsURLArr.length === 0) return null;
 
-    const description = `${EARNING_POST_DESCRIPTION.headline}\n${EARNING_POST_DESCRIPTION.caption}`;
-    await broadcastMultipleUpdates(earningsURLArr, { caption: description });
-    await sendTelegramStockGallery(
-      EARNING_POST_DESCRIPTION,
-      earningsURLArr,
-      true,
-    );
+    const description = EARNING_POST_DESCRIPTION[
+      Math.floor(Math.random() * EARNING_POST_DESCRIPTION.length)
+    ] as any;
+    await broadcastMultipleUpdates(earningsURLArr, {
+      caption: description.instagramCaption,
+    });
+    await sendTelegramStockGallery(description, earningsURLArr, true);
     await syncConcallDataToDB(earningResult);
 
     await closeDB();

@@ -187,7 +187,7 @@ export const generateMarketPulseImage = async (
                 <img src="data:image/png;base64,${TSFINNEWS_ICONS.threads}" style="width:24px;height:24px;" />
                 <span>tsfinnews</span>
                 </div>
-        </div>
+            </div>
     </div>
 
 </body>

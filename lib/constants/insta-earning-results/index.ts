@@ -1,6 +1,7 @@
-import dayjs from "dayjs";
+import { toBold } from "../../helpers/morning-quote/index.js";
+import { getTimeInIST } from "../../helpers/index.js";
 
-const TODAY = dayjs(new Date()).format("DD,MMM,YYYY");
+const TODAY = getTimeInIST("DD MMMM YYYY");
 
 export const MARKET_HOLIDAYS = {
   marketHolidays: [
@@ -23,17 +24,38 @@ export const MARKET_HOLIDAYS = {
   ],
 };
 
-export const EARNING_POST_DESCRIPTION = {
-  headline: `📈 Earnings Results Update | ${TODAY}`,
-  caption:
-    `The numbers are in! 📊 Here’s a breakdown of today's key financial results and how they impacted the market.\n\n` +
-    `📅 <b>Date:</b> ${TODAY}\n` +
-    `💰 <b>Focus:</b> Net Profit, Revenue Growth, and Margin Analysis.\n\n` +
-    `✨ <b>Get daily market pulses and technical setups:</b>\n` +
-    `👉 <b>Follow @tsfinnews</b> for real-time updates! 🚀\n\n` +
-    `Which of these results surprised you the most? \n\n` +
-    `#StockMarketIndia #EarningsResults #QuarterlyUpdate #Nifty50 #Investing`,
-};
+export const EARNING_POST_DESCRIPTION = [
+  {
+    headline: "📈 Data > Emotions",
+    caption:
+      "The numbers don't lie, but sentiments often do. Use these earning reports to anchor your strategy in hard data, not market noise.",
+    instagramCaption: `📈 ${toBold("DATA OVER EMOTIONS")} | ${TODAY}\n\nThe numbers don't lie, but sentiments often do. Use these earning reports to anchor your strategy in hard data, not market noise.\n\n👉 Follow @tsfinnews for your daily market pulse! 🚀\n\n#StockMarketIndia #EarningsSeason #Nifty50 #TradingDiscipline #FundamentalAnalysis`,
+  },
+  {
+    headline: "💎 The Value of Patience",
+    caption:
+      "Earnings season is where the patient are rewarded. Look for consistent profit growth and long-term stability in the results today.",
+    instagramCaption: `💎 ${toBold("THE VALUE OF PATIENCE")} | ${TODAY}\n\nEarnings season is where the patient are rewarded. Look for consistent profit growth and long-term stability in the results today.\n\n👉 Follow @tsfinnews for your daily market pulse! 🚀\n\n#InvestingTips #LongTermWealth #StockMarketIndia #DividendInvesting #MarketPulse`,
+  },
+  {
+    headline: "🚀 Spotting Momentum",
+    caption:
+      "A massive jump in YoY EPS can be the spark for the next big trend. Today’s results highlight where the real momentum is building.",
+    instagramCaption: `🚀 ${toBold("SPOTTING MOMENTUM")} | ${TODAY}\n\nA massive jump in YoY EPS can be the spark for the next big trend. Today’s results highlight where the real momentum is building.\n\n👉 Follow @tsfinnews for your daily market pulse! 🚀\n\n#MomentumTrading #StockMarketNews #GrowthStocks #NSEIndia #MarketSetup`,
+  },
+  {
+    headline: "🛡️ Managing the Risk",
+    caption:
+      "Trading isn't just about picking winners; it's about avoiding the traps. Use these profit-and-loss insights to filter out high-risk setups.",
+    instagramCaption: `🛡️ ${toBold("MANAGING THE RISK")} | ${TODAY}\n\nTrading isn't just about picking winners; it's about avoiding the traps. Use these profit-and-loss insights to filter out high-risk setups.[cite: 1]\n\n👉 Follow @tsfinnews for your daily market pulse! 🚀\n\n#RiskManagement #SmartTrading #FinancialResults #TradingPsychology #TechnicalAnalysis`,
+  },
+  {
+    headline: "💸 Passive Income Focus",
+    caption:
+      "Dividends are the 'thank you' notes from a profitable company. Check today's board recommendations to grow your passive income stream.",
+    instagramCaption: `💸 ${toBold("PASSIVE INCOME FOCUS")} | ${TODAY}\n\nDividends are the 'thank you' notes from a profitable company. Check today's board recommendations to grow your passive income stream.[cite: 1]\n\n👉 Follow @tsfinnews for your daily market pulse! 🚀\n\n#PassiveIncome #DividendStocks #WealthBuilding #FinancialFreedom #StockMarketIndia`,
+  },
+];
 
 export const NIFTY_50_STOCKS = {
   index: "NIFTY 50",

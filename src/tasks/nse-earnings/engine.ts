@@ -1,5 +1,5 @@
 import {
-  getTimeInIST,
+  getHoursAgoInIST,
   isAfter330PMInIST,
   isWeekendInIST,
 } from "../../../lib/helpers/index.js";
@@ -23,7 +23,7 @@ import { isMarketHoliday } from "../../../lib/helpers/insta-earning-results/inde
 const sessionStocks = new Set<String>();
 
 const runNSEEngine = async () => {
-  const dataTime = getTimeInIST("DD-MMM-YYYY HH");
+  const dataTime = getHoursAgoInIST("DD-MMM-YYYY HH", 1);
   //   const dataTime = "29-Apr-2026 22";
 
   try {

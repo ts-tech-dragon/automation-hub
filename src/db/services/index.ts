@@ -1,5 +1,6 @@
-import { isAfter330PMInIST } from "../../../lib/helpers/index.js";
+import { getTimeInIST, isAfter330PMInIST } from "../../../lib/helpers/index.js";
 import { getFakeIstDate } from "../../../lib/helpers/insta-earning-results/index.js";
+import { sortDataByMarketCap } from "../../../lib/helpers/nse-results/index.js";
 import connectDB, { closeDB } from "../index.js";
 import type {
   IConcallEarningsResult,
@@ -114,6 +115,31 @@ export async function syncConcallDataToDB(apiData: IConcallEarningsResult[]) {
     console.error("❌ Error during bulk update:", error);
   }
 }
+
+export const getAfterMarketHrsResults = async () => {
+  const db = await connectDB();
+  if (!db) return console.log("Not able to connect with DB 😢");
+
+  try {
+    // 1. Translate ISODate to native JS Date objects
+    const query = {
+      isAfterMarketHours: true,
+      scraped_at: {
+        $gte: new Date(`${getTimeInIST("YYYY-MM-DD", 1)}T00:00:00.000Z`),
+        $lt: new Date(`${getTimeInIST("YYYY-MM-DD")}T00:00:00.000Z`),
+      },
+    };
+
+    // 2. Use .find() and convert the cursor .toArray()
+    const stocks = await db.collection("daily_earnings").find(query).toArray();
+
+    console.log(`✅ Found ${stocks.length} stocks from the query.`);
+    return sortDataByMarketCap(stocks as any[]);
+  } catch (error) {
+    console.log("❌ Fetch Error : ", (error as Error).message);
+    return [];
+  }
+};
 
 export const getWeeklyTopPerformers = async () => {
   const db = await connectDB();

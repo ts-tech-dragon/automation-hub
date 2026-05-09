@@ -155,7 +155,7 @@ export async function generateEarningsImage(
           <div class="header-glass" style="padding: 32px; text-align: center;">
             <div style="position: relative; z-index: 1;">
               <h1 class="title-glow" style="font-size: 2.5rem; font-weight: 800; color: rgba(var(--primary-rgb), 1); letter-spacing: 0.06em; text-transform: uppercase; margin: 0 0 12px;">
-                Daily Upcoming Earnings
+                ${isEPSRequired ? "Daily EPS Updates" : "Daily Upcoming Earnings"}
               </h1>
               <div class="date-pill">
                 <span style=" font-weight: 600;font-size:1.25rem">${dateStr}</span>

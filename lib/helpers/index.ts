@@ -18,6 +18,19 @@ export const getTimeInIST = (formate = "DD-MM-YYYY", daysAgo = 0) => {
   return targetDate;
 };
 
+export const getHoursAgoInIST = (
+  formate = "DD-MM-YYYY HH:mm",
+  hoursAgo = 0,
+) => {
+  // Subtract specified hours then format in IST
+  const targetTime = dayjs()
+    .tz("Asia/Kolkata")
+    .subtract(hoursAgo, "hour")
+    .format(formate);
+
+  return targetTime;
+};
+
 export const isWeekendInIST = () => {
   const nowInIST = dayjs().tz("Asia/Kolkata");
   const dayOfWeek = nowInIST.day();

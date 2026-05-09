@@ -34,3 +34,20 @@ export function formatNSEResultMessage(data: any) {
 
   return msg;
 }
+
+export const sortDataByMarketCap = (data: { marketCap?: string }[]) => {
+  return data.sort((a, b) => {
+    // Helper to convert string like "₹1,50,519 Cr" to a number
+    const getNumericMCap = (item: { marketCap?: string }) => {
+      if (!item.marketCap) return 0; // Move items without marketCap to the bottom
+
+      // Remove Currency symbols, commas, and unit strings
+      const numericString = item.marketCap.replace(/[₹,]|Cr/g, "").trim();
+
+      return parseFloat(numericString);
+    };
+
+    // Sort descending: (b - a)
+    return getNumericMCap(b) - getNumericMCap(a);
+  });
+};
