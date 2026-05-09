@@ -131,7 +131,7 @@ export const getAfterMarketHrsResults = async () => {
       : new Date(`${getTimeInIST("YYYY-MM-DD", 1)}T00:00:00.000Z`);
     // 1. Translate ISODate to native JS Date objects
     const query = {
-      isAfterMarketHours: !isMonday, // Only fetch after market hours stocks on non-Mondays
+      ...(isMonday ? {} : { isAfterMarketHours: true }),
       scraped_at: {
         $gte: gteDate,
         $lt: new Date(`${getTimeInIST("YYYY-MM-DD")}T00:00:00.000Z`),
