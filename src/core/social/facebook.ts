@@ -199,7 +199,7 @@ export async function multiPostToThreads(
  */
 async function postToFacebook(imageUrl: string, content: content) {
   const userToken = process.env.FB_USER_TOKEN;
-  const pageId = process.env.FB_PAGE_ID; // Should be 1056764777524801
+  const pageId = process.env.FB_PAGE_ID;
 
   // 1. Get the list of pages this token can actually see
   const response = await axios.get(
@@ -231,6 +231,58 @@ async function postToFacebook(imageUrl: string, content: content) {
   );
 
   return fbRes.data.id;
+}
+
+async function postMultipleToFacebook(imageUrls: string[], content: any) {
+  const userToken = process.env.FB_USER_TOKEN;
+  const pageId = process.env.FB_PAGE_ID;
+
+  try {
+    // 1. Get the Page Access Token
+    const accountsResponse = await axios.get(
+      `https://graph.facebook.com/v20.0/me/accounts?access_token=${userToken}`,
+    );
+
+    const targetPage = accountsResponse.data.data.find(
+      (p: any) => String(p.id) === String(pageId),
+    );
+
+    if (!targetPage) throw new Error(`Page ID ${pageId} not found.`);
+    const pageAccessToken = targetPage.access_token;
+
+    // 2. Upload all images as "Unpublished" to get their IDs
+    console.log(`📤 Uploading ${imageUrls.length} images to Facebook...`);
+
+    const uploadPromises = imageUrls.map((url) =>
+      axios.post(`https://graph.facebook.com/v20.0/${pageId}/photos`, {
+        url: url,
+        published: false, // This prevents them from showing as individual posts
+        access_token: pageAccessToken,
+      }),
+    );
+
+    const uploadResults = await Promise.all(uploadPromises);
+    const mediaIds = uploadResults.map((res) => ({ media_fbid: res.data.id }));
+
+    // 3. Create the final post containing all images
+    const finalPost = await axios.post(
+      `https://graph.facebook.com/v20.0/${pageId}/feed`,
+      {
+        message: content.caption, // Your earnings caption
+        attached_media: mediaIds,
+        access_token: pageAccessToken,
+      },
+    );
+
+    console.log("✅ Multi-image post successful! ID:", finalPost.data.id);
+    return finalPost.data;
+  } catch (error: any) {
+    console.error(
+      "❌ Facebook Multi-Post Failed:",
+      error.response?.data || error.message,
+    );
+    throw error;
+  }
 }
 
 export async function broadcastUpdate(
@@ -267,12 +319,13 @@ export async function broadcastUpdate(
     }
 
     // Try Facebook and LOG EVERYTHING
-    // try {
-    //   const fbId = await postToFacebook(publicURL, content);
-    //   console.log("✅ FB SUCCESS ID:", fbId);
-    // } catch (err: any) {
-    //   console.error("❌ FB FAILED:", err.response?.data || err.message);
-    // }
+    try {
+      const fbId = await postToFacebook(publicURL, content);
+      console.log("✅ FB SUCCESS ID:", fbId);
+    } catch (err: any) {
+      console.error("❌ FB FAILED:", err.response?.data || err.message);
+      sendErrorToDiscord(err, "POST TO Facebook");
+    }
   } catch (error) {
     console.log("broadcastUpdate Error : ", (error as Error).message);
   }
@@ -300,6 +353,15 @@ export async function broadcastMultipleUpdates(
     } catch (err: any) {
       console.error("❌ Threads FAILED:", err.response?.data || err.message);
       sendErrorToDiscord(err, "POST TO Threads");
+    }
+
+    // Try Facebook LOG EVERYTHING
+    try {
+      const igId = await postMultipleToFacebook(imageUrlArr, content);
+      console.log("✅ Facebook SUCCESS ID:", igId);
+    } catch (err: any) {
+      console.error("❌ Facebook FAILED:", err.response?.data || err.message);
+      sendErrorToDiscord(err, "POST TO Facebook");
     }
   } catch (error) {
     console.log("broadcastUpdate Error : ", (error as Error).message);
