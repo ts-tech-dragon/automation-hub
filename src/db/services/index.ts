@@ -149,6 +149,30 @@ export const getAfterMarketHrsResults = async () => {
   }
 };
 
+export async function injectMarketCaps(geminiResults: any[]) {
+  const db = await connectDB();
+  if (!db) return console.log("Not able to connect with DB 😢");
+  const symbols = [...new Set(geminiResults.map((item) => item.symbol))];
+
+  // The DB returns an array of objects: [{symbol: 'ABC', marketCap: '...'}, ...]
+  const dbStocks = await db
+    .collection("stocks")
+    .find({ symbol: { $in: symbols } })
+    .toArray();
+
+  // Create a lookup dictionary
+  const marketCapMap = new Map(
+    dbStocks.map((stock) => [stock.symbol, stock.marketCap]),
+  );
+
+  // Return the new combined objects
+  return geminiResults.map((item) => ({
+    ...item,
+    // marketCapMap.get(item.symbol) retrieves the value we fetched from the DB
+    marketCap: marketCapMap.get(item.marketCap) || "N/A",
+  }));
+}
+
 export const getWeeklyTopPerformers = async () => {
   const db = await connectDB();
   // Add your logic to query the top 5 for tsfinnews here

@@ -16,7 +16,7 @@ import {
   sendNSEResultDiscordNotification,
 } from "../../core/notifier/discord.js";
 import { CONCALL_MOCK_RESPONSE } from "../../../lib/constants/insta-earning-results/mock.js";
-import { saveDailyResults } from "../../db/services/index.js";
+import { injectMarketCaps, saveDailyResults } from "../../db/services/index.js";
 import { closeDB } from "../../db/index.js";
 import { isMarketHoliday } from "../../../lib/helpers/insta-earning-results/index.js";
 
@@ -50,9 +50,12 @@ const runNSEEngine = async () => {
 
     const pdfURLs = newResults.map((item: any) => item.attchmntFile);
 
-    const geminiResponse = await processBatchNsePdfs(pdfURLs);
-    // const geminiResponse = NSE_RESULT_GEMINI_MOCK;
+    let geminiResponse = await processBatchNsePdfs(pdfURLs);
+    // let geminiResponse: any[] = NSE_RESULT_GEMINI_MOCK;
+
     await saveDailyResults(geminiResponse as any);
+
+    geminiResponse = (await injectMarketCaps(geminiResponse as any)) as any[];
 
     pdfURLs.forEach(async (url: string, index: number) => {
       await sendNSEResultDiscordNotification(geminiResponse[index], url);

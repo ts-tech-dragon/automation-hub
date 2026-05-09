@@ -7,6 +7,7 @@ export function formatNSEResultMessage(data: any) {
     financials = {},
     dividend_declared = "",
     dividend_amount = "",
+    marketCap = "",
   } = data;
 
   let msg = `**🏢 ${company_name} (${symbol})**\n`;
@@ -21,6 +22,7 @@ export function formatNSEResultMessage(data: any) {
   // 2. Financials Section (Check if data exists)
   if (financials && financials.profit_current !== null) {
     msg += `\n📊 **Financial Performance:**\n`;
+    msg += `💸 **Market Cap:** ₹${marketCap}\n`;
     msg += `💰 **Profit:** ₹${financials.profit_current} (YoY: ${financials.profit_yoy_chg_pct}%)\n`;
     msg += `📈 **EPS:** ${financials.eps_current} (YoY: ${financials.eps_yoy_chg_pct}%)\n`;
   } else {

@@ -179,6 +179,11 @@ export async function sendNSEResultDiscordNotification(
             inline: true,
           },
           {
+            name: "Market Cap",
+            value: data.marketCap || "N/A",
+            inline: true,
+          },
+          {
             name: "Date",
             value: data.meeting_date,
             inline: true,
