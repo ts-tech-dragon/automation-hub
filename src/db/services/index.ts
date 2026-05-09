@@ -1,4 +1,8 @@
-import { getTimeInIST, isAfter330PMInIST } from "../../../lib/helpers/index.js";
+import {
+  getTimeInIST,
+  getTodayDayInIST,
+  isAfter330PMInIST,
+} from "../../../lib/helpers/index.js";
 import { getFakeIstDate } from "../../../lib/helpers/insta-earning-results/index.js";
 import { sortDataByMarketCap } from "../../../lib/helpers/nse-results/index.js";
 import connectDB, { closeDB } from "../index.js";
@@ -121,11 +125,15 @@ export const getAfterMarketHrsResults = async () => {
   if (!db) return console.log("Not able to connect with DB 😢");
 
   try {
+    const isMonday = getTodayDayInIST(1);
+    const gteDate = isMonday
+      ? new Date(`${getTimeInIST("YYYY-MM-DD", 3)}T15:15:00.000Z`)
+      : new Date(`${getTimeInIST("YYYY-MM-DD", 1)}T00:00:00.000Z`);
     // 1. Translate ISODate to native JS Date objects
     const query = {
-      isAfterMarketHours: true,
+      isAfterMarketHours: !isMonday, // Only fetch after market hours stocks on non-Mondays
       scraped_at: {
-        $gte: new Date(`${getTimeInIST("YYYY-MM-DD", 1)}T00:00:00.000Z`),
+        $gte: gteDate,
         $lt: new Date(`${getTimeInIST("YYYY-MM-DD")}T00:00:00.000Z`),
       },
     };

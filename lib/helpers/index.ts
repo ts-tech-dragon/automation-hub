@@ -37,6 +37,12 @@ export const isWeekendInIST = () => {
   return dayOfWeek === 0 || dayOfWeek === 6; // 0 = Sunday, 6 = Saturday
 };
 
+export const getTodayDayInIST = (index: number) => {
+  const nowInIST = dayjs().tz("Asia/Kolkata");
+  const dayOfWeek = nowInIST.day();
+  return dayOfWeek === index;
+};
+
 export function isAfter6PMInIST() {
   // Get the current time in IST
   const nowInIST = dayjs().tz("Asia/Kolkata");
