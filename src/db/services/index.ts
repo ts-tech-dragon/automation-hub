@@ -156,7 +156,7 @@ export async function injectMarketCaps(geminiResults: any[]) {
 
   // The DB returns an array of objects: [{symbol: 'ABC', marketCap: '...'}, ...]
   const dbStocks = await db
-    .collection("stocks")
+    .collection("daily_earnings")
     .find({ symbol: { $in: symbols } })
     .toArray();
 
@@ -169,7 +169,7 @@ export async function injectMarketCaps(geminiResults: any[]) {
   return geminiResults.map((item) => ({
     ...item,
     // marketCapMap.get(item.symbol) retrieves the value we fetched from the DB
-    marketCap: marketCapMap.get(item.marketCap) || "N/A",
+    marketCap: marketCapMap.get(item.symbol) || "N/A",
   }));
 }
 

@@ -892,7 +892,7 @@ export const NSE_MOCK_DATA = [
 export const NSE_RESULT_GEMINI_MOCK = [
   {
     company_name: "WAAREE Energies Ltd.",
-    symbol: "WAAREEENER",
+    symbol: "ABB",
     meeting_date: "29-04-2026",
     highlights: [
       "Approved Audited Financial Results for the quarter and financial year ended March 31, 2026.",
