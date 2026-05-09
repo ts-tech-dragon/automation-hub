@@ -1,9 +1,10 @@
+import type { Page } from "playwright";
 import { sortDataByMarketCap } from "../../../lib/helpers/nse-results/index.js";
 import { scrapperBrowser } from "../../core/scrapper/index.js";
 
 export async function concallEarningsFetcher() {
   const { page, context, browser } = await scrapperBrowser();
-
+  let detailPage: Page | null = null;
   const results: any[] = [];
 
   try {
@@ -62,7 +63,7 @@ export async function concallEarningsFetcher() {
 
         try {
           console.log(`🔍 Fetching Market Cap for: ${name}...`);
-          const detailPage = await context.newPage();
+          detailPage = await context.newPage();
           // Open the company analysis page
           await detailPage.goto(fullUrl, {
             waitUntil: "domcontentloaded",
@@ -79,6 +80,19 @@ export async function concallEarningsFetcher() {
           const marketCapParent = marketCap.locator("..");
           const marketCapFirstChild =
             marketCapParent.locator("> *:nth-child(1)");
+          await marketCapFirstChild.waitFor({
+            state: "visible",
+            timeout: 5000,
+          });
+          const marketCapFirstChildVisible =
+            await marketCapFirstChild.isVisible();
+          if (!marketCapFirstChildVisible) {
+            // FIX 2: Await the page closure
+            await detailPage.close();
+
+            await page.waitForTimeout(500);
+            continue;
+          }
 
           // Clean up the string (e.g., "Market Cap ₹1,200 Cr" -> "₹1,200 Cr")
           // FIX 1: Add 'await' here to resolve the string
@@ -89,6 +103,10 @@ export async function concallEarningsFetcher() {
               .replace("Cr", "")
               .replace(/,/g, "")
               .trim(),
+          );
+
+          console.log(
+            `💰 Market Cap for ${name}: ${marketCapValue} (${marketCapValueNUm})`,
           );
 
           if (Boolean(marketCapValueNUm < 1000)) {
@@ -117,7 +135,7 @@ export async function concallEarningsFetcher() {
           } else {
             // FIX 2: Await the page closure
             await detailPage.close();
-
+            await page.bringToFront();
             await page.waitForTimeout(500);
             continue;
           }
@@ -127,11 +145,14 @@ export async function concallEarningsFetcher() {
           }
           // FIX 2: Await the page closure
           await detailPage.close();
-
           await page.waitForTimeout(500);
+          await page.bringToFront();
         } catch (err) {
           console.error(`⚠️ Failed to get data for :`, (err as Error).message);
           results.push({ name, marketCap: "N/A" });
+          await detailPage?.close().catch(() => {});
+          await page.waitForTimeout(500);
+          await page.bringToFront();
         }
       }
     };
