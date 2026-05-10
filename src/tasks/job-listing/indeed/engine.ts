@@ -4,6 +4,8 @@ import { MOCK_INTERVIEW_JOBS } from "../../../../lib/constants/job-listing/mock.
 import { runScrapeIndeed } from "./indeed-scrapper.js";
 import { RUN_INDEED_SCRAPER_PAYLOAD } from "../../../../lib/constants/interview-prep/index.js";
 import { splitInHalf } from "../../../../lib/helpers/index.js";
+import { processJobListings } from "../../../db/services/job-listing.js";
+import { closeDB } from "../../../db/index.js";
 
 async function runJobListing() {
   try {
@@ -13,17 +15,30 @@ async function runJobListing() {
         RUN_INDEED_SCRAPER_PAYLOAD,
         location,
       );
-      if (!jobsList.length) return console.log("No Jobs Found 😐!!!");
-      if (jobsList.length > 20) {
-        const [firstHalf, secondHalf] = splitInHalf(jobsList) as any;
-        sendTelegramJobListing(firstHalf, { src: "Indeed", loc: location });
-        sendTelegramJobListing(secondHalf, { src: "Indeed", loc: location });
+      // const jobsList = MOCK_INTERVIEW_JOBS as any;
+      const filteredJobs = await processJobListings(jobsList);
+      if (!filteredJobs.length) return console.log("No Jobs Found 😐!!!");
+      if (filteredJobs.length > 20) {
+        const [firstHalf, secondHalf] = splitInHalf(filteredJobs) as any;
+        await sendTelegramJobListing(firstHalf, {
+          src: "Indeed",
+          loc: location,
+        });
+        await sendTelegramJobListing(secondHalf, {
+          src: "Indeed",
+          loc: location,
+        });
         return;
       }
-      sendTelegramJobListing(jobsList, { src: "Indeed", loc: location });
+      await sendTelegramJobListing(filteredJobs, {
+        src: "Indeed",
+        loc: location,
+      });
     }
   } catch (error) {
     console.log("run job l6isting error : ", (error as Error).message);
+  } finally {
+    await closeDB();
   }
 }
 

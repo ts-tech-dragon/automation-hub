@@ -25,6 +25,9 @@ async function runEarningsGenerator() {
       });
     }
 
+    if (earningResult.length === 0)
+      return console.log("No Earnings Result Found 😐!!!");
+
     const earningsURLArr = [];
 
     if (earningResult.length > 10) {
