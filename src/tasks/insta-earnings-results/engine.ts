@@ -5,7 +5,10 @@ import { sendTelegramStockGallery } from "../../core/notifier/telegram.js";
 import { concallEarningsFetcher } from "./concall-fetcher.js";
 import { generateEarningsImage } from "./generateEarningImage.js";
 import { isAfter6PMInIST } from "../../../lib/helpers/index.js";
-import { broadcastMultipleUpdates } from "../../core/social/facebook.js";
+import {
+  broadcastMultipleUpdates,
+  broadcastUpdate,
+} from "../../core/social/facebook.js";
 import { syncConcallDataToDB } from "../../db/services/index.js";
 import { closeDB } from "../../db/index.js";
 
@@ -44,9 +47,21 @@ async function runEarningsGenerator() {
     const description = EARNING_POST_DESCRIPTION[
       Math.floor(Math.random() * EARNING_POST_DESCRIPTION.length)
     ] as any;
-    await broadcastMultipleUpdates(earningsURLArr, {
-      caption: description.instagramCaption,
-    });
+
+    if (earningsURLArr.length === 1) {
+      await broadcastUpdate(
+        earningsURLArr[0] as string,
+        {
+          caption: description.instagramCaption,
+        },
+        true,
+      );
+    } else {
+      await broadcastMultipleUpdates(earningsURLArr, {
+        caption: description.instagramCaption,
+      });
+    }
+
     await sendTelegramStockGallery(description, earningsURLArr, true);
     await syncConcallDataToDB(earningResult);
 

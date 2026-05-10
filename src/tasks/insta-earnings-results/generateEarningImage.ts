@@ -4,6 +4,7 @@ import { scrapperBrowser } from "../../core/scrapper/index.js";
 import { uploadBufferToImgBB } from "../../core/imgbb.js";
 import { NIFTY_50_STOCKS } from "../../../lib/constants/insta-earning-results/index.js";
 import { EARNINGS_POST_THEMES } from "../../../lib/constants/theme.js";
+import { TSFINNEWS_ICONS } from "../../../lib/constants/index.js";
 
 // ... inside your generateEarningsImage function
 
@@ -58,179 +59,195 @@ export async function generateEarningsImage(
     });
 
     // 1. Create the HTML Template with Tailwind CSS for styling
-    const htmlContent = `
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <script src="https://cdn.tailwindcss.com"></script>
-      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-      <style>
-        :root {
-        --primary-rgb: ${activeTheme.primary};
-        --secondary-rgb: ${activeTheme.secondary};
-        --accent-rgb: ${activeTheme.accent};
-        --header-gradient: ${activeTheme.gradient};
-        }
+    const htmlContent = `<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Mapping your activeTheme object */
+      --primary-rgb: ${activeTheme.primary};
+      --secondary-rgb: ${activeTheme.secondary};
+      --accent-hex: ${activeTheme.accent.startsWith("#") ? activeTheme.accent : "#" + activeTheme.accent};
+      --bg-gradient: ${activeTheme.gradient};
+    }
 
-        * { box-sizing: border-box; }
+    * { box-sizing: border-box; }
+    
+    body {
+      font-family: 'Urbanist', sans-serif;
+      background: #020408;
+      color: white;
+      margin: 0; padding: 0;
+      width: 1080px; height: 1080px;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+
+    .dashboard-pane {
+      width: 1000px; height: 1000px;
+      background: #060912;
+      background-image: var(--bg-gradient); /* Uses your theme's custom gradient */
+      border-radius: 50px;
+      border: 1px solid rgba(var(--primary-rgb), 0.3);
+      display: flex; flex-direction: column;
+      box-shadow: 0 0 80px rgba(var(--primary-rgb), 0.1), inset 0 0 50px rgba(0,0,0,0.4);
+      position: relative;
+    }
+
+    .aurora-blur {
+      position: absolute; top: -100px; right: -50px;
+      width: 450px; height: 450px;
+      background: rgba(var(--primary-rgb), 0.15);
+      border-radius: 50%;
+      filter: blur(120px);
+      z-index: 0;
+    }
+
+    .header-section {
+      padding: 45px 25px 35px;
+      position: relative; z-index: 10;
+    }
+
+    .title-watch {
+      font-size: 3.8rem; font-weight: 800; line-height: 1.1;
+      letter-spacing: -2px;
+      background: linear-gradient(to bottom, #fff 50%, rgba(255,255,255,0.5));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      margin-bottom: 12px;
+    }
+
+    .date-pill {
+      display: inline-block;
+      background: rgba(var(--primary-rgb), 0.1);
+      border: 1px solid rgba(var(--primary-rgb), 0.4);
+      color: var(--accent-hex);
+      padding: 6px 24px; border-radius: 100px;
+      font-family: 'JetBrains Mono'; font-size: 1.1rem;
+      text-transform: uppercase; letter-spacing: 2px;
+    }
+
+    .data-grid {
+      flex: 1; padding: 10px 10px;
+      display: flex; flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .header-row {
+      display: grid;
+      grid-template-columns: 2fr 1.3fr ${isEPSRequired ? "1.3fr" : ""} 0.5fr;
+      padding: 15px 25px;
+      text-transform: uppercase;
+      font-size: 0.85rem; letter-spacing: 2px;
+      color: rgba(255, 255, 255, 0.3);
+      font-weight: 800;
+      border-bottom: 1px solid rgba(var(--primary-rgb), 0.1);
+    }
+
+    .data-row {
+      display: grid;
+      grid-template-columns: 2fr 1.3fr ${isEPSRequired ? "1.3fr" : ""} 0.5fr;
+      align-items: center;
+      padding: 12px 8px;
+      border-bottom: 1px solid rgba(var(--primary-rgb), 0.05);
+    }
+
+    .name-cell .name { font-size: 1.7rem; font-weight: 700; color: #fff; display: block; margin-bottom: 2px;}
+    .name-cell .symbol { font-size: 0.95rem; color: var(--accent-hex); font-weight: 700; text-transform: uppercase; opacity: 0.8; }
+
+    .value-cell { font-family: 'JetBrains Mono'; font-size: 1.5rem; font-weight: 700; color: #f1f5f9; }
+    
+    .nifty-cell {
+      width: 45px; height: 45px;
+      background: rgba(var(--primary-rgb), 0.05);
+      border: 1px solid rgba(var(--primary-rgb), 0.2);
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .footer-area {
+      padding: 40px 65px;
+      display: flex; justify-content: space-between; align-items: center;
+      background: linear-gradient(to top, rgba(var(--primary-rgb), 0.05), transparent);
+      border-radius: 0 0 50px 50px;
+    }
+
+    .brand-handle {
+      display: flex; align-items: center; gap: 10px;
+      font-weight: 700; color: rgba(255, 255, 255, 0.85);
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-pane">
+    <div class="aurora-blur"></div>
+    
+    <div class="header-section">
+      <h1 class="title-watch">
+        ${isEPSRequired ? "Earnings Results Declared" : "Upcoming Earnings Results"}
+      </h1>
+      <div class="date-pill">${dateStr}</div>
+    </div>
+
+    <div class="data-grid">
+      <div class="header-row">
+        <span>Company</span>
+        <span style="text-align: right;">M.Cap (Cr)</span>
+        ${isEPSRequired ? '<span style="text-align: right;">EPS</span>' : ""}
+        <span style="text-align: center;">N50</span>
+      </div>
+
+      ${data
+        .map(
+          (stock) => `
+      <div class="data-row">
+        <div class="name-cell">
+          <span class="name">${stock.name}</span>
+        </div>
         
-        body {
-          font-family: 'Inter', sans-serif;
-          background: radial-gradient(ellipse at 20% 20%, #0d2137 0%, #0a0f1e 40%, #050810 100%);
-          color: white;
-          margin: 0; /* Important: Remove default body margins */
-          padding: 0;
-          min-height: 100vh;
-          display: flex;
-          flex-direction: column;
+        <div class="value-cell" style="text-align: right;">₹${stock.marketCap}</div>
+
+        ${
+          isEPSRequired
+            ? `
+        <div class="value-cell" style="text-align: right; color: var(--accent-hex)">₹${stock.eps}</div>
+        `
+            : ""
         }
 
-        /* This wrapper now ensures the content fills the 1080px (or whatever) height */
-        .outer-wrapper {
-          width: 100%;
-          min-height: 100vh;
-          padding: 0; /* Remove padding to go full-bleed */
-          display: flex;
-        }
-
-        .glass-card {
-          width: 100%; /* Take full width */
-          display: flex;
-          flex-direction: column;
-          background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
-          border: none; /* Removed border to make it look like a background */
-          backdrop-filter: blur(24px);
-          box-shadow: inset 0 0 100px rgba(0,0,0,0.5); /* Adds depth to the edges */
-        }
-
-        .header-glass {
-          background: var(--header-gradient);
-          border-bottom: 1px solid rgba(var(--primary-rgb), 0.2);
-          position: relative;
-          overflow: hidden;
-        }
-
-        .header-glass::before {
-          content: '';
-          position: absolute;
-          top: -60%; left: 50%;
-          transform: translateX(-50%);
-          width: 70%; height: 120%;
-          background: radial-gradient(ellipse, rgba(var(--primary-rgb), 0.15) 0%, transparent 70%);
-        }
-
-        .title-glow {
-          text-shadow:
-            0 0 20px rgba(var(--primary-rgb), 0.6),
-            0 0 40px rgba(var(--primary-rgb), 0.3);
-        }
-
-        .date-pill {
-          background: rgba(var(--primary-rgb), 0.1);
-          border: 1px solid rgba(var(--primary-rgb), 0.25);
-          color: var(--accent-rgb);
-          border-radius: 999px; padding: 4px 20px; font-size: 0.85rem;
-        }
-
-        thead th {
-          color: rgba(var(--primary-rgb), 1);
-          border-bottom: 1px solid rgba(var(--primary-rgb), 0.2);
-          font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
-        }
-
-        .divider {
-          background: linear-gradient(to bottom, transparent, rgba(var(--primary-rgb), 0.2) 20%, rgba(var(--primary-rgb), 0.2) 80%, transparent);
-        }
-
-        .nifty-badge {
-          background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.2), rgba(var(--primary-rgb), 0.08));
-          border: 1px solid rgba(var(--primary-rgb), 0.35);
-        }
-      </style>
-    </head>
-    <body class="bg-[#050810]">
-      <div class="outer-wrapper flex items-start justify-center">
-        <div class="glass-card" style="border-radius: 20px; overflow: hidden;">
-
-          <div class="header-glass" style="padding: 32px; text-align: center;">
-            <div style="position: relative; z-index: 1;">
-              <h1 class="title-glow" style="font-size: 2.5rem; font-weight: 800; color: rgba(var(--primary-rgb), 1); letter-spacing: 0.06em; text-transform: uppercase; margin: 0 0 12px;">
-                ${isEPSRequired ? "Daily EPS Updates" : "Daily Upcoming Earnings"}
-              </h1>
-              <div class="date-pill">
-                <span style=" font-weight: 600;font-size:1.25rem">${dateStr}</span>
-              </div>
-            </div>
+        <div class="flex justify-center">
+          <div class="nifty-cell">
+            ${stock.isNifty ? "💎" : "•"}
           </div>
-
-          <div style="width: 100%; overflow-x: auto;">
-            <table style="table-layout: auto; width: 100%;"> 
-            <thead>
-                <tr>
-                  <th style="text-align: left; padding-left: 32px;font-size:24px">Company Name</th>
-                  <th style="text-align: right;;font-size:16px">Market Cap (Cr)</th>
-                  ${isEPSRequired ? '<th style="text-align: right;font-size:16px">EPS</th>' : ""}
-                  <th style="text-align: center; padding-right: 32px;font-size:16px">N50</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${data
-                  .map(
-                    (stock, index) => `
-                  <tr class="${index % 2 === 0 ? "" : "row-alt"}" style="height: 60px; padding: 24px 20px; vertical-align: middle;">
-                    <td class="company-name" style="padding-left: 32px;font-size:24px">${stock.name}</td>
-                    <td style="text-align: right;font-size:24px">
-                      <span style="display: inline-flex; align-items: center; gap: 8px; justify-content: flex-end;">
-                        <span class="rupee-badge">₹</span>
-                        <span class="mono-val">${stock.marketCap}</span>
-                      </span>
-                    </td>
-                    ${
-                      isEPSRequired
-                        ? `
-                    <td style="text-align: right;font-size:24px">
-                      <span style="display: inline-flex; align-items: center; gap: 8px; justify-content: flex-end;">
-                        <span class="rupee-badge">₹</span>
-                        <span class="mono-val">${stock.eps}</span>
-                      </span>
-                    </td>`
-                        : ""
-                    }
-                    <td style="font-size:24px">
-                      <div class="nifty-cell" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
-                        ${stock.isNifty ? '<span class="nifty-badge">✅</span>' : ""}
-                      </div>
-                    </td>
-                  </tr>
-                `,
-                  )
-                  .join("")}
-              </tbody>
-            </table>
-          </div>
-
-          <div class="footer-glass" style="display: flex; align-items: center; justify-content: center; gap: 24px;">
-            <div class="footer-item flex items-center gap-2">
-              <img src="data:image/png;base64,${fbBase64}" style="width:16px;height:16px;" />
-              <span>tsfinnews</span>
-            </div>
-            
-            <div class="footer-item flex items-center gap-2">
-              <img src="data:image/png;base64,${igBase64}" style="width:16px;height:16px;" />
-              <span>@tsfinnews</span>
-            </div>
-
-            <div class="footer-item flex items-center gap-2">
-              <img src="data:image/png;base64,${thBase64}" style="width:16px;height:16px;" />
-              <span>tsfinnews</span>
-            </div>
-          </div>
-
         </div>
       </div>
-    </body>
-    </html>
-  `;
+      `,
+        )
+        .join("")}
+    </div>
+
+    <div class="footer-area">
+      <div class="brand-handle">
+        <img src="data:image/png;base64,${TSFINNEWS_ICONS.facebook}" style="width:20px;height:20px; opacity: 0.5;" />
+        <span>@tsfinnews</span>
+      </div>
+      <div class="brand-handle">
+        <img src="data:image/png;base64,${TSFINNEWS_ICONS.instagram}" style="width:20px;height:20px; opacity: 0.5;" />
+        <span>@tsfinnews</span>
+      </div>
+      <div class="brand-handle">
+        <img src="data:image/png;base64,${TSFINNEWS_ICONS.threads}" style="width:20px;height:20px; opacity: 0.5;" />
+        <span>@tsfinnews</span>
+      </div>
+      <div style="font-family: 'JetBrains Mono'; font-size: 0.8rem; color: rgba(var(--primary-rgb), 0.4); letter-spacing: 3px; font-weight: 700;">
+        THEME: ${activeTheme.name.toUpperCase()}
+      </div>
+    </div>
+  </div>
+</body>
+</html>`;
 
     // 2. Load the HTML into the page
     await page.setContent(htmlContent);
