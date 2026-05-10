@@ -207,7 +207,7 @@ export async function generateEarningsImage(
           <span class="name">${stock.name}</span>
         </div>
         
-        <div class="value-cell" style="text-align: right;">₹${stock.marketCap}</div>
+        <div class="value-cell" style="text-align: right;">${stock.marketCap}</div>
 
         ${
           isEPSRequired
