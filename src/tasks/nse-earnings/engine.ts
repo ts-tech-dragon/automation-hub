@@ -23,7 +23,9 @@ import { isMarketHoliday } from "../../../lib/helpers/insta-earning-results/inde
 const sessionStocks = new Set<String>();
 
 const runNSEEngine = async () => {
-  const dataTime = getHoursAgoInIST("DD-MMM-YYYY HH", 1);
+  const timeToRun =
+    isAfter330PMInIST() || isWeekendInIST() || isMarketHoliday() ? 1 : 0;
+  const dataTime = getHoursAgoInIST("DD-MMM-YYYY HH", timeToRun);
   //   const dataTime = "29-Apr-2026 22";
 
   try {
