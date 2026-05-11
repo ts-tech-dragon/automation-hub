@@ -5,6 +5,7 @@ export const ENV_VARS = {
   GEMINI_API_KEY: process.env.GEMINI_API_KEY || "",
   PUTER_API_KEY: process.env.PUTER_API_KEY || "",
   TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN || "",
+  TELEGRAM_STOCK_BOT_TOKEN: process.env.TELEGRAM_STOCK_BOT_TOKEN || "",
   TELEGRAM_CHAT_ID: process.env.TELEGRAM_CHAT_ID || "",
   MARKETAUX_API_KEY: process.env.MARKETAUX_API_KEY || "",
   MOCK_GEMINI: process.env.MOCK_GEMINI || "true",

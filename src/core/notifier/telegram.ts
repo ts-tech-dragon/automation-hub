@@ -7,6 +7,7 @@ import { sendErrorToDiscord } from "./discord.js";
 
 // Initialize the Telegram client
 const tg = new Telegram(ENV_VARS.TELEGRAM_BOT_TOKEN);
+const ts_stock_bot = new Telegram(ENV_VARS.TELEGRAM_STOCK_BOT_TOKEN);
 
 export async function sendTelegramInterview(title: string, content: string) {
   try {
@@ -130,7 +131,7 @@ export async function sendNSEResultTelegramNotification(
       formattedMsg.replace(/\*\*(.*?)\*\*/g, "<b>$1</b>").replace(/•/g, "▫️") +
       `\n\n📄 <a href="${pdfUrl}">View Full Report</a>`;
 
-    await tg.sendMessage(ENV_VARS.TELEGRAM_CHAT_ID, htmlMsg, {
+    await ts_stock_bot.sendMessage(ENV_VARS.TELEGRAM_CHAT_ID, htmlMsg, {
       parse_mode: "HTML",
     });
   } catch (error) {
