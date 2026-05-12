@@ -168,14 +168,14 @@ export async function sendNSEResultDiscordNotification(
     username: "NSE Result Bot 📈",
     embeds: [
       {
-        title: `Corporate Announcement: ${data.symbol}`,
+        title: `Corporate Announcement: ${data.symbol ?? "N/A"}`,
         url: pdfUrl,
         color: data.dividend_declared ? 3066993 : 5814783, // Green if dividend, Blue otherwise
-        description: data.highlights.map((h: string) => `• ${h}`).join("\n"),
+        description: data?.highlights.map((h: string) => `• ${h}`).join("\n"),
         fields: [
           {
             name: "Company",
-            value: data.company_name,
+            value: data.company_name ?? "N/A",
             inline: true,
           },
           {
@@ -185,7 +185,7 @@ export async function sendNSEResultDiscordNotification(
           },
           {
             name: "Date",
-            value: data.meeting_date,
+            value: data.meeting_date ?? "N/A",
             inline: true,
           },
           {

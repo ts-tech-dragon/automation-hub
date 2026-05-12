@@ -55,11 +55,12 @@ export const sortDataByMarketCap = (data: { marketCap?: string }[]) => {
 };
 
 export const formatCurrentPrice = (price: number) => {
+  const priceInCrores = price / 10000000; // Convert to Crores
   const formatted = new Intl.NumberFormat("en-IN", {
     style: "currency",
     currency: "INR",
     maximumFractionDigits: 0, // Removes .00 if you don't need paisa
-  }).format(price);
+  }).format(priceInCrores);
 
-  return formatted;
+  return formatted + " Cr"; // Append "Cr" to indicate Crores
 };

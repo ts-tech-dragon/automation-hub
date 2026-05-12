@@ -172,27 +172,29 @@ export async function injectMarketCaps(geminiResults: any[]) {
   );
 
   // Return the new combined objects
-  return geminiResults.map(async (item) => {
-    let marketCap = marketCapMap.get(item.symbol) || null;
-    if (!marketCap) {
-      try {
-        // NSE symbols on Yahoo Finance need the ".NS" suffix
-        const querySymbol = `${item.symbol}.NS`;
-        const result = await yahooFinance.quote(querySymbol);
+  return await Promise.all(
+    geminiResults.map(async (item) => {
+      let marketCap = marketCapMap.get(item.symbol) || null;
+      if (!Boolean(marketCap)) {
+        try {
+          // NSE symbols on Yahoo Finance need the ".NS" suffix
+          const querySymbol = `${item.symbol}.NS`;
+          const result = await yahooFinance.quote(querySymbol);
 
-        marketCap = formatCurrentPrice(result.marketCap); // This returns the value in absolute numbers (e.g., 150000000000)
-      } catch (error) {
-        console.error("Error fetching from Yahoo:", error);
+          marketCap = formatCurrentPrice(result.marketCap); // This returns the value in absolute numbers (e.g., 150000000000)
+        } catch (error) {
+          console.error("Error fetching from Yahoo:", error);
+        }
       }
-    }
 
-    return {
-      ...item,
+      return {
+        ...item,
 
-      // marketCapMap.get(item.symbol) retrieves the value we fetched from the DB
-      marketCap: marketCap || "N/A", // Fallback to "N/A" if not found in DB or Yahoo
-    };
-  });
+        // marketCapMap.get(item.symbol) retrieves the value we fetched from the DB
+        marketCap: marketCap || "N/A", // Fallback to "N/A" if not found in DB or Yahoo
+      };
+    }),
+  );
 }
 
 async function removeDuplicateStocks() {
