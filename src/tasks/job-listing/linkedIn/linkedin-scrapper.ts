@@ -1,6 +1,7 @@
 import { scrollToLoad } from "../../../../lib/helpers/interview-prep/index.js";
 import { scrapperBrowser } from "../../../core/scrapper/index.js";
 import type { RUN_LINKEDIN_SCRAPER_PAYLOAD } from "../../../../lib/constants/interview-prep/index.js";
+import { humanDelay, humanMouseMove } from "../../../../lib/helpers/human.js";
 
 const runLinkenInScrapper: (
   option: typeof RUN_LINKEDIN_SCRAPER_PAYLOAD,
@@ -81,7 +82,15 @@ const runLinkenInScrapper: (
               normalizedText.toLocaleLowerCase().includes(loc.toLowerCase()),
             );
 
-            if (!isExactLocation) continue;
+            if (!isExactLocation) {
+              await humanDelay(1000, 5000);
+              await humanMouseMove(
+                page,
+                Math.floor(Math.random() * 800) + 200,
+                Math.floor(Math.random() * 400) + 200,
+              );
+              continue;
+            }
 
             const jobTitle = await rightPanel
               .locator(".job-details-jobs-unified-top-card__job-title")
@@ -106,12 +115,23 @@ const runLinkenInScrapper: (
               newFoundOnPage++;
               console.log(`✅ ${jobTitle} @ ${companyName}`);
             }
+            await humanDelay(1000, 5000);
+            await humanMouseMove(
+              page,
+              Math.floor(Math.random() * 800) + 200,
+              Math.floor(Math.random() * 400) + 200,
+            );
           }
         } catch (err) {
           console.log("❌ Card error:", (err as Error).message);
         }
       }
-
+      await humanDelay(1000, 5000);
+      await humanMouseMove(
+        page,
+        Math.floor(Math.random() * 800) + 200,
+        Math.floor(Math.random() * 400) + 200,
+      );
       if (newFoundOnPage === 0) {
         console.log("🛑 No new jobs found, stopping...");
         break;
