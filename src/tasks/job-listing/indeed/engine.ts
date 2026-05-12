@@ -17,7 +17,10 @@ async function runJobListing() {
       );
       // const jobsList = MOCK_INTERVIEW_JOBS as any;
       const filteredJobs = await processJobListings(jobsList);
-      if (!filteredJobs.length) return console.log("No Jobs Found 😐!!!");
+      if (!filteredJobs.length) {
+        console.log("No Jobs Found 😐!!!");
+        continue;
+      }
       if (filteredJobs.length > 20) {
         const [firstHalf, secondHalf] = splitInHalf(filteredJobs) as any;
         await sendTelegramJobListing(firstHalf, {
