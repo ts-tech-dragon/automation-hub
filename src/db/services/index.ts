@@ -1,15 +1,21 @@
+import YahooFinance from "yahoo-finance2";
 import {
   getTimeInIST,
   getTodayDayInIST,
   isAfter330PMInIST,
 } from "../../../lib/helpers/index.js";
 import { getFakeIstDate } from "../../../lib/helpers/insta-earning-results/index.js";
-import { sortDataByMarketCap } from "../../../lib/helpers/nse-results/index.js";
+import {
+  formatCurrentPrice,
+  sortDataByMarketCap,
+} from "../../../lib/helpers/nse-results/index.js";
 import connectDB, { closeDB } from "../index.js";
 import type {
   IConcallEarningsResult,
   IEarningsResult,
 } from "../models/index.js";
+
+const yahooFinance = new YahooFinance({ suppressNotices: ["yahooSurvey"] });
 
 export const saveDailyResults = async (data: IEarningsResult[]) => {
   const db = await connectDB();
@@ -166,11 +172,27 @@ export async function injectMarketCaps(geminiResults: any[]) {
   );
 
   // Return the new combined objects
-  return geminiResults.map((item) => ({
-    ...item,
-    // marketCapMap.get(item.symbol) retrieves the value we fetched from the DB
-    marketCap: marketCapMap.get(item.symbol) || "N/A",
-  }));
+  return geminiResults.map(async (item) => {
+    let marketCap = marketCapMap.get(item.symbol) || null;
+    if (!marketCap) {
+      try {
+        // NSE symbols on Yahoo Finance need the ".NS" suffix
+        const querySymbol = `${item.symbol}.NS`;
+        const result = await yahooFinance.quote(querySymbol);
+
+        marketCap = formatCurrentPrice(result.marketCap); // This returns the value in absolute numbers (e.g., 150000000000)
+      } catch (error) {
+        console.error("Error fetching from Yahoo:", error);
+      }
+    }
+
+    return {
+      ...item,
+
+      // marketCapMap.get(item.symbol) retrieves the value we fetched from the DB
+      marketCap: marketCap || "N/A", // Fallback to "N/A" if not found in DB or Yahoo
+    };
+  });
 }
 
 async function removeDuplicateStocks() {

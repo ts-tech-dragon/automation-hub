@@ -53,3 +53,13 @@ export const sortDataByMarketCap = (data: { marketCap?: string }[]) => {
     return getNumericMCap(b) - getNumericMCap(a);
   });
 };
+
+export const formatCurrentPrice = (price: number) => {
+  const formatted = new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    maximumFractionDigits: 0, // Removes .00 if you don't need paisa
+  }).format(price);
+
+  return formatted;
+};
