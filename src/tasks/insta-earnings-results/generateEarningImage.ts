@@ -5,6 +5,7 @@ import { uploadBufferToImgBB } from "../../core/imgbb.js";
 import { NIFTY_50_STOCKS } from "../../../lib/constants/insta-earning-results/index.js";
 import { EARNINGS_POST_THEMES } from "../../../lib/constants/theme.js";
 import { TSFINNEWS_ICONS } from "../../../lib/constants/index.js";
+import { isEpsPositive } from "../../../lib/helpers/insta-earning-results/index.js";
 
 // ... inside your generateEarningsImage function
 
@@ -212,8 +213,12 @@ export async function generateEarningsImage(
         ${
           isEPSRequired
             ? `
-        <div class="value-cell" style="text-align: right; color: var(--accent-hex)">₹${stock.eps}</div>
-        `
+            <div class="value-cell" style="text-align: right; display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
+              <span style="color: ${isEpsPositive(stock.eps) ? "#22c55e" : "#ef4444"}; font-size: 1.2rem;">
+                ${isEpsPositive(stock.eps) ? "▲" : "▼"}
+              </span>
+              <span style="color: var(--accent-hex)">${stock.eps}</span>
+            </div>`
             : ""
         }
 
