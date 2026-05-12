@@ -173,6 +173,53 @@ export async function injectMarketCaps(geminiResults: any[]) {
   }));
 }
 
+async function removeDuplicateStocks() {
+  const db = await connectDB();
+  const collection = db.collection("daily_earnings"); // or "daily_earnings"
+
+  try {
+    const duplicates = await collection
+      .aggregate([
+        {
+          // 1. Group by symbol
+          $group: {
+            _id: { symbol: "$symbol" },
+            uniqueIds: { $addToSet: "$_id" },
+            count: { $sum: 1 },
+          },
+        },
+        {
+          // 2. Only look for groups with more than 1 document
+          $match: {
+            count: { $gt: 1 },
+          },
+        },
+      ])
+      .toArray();
+
+    // 3. Prepare IDs to delete
+    const idsToDelete: any[] = [];
+    duplicates.forEach((doc) => {
+      // Keep the first ID, discard the rest
+      const [keep, ...rest] = doc.uniqueIds;
+      idsToDelete.push(...rest);
+    });
+
+    if (idsToDelete.length > 0) {
+      const result = await collection.deleteMany({
+        _id: { $in: idsToDelete },
+      });
+      console.log(
+        `✅ Successfully removed ${result.deletedCount} duplicate symbols.`,
+      );
+    } else {
+      console.log("✨ No duplicates found. Your DB is clean!");
+    }
+  } catch (error) {
+    console.error("Cleanup Error:", error);
+  }
+}
+
 export const getWeeklyTopPerformers = async () => {
   const db = await connectDB();
   // Add your logic to query the top 5 for tsfinnews here
