@@ -24,7 +24,7 @@ export function formatNSEResultMessage(data: any) {
     msg += `\n📊 **Financial Performance:**\n`;
     msg += `💸 **Market Cap:** ₹${marketCap}\n`;
     msg += `💰 **Profit:** ₹${financials.profit_current} (YoY: ${financials.profit_yoy_chg_pct}%)\n`;
-    msg += `📈 **EPS:** ${financials.eps_current} (YoY: ${financials.eps_yoy_chg_pct}%)\n`;
+    msg += `📈 **EPS:** ${financials.eps_current} (YoY: ${financials.eps_yoy_chg_pct}%) (QoQ: ${financials.eps_qoq_chg_pct}%)\n`;
   } else {
     msg += `\n📊 *Financial results table not found in this filing.*\n`;
   }

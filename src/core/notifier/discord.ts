@@ -193,9 +193,11 @@ export async function sendNSEResultDiscordNotification(
             value: data?.financials?.profit_current
               ? `
                 Profit: ${data.financials.profit_current ?? "N/A"} Rs
-                \nProfit %: ${data.financials.profit_yoy_chg_pct ?? "N/A"}%
+                \nProfit(YoY) %: ${data.financials.profit_yoy_chg_pct ?? "N/A"}%
+                \nProfit(QoQ) %: ${data.financials.profit_qoq_chg_pct ?? "N/A"}%
                 \nEPS: ${data.financials.eps_current ?? "N/A"} Rs
-                \nEPS %: ${data.financials.eps_yoy_chg_pct ?? "N/A"}%
+                \nEPS(YoY) %: ${data.financials.eps_yoy_chg_pct ?? "N/A"}%
+                \nEPS(QoQ) %: ${data.financials.eps_qoq_chg_pct ?? "N/A"}%
                 `
               : "N/A",
             inline: false,
