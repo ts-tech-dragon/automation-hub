@@ -88,7 +88,7 @@ export const sendTelegramStockGallery = async (
       parse_mode: "HTML",
     }));
 
-    await tg.sendMediaGroup(ENV_VARS.TELEGRAM_CHAT_ID, mediaGroup);
+    await ts_stock_bot.sendMediaGroup(ENV_VARS.TELEGRAM_CHAT_ID, mediaGroup);
 
     console.log("✅ Stock gallery sent to your phone!");
   } catch (error) {

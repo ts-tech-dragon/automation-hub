@@ -70,3 +70,13 @@ export const getRandomMarketDelay = (min: number, max: number) => {
   const maxMs = max * 60 * 1000; // 6 mins
   return Math.floor(Math.random() * (maxMs - minMs + 1) + minMs);
 };
+
+export const parseEpsPercent = (percentStr: string, asDecimal = false) => {
+  if (!percentStr) return false;
+
+  // Remove the '%' sign and parse as a float
+  const numericValue = parseFloat(percentStr.replace("%", ""));
+
+  // Return either the whole number or the decimal equivalent
+  return asDecimal ? numericValue / 100 : numericValue;
+};

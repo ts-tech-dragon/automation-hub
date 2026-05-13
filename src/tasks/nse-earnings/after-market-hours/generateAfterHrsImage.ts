@@ -1,5 +1,6 @@
 import { TSFINNEWS_ICONS } from "../../../../lib/constants/index.js";
 import { EARNINGS_POST_THEMES } from "../../../../lib/constants/theme.js";
+import { parseEpsPercent } from "../../../../lib/helpers/nse-results/index.js";
 import { uploadBufferToImgBB } from "../../../core/imgbb.js";
 import { scrapperBrowser } from "../../../core/scrapper/index.js";
 
@@ -192,7 +193,9 @@ export const generateAfterHrsImage = async (
         <div class="results-container">
             ${results
               .map((item: any) => {
-                const isPositive = item.financials.eps_yoy_chg_pct >= 0;
+                const eps =
+                  parseEpsPercent(item.eps) || item.financials.eps_yoy_chg_pct;
+                const isPositive = eps >= 0;
                 const statusColor = isPositive ? "#00ff88" : "#ff4d4d";
 
                 return `
@@ -205,7 +208,7 @@ export const generateAfterHrsImage = async (
                     <div>
                         <div class="metric-label">EPS Growth</div>
                         <div class="eps-value ${isPositive ? "bullish-text" : "bearish-text"}">
-                            ${isPositive ? "▲" : "▼"} ${Math.abs(item.financials.eps_yoy_chg_pct).toFixed(1)}%
+                            ${isPositive ? "▲" : "▼"} ${Math.abs(eps).toFixed(1)}%
                         </div>
                     </div>
 
