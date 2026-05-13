@@ -64,3 +64,9 @@ export const formatCurrentPrice = (price: number) => {
 
   return formatted + " Cr"; // Append "Cr" to indicate Crores
 };
+
+export const getRandomMarketDelay = (min: number, max: number) => {
+  const minMs = min * 60 * 1000; // 3 mins
+  const maxMs = max * 60 * 1000; // 6 mins
+  return Math.floor(Math.random() * (maxMs - minMs + 1) + minMs);
+};

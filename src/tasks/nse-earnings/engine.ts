@@ -9,7 +9,10 @@ import {
   NSE_RESULT_GEMINI_MOCK,
 } from "../../../lib/constants/nse-scrapper/mock.js";
 import { processBatchNsePdfs } from "./processNsePdf.js";
-import { formatNSEResultMessage } from "../../../lib/helpers/nse-results/index.js";
+import {
+  formatNSEResultMessage,
+  getRandomMarketDelay,
+} from "../../../lib/helpers/nse-results/index.js";
 import { sendNSEResultTelegramNotification } from "../../core/notifier/telegram.js";
 import {
   sendErrorToDiscord,
@@ -83,7 +86,6 @@ const oneTimeRunner = async () => {
 };
 
 const RUN_DURATION = 60 * 60 * 1000; // 1 hour
-const SLEEP_INTERVAL = 5 * 60 * 1000; // 5 minutes
 
 async function monitorMarketEngine() {
   if (isAfter330PMInIST() || isWeekendInIST() || isMarketHoliday())
@@ -91,11 +93,12 @@ async function monitorMarketEngine() {
   const startTime = Date.now();
   console.log("🚀 Starting NSE Monitoring Session...");
   while (Date.now() - startTime < RUN_DURATION) {
+    const SLEEP_INTERVAL = getRandomMarketDelay(4, 6); // 4 - 6 minutes
     try {
       console.log(`\n🔍 Tick: ${new Date().toLocaleTimeString("en-IN")}`);
       await runNSEEngine();
       console.log(
-        `😴 Sleeping for 5m. Total runtime: ${Math.round((Date.now() - startTime) / 60000)} mins`,
+        `😴 Sleeping for ${SLEEP_INTERVAL / 60000}. Total runtime: ${Math.round((Date.now() - startTime) / 60000)} mins`,
       );
       await new Promise((resolve) => setTimeout(resolve, SLEEP_INTERVAL));
     } catch (error) {
