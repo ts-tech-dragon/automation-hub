@@ -33,6 +33,12 @@ export const ENV_VARS = {
   MARKET_AUX_API_KEY: process.env.MARKET_AUX_API_KEY,
 };
 
+export const MISCELLANEOUS_ENV_VARS = {
+  WHATSAPP_ACCESS_TOKEN: process.env.WHATSAPP_ACCESS_TOKEN,
+  WHATSAPP_PHONE_NUMBER_ID: process.env.WHATSAPP_PHONE_NUMBER_ID,
+  WHATSAPP_MARI_NUMBER: process.env.WHATSAPP_MARI_NUMBER,
+};
+
 export const GEMINI_MODELS = {
   // ⚡ The "Workhorses" (High Quota: ~1,500 to 2,500 RPD)
   FLASH_LITE_3_1: "gemini-3.1-flash-lite-preview", // Best for very high volume
