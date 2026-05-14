@@ -14,6 +14,7 @@ import {
 } from "../../../../lib/helpers/human.js";
 import { delay } from "../../../../lib/helpers/index.js";
 import { ENV_VARS } from "../../../../lib/constants/index.js";
+import { extractQuestionnaireModal } from "./questionModel.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -67,16 +68,7 @@ const runApplyShine = async (shineURL: string) => {
       // We use isVisible() after a short delay to see if it's actually there
       await humanDelay(2000, 3000);
       if (await questionnaire.isVisible()) {
-        const closeButton = page.locator('button[aria-label="Close Button"]');
-        log("Questionnaire detected. Closing modal to continue...");
-
-        // Use your humanClick helper for the close button
-        await humanClick(page, closeButton);
-        // Wait for it to be removed from the view
-        await questionnaire.waitFor({ state: "hidden" });
-        await humanDelay(500, 1000);
-        console.log("Questionnaire Model Closed...");
-        continue;
+        await extractQuestionnaireModal(page);
       }
       await humanDelay(2000, 4000);
       await humanScroll(page, "down", randInt(100, 300));
