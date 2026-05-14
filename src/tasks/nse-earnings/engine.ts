@@ -13,7 +13,10 @@ import {
   formatNSEResultMessage,
   getRandomMarketDelay,
 } from "../../../lib/helpers/nse-results/index.js";
-import { sendNSEResultTelegramNotification } from "../../core/notifier/telegram.js";
+import {
+  sendNSEResultPdfListToTelegram,
+  sendNSEResultTelegramNotification,
+} from "../../core/notifier/telegram.js";
 import {
   sendErrorToDiscord,
   sendNSEResultDiscordNotification,
@@ -26,8 +29,9 @@ import { isMarketHoliday } from "../../../lib/helpers/insta-earning-results/inde
 const sessionStocks = new Set<String>();
 
 const runNSEEngine = async () => {
-  const timeToRun =
-    isAfter330PMInIST() || isWeekendInIST() || isMarketHoliday() ? 1 : 0;
+  const isNotMarketHours =
+    isAfter330PMInIST() || isWeekendInIST() || isMarketHoliday();
+  const timeToRun = isNotMarketHours ? 1 : 0;
   const dataTime = getHoursAgoInIST("DD-MMM-YYYY HH", timeToRun);
   //   const dataTime = "29-Apr-2026 22";
 
@@ -54,6 +58,10 @@ const runNSEEngine = async () => {
     }
 
     const pdfURLs = newResults.map((item: any) => item.attchmntFile);
+
+    if (!isNotMarketHours) {
+      await sendNSEResultPdfListToTelegram(pdfURLs);
+    }
 
     let geminiResponse = await processBatchNsePdfs(pdfURLs);
     // let geminiResponse: any[] = NSE_RESULT_GEMINI_MOCK;

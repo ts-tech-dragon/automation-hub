@@ -139,3 +139,20 @@ export async function sendNSEResultTelegramNotification(
     sendErrorToDiscord(error, "NSE RESULT TELEGRAM ERROR");
   }
 }
+
+export async function sendNSEResultPdfListToTelegram(pdfUrl: string[]) {
+  try {
+    // Convert Markdown-ish to HTML for Telegram
+    let htmlMsg = "📄 NSE Result PDFs:\n\n";
+    pdfUrl.forEach((url) => {
+      htmlMsg += `• <a href="${url}">${url}</a>\n\n`;
+    });
+
+    await ts_stock_bot.sendMessage(ENV_VARS.TELEGRAM_CHAT_ID, htmlMsg, {
+      parse_mode: "HTML",
+    });
+  } catch (error) {
+    console.error("❌ Telegraf Error:", (error as Error).message);
+    sendErrorToDiscord(error, "NSE RESULT TELEGRAM ERROR");
+  }
+}
