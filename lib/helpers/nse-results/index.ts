@@ -13,12 +13,6 @@ export function formatNSEResultMessage(data: any) {
   let msg = `**🏢 ${company_name} (${symbol})**\n`;
   msg += `📅 **Date:** ${meeting_date}\n\n`;
 
-  // 1. Highlights Section
-  msg += `🔍 **Key Highlights:**\n`;
-  highlights.forEach((h: string) => {
-    msg += `• ${h}\n`;
-  });
-
   // 2. Financials Section (Check if data exists)
   if (financials && financials.profit_current !== null) {
     msg += `\n📊 **Financial Performance:**\n`;
