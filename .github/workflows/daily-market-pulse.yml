@@ -36,6 +36,7 @@ jobs:
           MARKET_AUX_API_KEY: ${{ secrets.MARKET_AUX_API_KEY }}
           TELEGRAM_STOCK_BOT_TOKEN: ${{ secrets.TELEGRAM_STOCK_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          X_SESSION_JSON: ${{ secrets.X_SESSION_JSON }}
           IMGBB_API_KEY: ${{secrets.IMGBB_API_KEY}}
           IG_USER_TOKEN: ${{secrets.IG_USER_TOKEN}}
           TH_USER_TOKEN: ${{secrets.TH_USER_TOKEN}}

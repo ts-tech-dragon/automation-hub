@@ -56,6 +56,7 @@ async function runEarningsGenerator() {
         earningsURLArr[0] as string,
         {
           caption: description.instagramCaption,
+          xCaption: description.xCaption,
         },
         true,
       );

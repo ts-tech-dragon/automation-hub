@@ -14,7 +14,7 @@ const runDailyQuoteEngine = async () => {
     ] as any;
     await broadcastUpdate(
       imageUrl,
-      { caption: description.instagramCaption },
+      { caption: description.instagramCaption, xCaption: description.xCaption },
       true,
     );
     // await sendTelegramStockImage(description, imageUrl, true);

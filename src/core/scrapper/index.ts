@@ -1,6 +1,7 @@
 import { chromium } from "playwright-extra";
 import { getBrowser } from "../browser.js";
 import stealth from "puppeteer-extra-plugin-stealth";
+import fs from "node:fs";
 
 const stealthPlugin = stealth();
 // Remove evasions that are currently flagged by modern security
@@ -41,12 +42,13 @@ export const scrapperBrowser = async (options: ScrapperOptions = {}) => {
 
       locale: "en-IN",
       timezoneId: "Asia/Kolkata",
+      ...((storageFile && { storageState: storageFile }) || {}),
     });
   } else {
-    // ✅ GitHub / CI
+    // ✅ REMOTE / CI (GitHub Actions)
     browser = await getBrowser(true);
 
-    context = await browser.newContext({
+    const contextOptions: any = {
       viewport: { width: 1366, height: 768 },
       userAgent:
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
@@ -55,7 +57,15 @@ export const scrapperBrowser = async (options: ScrapperOptions = {}) => {
       extraHTTPHeaders: {
         "Accept-Language": "en-US,en;q=0.9",
       },
-    });
+    };
+
+    // Safely inject storageState ONLY if the file exists
+    if (storageFile && fs.existsSync(storageFile)) {
+      console.log(`🔒 Loading auth state from: ${storageFile}`);
+      contextOptions.storageState = storageFile;
+    }
+
+    context = await browser.newContext(contextOptions);
   }
 
   // ✅ stealth tweak

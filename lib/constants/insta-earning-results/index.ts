@@ -30,30 +30,35 @@ export const EARNING_POST_DESCRIPTION = [
     caption:
       "The numbers don't lie, but sentiments often do. Use these earning reports to anchor your strategy in hard data, not market noise.",
     instagramCaption: `📈 ${toBold("DATA OVER EMOTIONS")} | ${TODAY}\n\nThe numbers don't lie, but sentiments often do. Use these earning reports to anchor your strategy in hard data, not market noise.\n\n👉 Follow @tsfinnews for your daily market pulse! 🚀\n\n#StockMarketIndia #EarningsSeason #Nifty50 #TradingDiscipline #FundamentalAnalysis`,
+    xCaption: `📈 DATA OVER EMOTIONS\n\nThe numbers don't lie, but sentiments often do. Use these earning reports to anchor your strategy in hard data, not market noise.\n\n👉 @tsfinnews\n#EarningsSeason #StockMarketIndia`,
   },
   {
     headline: "💎 The Value of Patience",
     caption:
       "Earnings season is where the patient are rewarded. Look for consistent profit growth and long-term stability in the results today.",
     instagramCaption: `💎 ${toBold("THE VALUE OF PATIENCE")} | ${TODAY}\n\nEarnings season is where the patient are rewarded. Look for consistent profit growth and long-term stability in the results today.\n\n👉 Follow @tsfinnews for your daily market pulse! 🚀\n\n#InvestingTips #LongTermWealth #StockMarketIndia #DividendInvesting #MarketPulse`,
+    xCaption: `💎 THE VALUE OF PATIENCE\n\nEarnings season is where the patient are rewarded. Look for consistent profit growth and long-term stability in the results today.\n\n👉 @tsfinnews\n#DividendInvesting #StockMarketIndia`,
   },
   {
     headline: "🚀 Spotting Momentum",
     caption:
       "A massive jump in YoY EPS can be the spark for the next big trend. Today’s results highlight where the real momentum is building.",
     instagramCaption: `🚀 ${toBold("SPOTTING MOMENTUM")} | ${TODAY}\n\nA massive jump in YoY EPS can be the spark for the next big trend. Today’s results highlight where the real momentum is building.\n\n👉 Follow @tsfinnews for your daily market pulse! 🚀\n\n#MomentumTrading #StockMarketNews #GrowthStocks #NSEIndia #MarketSetup`,
+    xCaption: `🚀 SPOTTING MOMENTUM\n\nA massive jump in YoY EPS can be the spark for the next big trend. Today’s results highlight where the real momentum is building.\n\n👉 @tsfinnews\n#MomentumTrading #NSEIndia`,
   },
   {
     headline: "🛡️ Managing the Risk",
     caption:
       "Trading isn't just about picking winners; it's about avoiding the traps. Use these profit-and-loss insights to filter out high-risk setups.",
-    instagramCaption: `🛡️ ${toBold("MANAGING THE RISK")} | ${TODAY}\n\nTrading isn't just about picking winners; it's about avoiding the traps. Use these profit-and-loss insights to filter out high-risk setups.[cite: 1]\n\n👉 Follow @tsfinnews for your daily market pulse! 🚀\n\n#RiskManagement #SmartTrading #FinancialResults #TradingPsychology #TechnicalAnalysis`,
+    instagramCaption: `🛡️ ${toBold("MANAGING THE RISK")} | ${TODAY}\n\nTrading isn't just about picking winners; it's about avoiding the traps. Use these profit-and-loss insights to filter out high-risk setups.\n\n👉 Follow @tsfinnews for your daily market pulse! 🚀\n\n#RiskManagement #SmartTrading #FinancialResults #TradingPsychology #TechnicalAnalysis`,
+    xCaption: `🛡️ MANAGING THE RISK\n\nTrading isn't just about picking winners; it's about avoiding the traps. Use these profit-and-loss insights to filter out high-risk setups.\n\n👉 @tsfinnews\n#RiskManagement #SmartTrading`,
   },
   {
     headline: "💸 Passive Income Focus",
     caption:
       "Dividends are the 'thank you' notes from a profitable company. Check today's board recommendations to grow your passive income stream.",
-    instagramCaption: `💸 ${toBold("PASSIVE INCOME FOCUS")} | ${TODAY}\n\nDividends are the 'thank you' notes from a profitable company. Check today's board recommendations to grow your passive income stream.[cite: 1]\n\n👉 Follow @tsfinnews for your daily market pulse! 🚀\n\n#PassiveIncome #DividendStocks #WealthBuilding #FinancialFreedom #StockMarketIndia`,
+    instagramCaption: `💸 ${toBold("PASSIVE INCOME FOCUS")} | ${TODAY}\n\nDividends are the 'thank you' notes from a profitable company. Check today's board recommendations to grow your passive income stream.\n\n👉 Follow @tsfinnews for your daily market pulse! 🚀\n\n#PassiveIncome #DividendStocks #WealthBuilding #FinancialFreedom #StockMarketIndia`,
+    xCaption: `💸 PASSIVE INCOME FOCUS\n\nDividends are the 'thank you' notes from a profitable company. Check today's board recommendations to grow your passive income stream.\n\n👉 @tsfinnews\n#DividendStocks #PassiveIncome`,
   },
 ];
 

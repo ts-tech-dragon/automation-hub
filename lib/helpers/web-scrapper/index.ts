@@ -32,7 +32,8 @@ export async function typeHumanLike(
   minDelay = 50,
   maxDelay = 150,
 ) {
-  // Clear the field first if needed
+  // Ensures the box is completely empty before typing
+  await locator.clear();
   await locator.focus();
 
   for (const char of text) {

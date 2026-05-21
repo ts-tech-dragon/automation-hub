@@ -2,6 +2,7 @@ import axios from "axios";
 import { ENV_VARS } from "../../../lib/constants/index.js";
 import { uploadToImgBB } from "../imgbb.js";
 import { sendErrorToDiscord } from "../notifier/discord.js";
+import { postToX } from "./x/index.js";
 
 const IG_ID = ENV_VARS.IG_USER_ID;
 const FB_ID = ENV_VARS.FB_PAGE_ID;
@@ -13,7 +14,7 @@ const THREADS_ID = ENV_VARS.TH_USER_ID;
  * 📢 POST TO INSTAGRAM (2-Step Process)
  */
 type imageUrl = string;
-type content = { caption: string };
+type content = { caption: string; xCaption?: string };
 async function postToInstagram(imageUrl: imageUrl, content: content) {
   // Step 1: Create Media Container
   const container = await axios.post(
@@ -326,6 +327,14 @@ export async function broadcastUpdate(
       console.error("❌ FB FAILED:", err.response?.data || err.message);
       sendErrorToDiscord(err, "POST TO Facebook");
     }
+
+    try {
+      await postToX(content.xCaption || content.caption, publicURL);
+      console.log("✅ X SUCCESS!");
+    } catch (error) {
+      console.error("❌ X FAILED:", (error as Error).message);
+      sendErrorToDiscord(error, "POST TO X");
+    }
   } catch (error) {
     console.log("broadcastUpdate Error : ", (error as Error).message);
   }
@@ -338,30 +347,38 @@ export async function broadcastMultipleUpdates(
   try {
     console.log("🚀 Debugging Broadcast...");
 
-    try {
-      const igId = await multiPostToInstagram(imageUrlArr, content);
-      console.log("✅ IG SUCCESS ID:", igId);
-    } catch (err: any) {
-      console.error("❌ IG FAILED:", err.response?.data || err.message);
-      sendErrorToDiscord(err, "POST TO Instagram");
-    }
+    // try {
+    //   const igId = await multiPostToInstagram(imageUrlArr, content);
+    //   console.log("✅ IG SUCCESS ID:", igId);
+    // } catch (err: any) {
+    //   console.error("❌ IG FAILED:", err.response?.data || err.message);
+    //   sendErrorToDiscord(err, "POST TO Instagram");
+    // }
 
-    // Try Threads LOG EVERYTHING
-    try {
-      const igId = await multiPostToThreads(imageUrlArr, content);
-      console.log("✅ Threads SUCCESS ID:", igId);
-    } catch (err: any) {
-      console.error("❌ Threads FAILED:", err.response?.data || err.message);
-      sendErrorToDiscord(err, "POST TO Threads");
-    }
+    // // Try Threads LOG EVERYTHING
+    // try {
+    //   const igId = await multiPostToThreads(imageUrlArr, content);
+    //   console.log("✅ Threads SUCCESS ID:", igId);
+    // } catch (err: any) {
+    //   console.error("❌ Threads FAILED:", err.response?.data || err.message);
+    //   sendErrorToDiscord(err, "POST TO Threads");
+    // }
 
-    // Try Facebook LOG EVERYTHING
+    // // Try Facebook LOG EVERYTHING
+    // try {
+    //   const igId = await postMultipleToFacebook(imageUrlArr, content);
+    //   console.log("✅ Facebook SUCCESS ID:", igId);
+    // } catch (err: any) {
+    //   console.error("❌ Facebook FAILED:", err.response?.data || err.message);
+    //   sendErrorToDiscord(err, "POST TO Facebook");
+    // }
+
     try {
-      const igId = await postMultipleToFacebook(imageUrlArr, content);
-      console.log("✅ Facebook SUCCESS ID:", igId);
-    } catch (err: any) {
-      console.error("❌ Facebook FAILED:", err.response?.data || err.message);
-      sendErrorToDiscord(err, "POST TO Facebook");
+      await postToX(content.xCaption || content.caption, imageUrlArr);
+      console.log("✅ X SUCCESS!");
+    } catch (error) {
+      console.error("❌ X FAILED:", (error as Error).message);
+      sendErrorToDiscord(error, "POST TO X");
     }
   } catch (error) {
     console.log("broadcastUpdate Error : ", (error as Error).message);

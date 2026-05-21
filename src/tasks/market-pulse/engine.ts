@@ -10,7 +10,7 @@ import { broadcastMultipleUpdates } from "../../core/social/facebook.js";
 const runMarketPulseEngine = async () => {
   const TODAY = getTimeInIST("DD MMMM YYYY");
   const data = await getMarketAuxData();
-  //   const data = MARKET_PULSE_MOCK_DATA as any;
+  // const data = MARKET_PULSE_MOCK_DATA as any;
   if (!data.data || data.data.length === 0) {
     console.log("No news data available for today.");
     return;
@@ -28,6 +28,7 @@ const runMarketPulseEngine = async () => {
   }
   await broadcastMultipleUpdates(imageURLArr, {
     caption: description?.instagramCaption,
+    xCaption: description?.xCaption,
   });
   //   await sendTelegramStockGallery(description, imageURLArr, true);
 };

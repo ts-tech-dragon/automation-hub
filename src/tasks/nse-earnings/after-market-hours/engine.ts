@@ -34,6 +34,7 @@ const runAfterMarekerHoursEngine = async () => {
     ] as any;
     await broadcastMultipleUpdates(imageURLArr, {
       caption: description.instagramCaption,
+      xCaption: description.xCaption,
     });
     await sendTelegramStockGallery(description, imageURLArr, true);
     await closeDB();
