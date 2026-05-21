@@ -347,31 +347,31 @@ export async function broadcastMultipleUpdates(
   try {
     console.log("🚀 Debugging Broadcast...");
 
-    // try {
-    //   const igId = await multiPostToInstagram(imageUrlArr, content);
-    //   console.log("✅ IG SUCCESS ID:", igId);
-    // } catch (err: any) {
-    //   console.error("❌ IG FAILED:", err.response?.data || err.message);
-    //   sendErrorToDiscord(err, "POST TO Instagram");
-    // }
+    try {
+      const igId = await multiPostToInstagram(imageUrlArr, content);
+      console.log("✅ IG SUCCESS ID:", igId);
+    } catch (err: any) {
+      console.error("❌ IG FAILED:", err.response?.data || err.message);
+      sendErrorToDiscord(err, "POST TO Instagram");
+    }
 
-    // // Try Threads LOG EVERYTHING
-    // try {
-    //   const igId = await multiPostToThreads(imageUrlArr, content);
-    //   console.log("✅ Threads SUCCESS ID:", igId);
-    // } catch (err: any) {
-    //   console.error("❌ Threads FAILED:", err.response?.data || err.message);
-    //   sendErrorToDiscord(err, "POST TO Threads");
-    // }
+    // Try Threads LOG EVERYTHING
+    try {
+      const igId = await multiPostToThreads(imageUrlArr, content);
+      console.log("✅ Threads SUCCESS ID:", igId);
+    } catch (err: any) {
+      console.error("❌ Threads FAILED:", err.response?.data || err.message);
+      sendErrorToDiscord(err, "POST TO Threads");
+    }
 
-    // // Try Facebook LOG EVERYTHING
-    // try {
-    //   const igId = await postMultipleToFacebook(imageUrlArr, content);
-    //   console.log("✅ Facebook SUCCESS ID:", igId);
-    // } catch (err: any) {
-    //   console.error("❌ Facebook FAILED:", err.response?.data || err.message);
-    //   sendErrorToDiscord(err, "POST TO Facebook");
-    // }
+    // Try Facebook LOG EVERYTHING
+    try {
+      const igId = await postMultipleToFacebook(imageUrlArr, content);
+      console.log("✅ Facebook SUCCESS ID:", igId);
+    } catch (err: any) {
+      console.error("❌ Facebook FAILED:", err.response?.data || err.message);
+      sendErrorToDiscord(err, "POST TO Facebook");
+    }
 
     try {
       await postToX(content.xCaption || content.caption, imageUrlArr);
