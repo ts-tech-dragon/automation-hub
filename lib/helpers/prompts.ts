@@ -23,7 +23,7 @@ The JSON must follow this exact structure:
     "indian_momentum": "Concise 2-3 sentence summary of today's Indian market close (Nifty50, Sensex, BankNifty, sectoral winners/losers) + momentum & key support/resistance levels for tomorrow's open",
     "global_momentum": "Concise 2-3 sentence summary of global cues (US markets close, Nasdaq/Dow futures, Asian markets, Europe, crude oil, gold, USDINR, VIX, FII flows) and how they will influence Indian opening",
     "overall_impact": "One-sentence verdict on expected Indian market opening tomorrow (Gap-up / Flat / Gap-down / Volatile) with reasoning",
-    "caption": "Ready-to-post Instagram caption with emojis + trending hashtags like #Nifty50 #Sensex #StockMarketIndia #BankNifty #Trading #Nifty #GlobalCues"
+    "caption": "Ready-to-post X.com caption with emojis + trending hashtags like #Nifty50 #Sensex #StockMarketIndia #BankNifty #Trading #Nifty #GlobalCues"
   }
     `;
   return EVERYDAY_STOCK_SUMMARY_PROMPT;
