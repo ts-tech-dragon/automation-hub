@@ -63,6 +63,7 @@ async function runEarningsGenerator() {
     } else {
       await broadcastMultipleUpdates(earningsURLArr, {
         caption: description.instagramCaption,
+        xCaption: description.xCaption,
       });
     }
 
