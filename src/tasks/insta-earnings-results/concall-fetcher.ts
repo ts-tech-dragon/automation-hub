@@ -157,16 +157,22 @@ export async function concallEarningsFetcher() {
       }
     };
 
-    //first page scrape
-    await scrapeData();
+    for (let i = 0; i < 5; i++) {
+      const nextPage = page.locator('[role="navigation"] ul li').last();
+      console.log("Scrapping page:", i + 1);
+      await scrapeData();
+      nextPage.click();
+      await page.waitForTimeout(2000); // Wait for the next page to load
+      await todaySection.waitFor({ state: "visible", timeout: 5000 });
+      // Returns true or false instantly
+      const isSectionPresent = await todaySection.isVisible();
 
-    const nextPage = page.locator('[role="navigation"] ul li').nth(2);
-    nextPage.click();
-    await page.waitForTimeout(2000); // Wait for the next page to load
-    await todaySection.waitFor({ state: "visible", timeout: 5000 });
+      if (!isSectionPresent) {
+        console.log("Today section missing after page transition. Exiting.");
+        break; // or return
+      }
+    }
 
-    //second page scrape
-    await scrapeData();
     console.log("✅ Final Scraped Data:", results.length);
     return sortDataByMarketCap(results);
   } catch (err) {
