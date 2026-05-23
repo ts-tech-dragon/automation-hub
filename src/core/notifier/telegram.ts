@@ -4,6 +4,7 @@ import { ENV_VARS } from "../../../lib/constants/index.js";
 import { message } from "telegraf/filters";
 import { ComputeTokensResponse } from "@google/genai";
 import { sendErrorToDiscord } from "./discord.js";
+import type { JobDataResponse } from "../../../types/index.js";
 
 // Initialize the Telegram client
 const tg = new Telegram(ENV_VARS.TELEGRAM_BOT_TOKEN);
@@ -97,7 +98,7 @@ export const sendTelegramStockGallery = async (
 };
 
 export const sendTelegramJobListing = async (
-  message: { title: string; company: string; location: string; link: string }[],
+  message: JobDataResponse[],
   base: { src: string; loc?: string },
 ) => {
   const { src, loc } = base;

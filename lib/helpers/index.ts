@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc.js";
 import timezone from "dayjs/plugin/timezone.js";
 import "dayjs/locale/en";
+import type { JobDataResponse } from "../../types/index.js";
 
 dayjs.locale("en");
 // Extend dayjs with the plugins
@@ -202,17 +203,13 @@ export function pad(str: string, length: number) {
   return (str || "").padEnd(length, " ").slice(0, length);
 }
 
-export function formatJob(job: {
-  title: string;
-  company: string;
-  location: string;
-  link: string;
-}) {
+export function formatJob(job: JobDataResponse) {
   return `
 🚀 *${job.title}*
 🏢 ${job.company}
 📍 ${job.location}
 ⏱ ${dayjs(new Date()).format("DD,MMM,YYYY")}
+${job.mail ? "📧 " + job.mail : ""}
 👉 [Apply Now](${job.link})
 `;
 }

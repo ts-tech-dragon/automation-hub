@@ -31,6 +31,10 @@ export const ENV_VARS = {
   MONGODB_URI: process.env.MONGODB_URI,
   //MARKET PULSE
   MARKET_AUX_API_KEY: process.env.MARKET_AUX_API_KEY,
+  //JSEARCH
+  JSEARCH_API_KEY: process.env.JSEARCH_API_KEY,
+  //SEARCHAPI_IO
+  SEARCHAPI_IO_KEY: process.env.SEARCHAPI_IO_KEY,
 };
 
 export const MISCELLANEOUS_ENV_VARS = {
