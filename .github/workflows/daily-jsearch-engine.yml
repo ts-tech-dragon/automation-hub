@@ -37,5 +37,6 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           JSEARCH_API_KEY: ${{ secrets.JSEARCH_API_KEY }}
           SEARCHAPI_IO_KEY: ${{secrets.SEARCHAPI_IO_KEY}}
+          MONGODB_URI: ${{secrets.MONGODB_URI }}
 
         run: npx tsx src/tasks/job-listing/jsearch/engine.ts
