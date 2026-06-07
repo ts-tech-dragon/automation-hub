@@ -12,16 +12,3 @@ export const toBold = (text: string) => {
     })
     .join("");
 };
-
-export const sanitizeMorningQuoteDescription = (
-  description: { instagramCaption: string; xCaption: string; headline: string },
-  quote: string,
-) => {
-  const instagramCaption = description.instagramCaption
-    .replace(/{{description}}/g, quote)
-    .trim();
-  const xCaption = description.xCaption
-    .replace(/{{description}}/g, quote)
-    .trim();
-  return { instagramCaption, xCaption, headline: description.headline };
-};

@@ -4,7 +4,7 @@ import { generateQuoteImage } from "./generateQuoteImage.js";
 import { QUOTE_DESCRIPTIONS } from "../../../lib/constants/morning-quote/index.js";
 import { broadcastUpdate } from "../../core/social/facebook.js";
 import { sendTelegramStockImage } from "../../core/notifier/telegram.js";
-import { sanitizeMorningQuoteDescription } from "../../../lib/helpers/morning-quote/index.js";
+import { sanitizeSocialPostDescription } from "../../../lib/helpers/index.js";
 
 const runDailyQuoteEngine = async () => {
   try {
@@ -18,7 +18,7 @@ const runDailyQuoteEngine = async () => {
     ] as any;
 
     const { instagramCaption, xCaption, headline } =
-      sanitizeMorningQuoteDescription(description, quote.q);
+      sanitizeSocialPostDescription(description, quote.q);
 
     await broadcastUpdate(
       imageUrl,
