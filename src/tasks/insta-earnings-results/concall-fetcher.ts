@@ -158,10 +158,23 @@ export async function concallEarningsFetcher() {
     };
 
     for (let i = 0; i < 5; i++) {
-      const nextPage = page.locator('[role="navigation"] ul li').last();
+      const paginationItems = page.locator('[role="navigation"] ul li');
+      const nextPageCount = await paginationItems.count();
       console.log("Scrapping page:", i + 1);
       await scrapeData();
-      nextPage.click();
+
+      if (nextPageCount === 0) {
+        console.log("No pagination found; ending scrape.");
+        break;
+      }
+
+      const nextPage = paginationItems.last();
+      if (!(await nextPage.isVisible())) {
+        console.log("Pagination link not visible; ending scrape.");
+        break;
+      }
+
+      await nextPage.click();
       await page.waitForTimeout(2000); // Wait for the next page to load
       await todaySection.waitFor({ state: "visible", timeout: 5000 });
       // Returns true or false instantly

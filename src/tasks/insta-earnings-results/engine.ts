@@ -1,6 +1,4 @@
 import "dotenv/config";
-import { EARNING_POST_DESCRIPTION } from "../../../lib/constants/insta-earning-results/index.js";
-import { EARNINGS_MOCK_DATA } from "../../../lib/constants/insta-earning-results/mock.js";
 import { sendTelegramStockGallery } from "../../core/notifier/telegram.js";
 import { concallEarningsFetcher } from "./concall-fetcher.js";
 import { generateEarningsImage } from "./generateEarningImage.js";
@@ -14,6 +12,8 @@ import {
 } from "../../core/social/facebook.js";
 import { syncConcallDataToDB } from "../../db/services/index.js";
 import { closeDB } from "../../db/index.js";
+import { EARNINGS_MOCK_DATA } from "../../../lib/constants/insta-earning-results/mock.js";
+import { EARNING_POST_DESCRIPTION } from "../../../lib/constants/insta-earning-results/index.js";
 
 async function runEarningsGenerator() {
   try {

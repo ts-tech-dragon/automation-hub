@@ -1,7 +1,9 @@
 import { toBold } from "../../helpers/morning-quote/index.js";
 import { getTimeInIST } from "../../helpers/index.js";
+import { getFormattedDateInIST } from "../../helpers/day.js";
 
-const TODAY = getTimeInIST("DD MMMM YYYY");
+const getTodayDate = () => getFormattedDateInIST("DD MMMM YYYY");
+const TODAY = getTodayDate();
 
 export const MARKET_HOLIDAYS = {
   marketHolidays: [
