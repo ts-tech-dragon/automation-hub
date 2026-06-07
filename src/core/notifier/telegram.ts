@@ -59,7 +59,7 @@ export const sendTelegramStockImage = async (
     // 📤 NEW: Send the image to Telegram
     console.log("📤 Sending slide to Telegram...");
     await ts_stock_bot.sendPhoto(ENV_VARS.TELEGRAM_CHAT_ID, path, {
-      caption: `<b>${content.headline ?? ""}</b>\n\n${content.xCaption ?? ""}`,
+      caption: `<b>${content.headline ?? ""}</b>\n\n${content.caption ?? ""}`,
       parse_mode: "HTML",
     });
 

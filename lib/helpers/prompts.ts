@@ -9,12 +9,11 @@ export const getDailyStockSummaryPrompt = (
       Create a JSON summary of the most important things that happened TODAY (${today}) in indian stock market (use the current date) including ${rawNews} and Nifty current price ${marketData?.nifty}, sensex current price ${marketData?.sensex}, brent crude oil current price ${marketData?.crudeOil}, inr current price ${marketData?.inr}, and india vix current price ${marketData?.indiaVix} which will reflect or affect the Indian stock market tomorrow morning. Focus on Indian market momentum + global momentum. This prompt will be run every night to quickly check market & global cues.
 NOTE: Do your reearch and use your real-time knowledge of today's closing data, news, FII/DII flows, global cues, commodities, geopolitics, earnings, RBI/policy updates, or any event that can move Nifty/Sensex at opening and incorporate that into the summary. Do NOT make up any news or data. Use only real, accurate information that you have access to right now.
 Respond STRICTLY with ONLY a valid JSON object (no extra text, no markdown, no explanations). Use real-time knowledge of today's closing data, news, FII/DII flows, global cues, commodities, geopolitics, earnings, RBI/policy updates, or any event that can move Nifty/Sensex at opening.
-Note: on JSON, for the caption key, create the caption output alone in conversation tamil but in english letters(tanglish).
 The JSON must follow this exact structure:
 
   {
     "date": ${today},
-    "headline": "Catchy, high-impact headline (e.g. \"BULLS CHARGE AHEAD!\", \"NIFTY EYES 24K\", \"GLOBAL CUES TURN RED\")",
+    "headline": "Catchy, high-impact headline summarizing the overall market sentiment in three or four words | ${today}",
     "points": [
       "1. Most important event/news today & its direct impact on Indian market tomorrow",
       "2. Second most important event/news today & its direct impact on Indian market tomorrow",
@@ -23,8 +22,7 @@ The JSON must follow this exact structure:
     "indian_momentum": "Concise 2-3 sentence summary of today's Indian market close (Nifty50, Sensex, BankNifty, sectoral winners/losers) + momentum & key support/resistance levels for tomorrow's open",
     "global_momentum": "Concise 2-3 sentence summary of global cues (US markets close, Nasdaq/Dow futures, Asian markets, Europe, crude oil, gold, USDINR, VIX, FII flows) and how they will influence Indian opening",
     "overall_impact": "One-sentence verdict on expected Indian market opening tomorrow (Gap-up / Flat / Gap-down / Volatile) with reasoning",
-    "caption": "Ready-to-post X.com caption with emojis + trending hashtags like #Nifty50 #Sensex #StockMarketIndia #BankNifty #Trading #Nifty #GlobalCues"
-  }
+    "caption": "Ready-to-post X.com caption in this format 'Index Value Change relative with (- or +) and emoji like 🔻🔼 \n' for all indices and values in next next lines + trending hashtags like #Nifty50 #Sensex #BankNifty (only 3 hashtags)"
     `;
   return EVERYDAY_STOCK_SUMMARY_PROMPT;
 };
