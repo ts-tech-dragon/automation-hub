@@ -4,7 +4,10 @@ import { EARNINGS_MOCK_DATA } from "../../../lib/constants/insta-earning-results
 import { sendTelegramStockGallery } from "../../core/notifier/telegram.js";
 import { concallEarningsFetcher } from "./concall-fetcher.js";
 import { generateEarningsImage } from "./generateEarningImage.js";
-import { isAfter6PMInIST } from "../../../lib/helpers/index.js";
+import {
+  isAfter6PMInIST,
+  santizeEarningResultCaption,
+} from "../../../lib/helpers/index.js";
 import {
   broadcastMultipleUpdates,
   broadcastUpdate,
@@ -51,24 +54,33 @@ async function runEarningsGenerator() {
       Math.floor(Math.random() * EARNING_POST_DESCRIPTION.length)
     ] as any;
 
+    const fiveMaxMarketCapResults = earningResult.slice(0, 5);
+
+    const { instagramCaption, xCaption, headline } =
+      santizeEarningResultCaption(description, fiveMaxMarketCapResults);
+
     if (earningsURLArr.length === 1) {
       await broadcastUpdate(
         earningsURLArr[0] as string,
         {
-          caption: description.instagramCaption,
-          xCaption: description.xCaption,
+          caption: instagramCaption,
+          xCaption: xCaption,
         },
         true,
       );
     } else {
       await broadcastMultipleUpdates(earningsURLArr, {
-        caption: description.instagramCaption,
-        xCaption: description.xCaption,
+        caption: instagramCaption,
+        xCaption: xCaption,
       });
     }
 
-    await sendTelegramStockGallery(description, earningsURLArr, true);
-    await syncConcallDataToDB(earningResult);
+    await sendTelegramStockGallery(
+      { headline, xCaption },
+      earningsURLArr,
+      true,
+    );
+    // await syncConcallDataToDB(earningResult);
 
     await closeDB();
   } catch (error) {

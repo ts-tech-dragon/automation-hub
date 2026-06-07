@@ -3,6 +3,7 @@ import utc from "dayjs/plugin/utc.js";
 import timezone from "dayjs/plugin/timezone.js";
 import "dayjs/locale/en";
 import type { JobDataResponse } from "../../types/index.js";
+import { isEpsPositive } from "./insta-earning-results/index.js";
 
 dayjs.locale("en");
 // Extend dayjs with the plugins
@@ -240,6 +241,33 @@ export const sanitizeSocialPostDescription = (
     .trim();
   const xCaption = description.xCaption
     .replace(/{{description}}/g, quote)
+    .trim();
+  return { instagramCaption, xCaption, headline: description.headline };
+};
+
+export const santizeEarningResultCaption = (
+  description: { instagramCaption: string; xCaption: string; headline: string },
+  results: [{ name: string; eps: string; symbol: string }],
+) => {
+  const quote = results
+    .map(
+      (item) =>
+        `▫️ ${item.symbol} ${item.eps ? `- EPS: ${item.eps}  ${isEpsPositive(item.eps) ? "▲" : "▼"}` : ""}`,
+    )
+    .join("\n");
+  const hashtags = results.map((item) => `#${item.symbol}`).join(" ");
+  const caption =
+    quote +
+    "\n" +
+    "👉 Follow @tsfinnews for daily market pulse! 🚀" +
+    "\n" +
+    hashtags;
+
+  const instagramCaption = description.instagramCaption
+    .replace(/{{description}}/g, caption)
+    .trim();
+  const xCaption = description.xCaption
+    .replace(/{{description}}/g, caption)
     .trim();
   return { instagramCaption, xCaption, headline: description.headline };
 };
