@@ -1,5 +1,8 @@
 import "dotenv/config";
-import { getTimeInIST } from "../../../../lib/helpers/index.js";
+import {
+  getTimeInIST,
+  santizeEarningResultCaption,
+} from "../../../../lib/helpers/index.js";
 import { getAfterMarketHrsResults } from "../../../db/services/index.js";
 import { generateAfterHrsImage } from "./generateAfterHrsImage.js";
 import { broadcastMultipleUpdates } from "../../../core/social/facebook.js";
@@ -32,11 +35,16 @@ const runAfterMarekerHoursEngine = async () => {
     const description = PRE_MARKET_EARNINGS_POSTS[
       Math.floor(Math.random() * PRE_MARKET_EARNINGS_POSTS.length)
     ] as any;
+
+    const fiveMaxMarketCapResults = results.slice(0, 5);
+    const { instagramCaption, xCaption, headline } =
+      santizeEarningResultCaption(description, fiveMaxMarketCapResults as any);
+
     await broadcastMultipleUpdates(imageURLArr, {
-      caption: description.instagramCaption,
-      xCaption: description.xCaption,
+      caption: instagramCaption,
+      xCaption: xCaption,
     });
-    await sendTelegramStockGallery(description, imageURLArr, true);
+    await sendTelegramStockGallery({ headline, xCaption }, imageURLArr, true);
     await closeDB();
   } catch (error) {
     console.log(
