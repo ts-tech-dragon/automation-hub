@@ -59,7 +59,7 @@ export const sendTelegramStockImage = async (
     // 📤 NEW: Send the image to Telegram
     console.log("📤 Sending slide to Telegram...");
     await ts_stock_bot.sendPhoto(ENV_VARS.TELEGRAM_CHAT_ID, path, {
-      caption: `<b>${content.headline ?? ""}</b>\n\n${content.caption}`,
+      caption: `<b>${content.headline ?? ""}</b>\n\n${content.xCaption ?? ""}`,
       parse_mode: "HTML",
     });
 
@@ -85,7 +85,7 @@ export const sendTelegramStockGallery = async (
       media: url ? { url: imagePath } : { source: imagePath },
       // Only attach the caption to the FIRST image of the group
       caption:
-        index === 0 ? `<b>${content.headline}</b>\n\n${content.caption}` : "",
+        index === 0 ? `<b>${content.headline}</b>\n\n${content.xCaption}` : "",
       parse_mode: "HTML",
     }));
 

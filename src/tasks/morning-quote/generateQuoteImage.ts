@@ -1,4 +1,3 @@
-import axios from "axios";
 import { EARNINGS_POST_THEMES } from "../../../lib/constants/theme.js";
 import { uploadBufferToImgBB } from "../../core/imgbb.js";
 import { scrapperBrowser } from "../../core/scrapper/index.js";
@@ -18,12 +17,9 @@ const thBase64 = fs.readFileSync(thIconPath).toString("base64");
 const activeTheme: any =
   EARNINGS_POST_THEMES[Math.floor(Math.random() * EARNINGS_POST_THEMES.length)];
 
-export const generateQuoteImage = async () => {
+export const generateQuoteImage = async (quote: any) => {
   const { page, context, browser } = await scrapperBrowser();
   try {
-    const response = await axios.get("https://zenquotes.io/api/random");
-    const quote = response.data?.[0];
-
     const quoteHtml = `
             <!DOCTYPE html>
             <html>
