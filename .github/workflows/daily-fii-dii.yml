@@ -1,0 +1,45 @@
+name: NSE Fii Dii Data Engine
+
+on:
+  schedule:
+    # 3:00 AM UTC (8:30 AM IST) to 6:00 PM UTC (11:30 PM IST)
+    # This runs at the top of the hour UTC, which is the :30 mark in IST
+    - cron: "0 3-18 * * 1-5"
+  workflow_dispatch: # Allows manual run
+jobs:
+  run-prep:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: 📦 Install Dependencies
+        run: npm install
+
+      - name: 📦 Install Dependencies
+        # This is the "Gold Standard" for CI/CD
+        run: npm ci
+
+      - name: 🕦 Run Fii Dii Data Engine
+        env:
+          X_SESSION_JSON: ${{ secrets.X_SESSION_JSON }}
+          IMGBB_API_KEY: ${{secrets.IMGBB_API_KEY}}
+          IG_USER_TOKEN: ${{secrets.IG_USER_TOKEN}}
+          TH_USER_TOKEN: ${{secrets.TH_USER_TOKEN}}
+          FB_USER_TOKEN: ${{secrets.FB_USER_TOKEN}}
+          FB_PAGE_ID: ${{secrets.FB_PAGE_ID}}
+          IG_USER_ID: ${{secrets.IG_USER_ID}}
+          TH_USER_ID: ${{secrets.TH_USER_ID}}
+          TELEGRAM_STOCK_BOT_TOKEN: ${{ secrets.TELEGRAM_STOCK_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          DISCORD_ERROR_LOGS_URL: ${{secrets.DISCORD_ERROR_LOGS_URL }}
+          MONGODB_URI: ${{secrets.MONGODB_URI }}
+
+        run: npx tsx src/tasks/nse-earnings/fii-dii/engine.ts

@@ -934,3 +934,24 @@ export const NSE_RESULT_GEMINI_MOCK = [
     },
   },
 ];
+
+export const MOCK_FII_DII_DATA = [
+  {
+    _id: "6a27fcff5e32a058491056ac",
+    date: "2026-06-06T00:00:00.000Z",
+    diiNetValue: 3028.13,
+    fiiNetValue: -1553.86,
+  },
+  {
+    _id: "6a27fcff5e32a058491056ac",
+    date: "2026-06-07T00:00:00.000Z",
+    diiNetValue: 4028.13,
+    fiiNetValue: -2553.86,
+  },
+  {
+    _id: "6a27fcff5e32a058491056ac",
+    date: "2026-06-08T00:00:00.000Z",
+    diiNetValue: 5028.13,
+    fiiNetValue: -5553.86,
+  },
+];

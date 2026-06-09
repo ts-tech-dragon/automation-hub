@@ -20,3 +20,9 @@ export interface IConcallEarningsResult {
   marketCap: string;
   eps: string;
 }
+
+export interface IFiiDiiData {
+  date: string;
+  category: "FII/FPI" | "DII";
+  netValue: string;
+}

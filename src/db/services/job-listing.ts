@@ -55,10 +55,24 @@ export async function processJobListings(incomingJobs: any[]) {
       `🚀 Found ${newJobs.length} new unique jobs. Sending to Telegram...`,
     );
 
-    // 6. Bulk Insert the new entries
-    await db.collection("job_listing").insertMany(newJobs);
-
-    console.log("✅ Successfully saved new jobs to DB.");
+    // --- 🚨 NEW: Step 5. Safe Insertion ---
+    try {
+      // ordered: false ensures that if ONE job violates an old database index,
+      // MongoDB simply skips it and inserts the rest, rather than crashing the app.
+      await db
+        .collection("job_listing")
+        .insertMany(newJobs, { ordered: false });
+      console.log("✅ Successfully saved new jobs to DB.");
+    } catch (dbError: any) {
+      // Catch duplicate key errors gracefully
+      if (dbError.code === 11000) {
+        console.log(
+          "⚠️ DB insertion finished, but skipped some lingering index duplicates.",
+        );
+      } else {
+        throw dbError; // Throw real database crashes
+      }
+    }
     return newJobs; // Return the new jobs for further processing (e.g., notifications)
   } catch (error) {
     console.error("Job Processing Error:", error);

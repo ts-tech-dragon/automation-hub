@@ -271,3 +271,39 @@ export const santizeEarningResultCaption = (
     .trim();
   return { instagramCaption, xCaption, headline: description.headline };
 };
+
+const mock = [
+  {
+    buyValue: "14636.7",
+    category: "DII",
+    date: "08-Jun-2026",
+    netValue: "5028.13",
+    sellValue: "9608.57",
+  },
+  {
+    buyValue: "8162.88",
+    category: "FII/FPI",
+    date: "08-Jun-2026",
+    netValue: "-5553.86",
+    sellValue: "13716.74",
+  },
+];
+
+export const fiiDiiDataFlowDescription = (fiiDiiData: any) => {
+  const dii = fiiDiiData.find((item: any) => item.category === "DII");
+  const fii = fiiDiiData.find((item: any) => item.category === "FII/FPI");
+  return {
+    headline: "",
+    caption: `FII and DII data for ${dii.date} is out!\n
+  🔵FII
+   Buy: ₹${fii.buyValue} Cr 
+   Sell: ₹${fii.sellValue} Cr
+   Net: ₹${fii.netValue} Cr ${fii.netValue > 0 ? "▲" : "▼"}\n
+  ⭐DII
+   Buy: ₹${dii.buyValue} Cr
+   Sell: ₹${dii.sellValue} Cr
+   Net: ₹${dii.netValue} Cr ${dii.netValue > 0 ? "▲" : "▼"}\n
+  Stay tuned for more updates @tsfinnews! 🚀
+  #nifty50 #fii #dii #stockmarket #stockmarket`,
+  };
+};
