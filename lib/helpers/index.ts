@@ -294,7 +294,7 @@ export const fiiDiiDataFlowDescription = (fiiDiiData: any) => {
   const fii = fiiDiiData.find((item: any) => item.category === "FII/FPI");
   return {
     headline: "",
-    caption: `FII and DII data for ${dii.date} is out!\n
+    caption: `FII and DII data for ${dii.date} is out!
   🔵FII
    Buy: ₹${fii.buyValue} Cr 
    Sell: ₹${fii.sellValue} Cr
@@ -302,8 +302,8 @@ export const fiiDiiDataFlowDescription = (fiiDiiData: any) => {
   ⭐DII
    Buy: ₹${dii.buyValue} Cr
    Sell: ₹${dii.sellValue} Cr
-   Net: ₹${dii.netValue} Cr ${dii.netValue > 0 ? "▲" : "▼"}\n
-  Stay tuned for more updates @tsfinnews! 🚀
-  #nifty50 #fii #dii #stockmarket #stockmarket`,
+   Net: ₹${dii.netValue} Cr ${dii.netValue > 0 ? "▲" : "▼"}
+  Stay tuned @tsfinnews! 🚀
+  #nifty50 #fii #dii #stockmarket #trading`,
   };
 };
