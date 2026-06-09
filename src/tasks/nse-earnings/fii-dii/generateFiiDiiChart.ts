@@ -2,15 +2,16 @@ import { chromium } from "playwright";
 import { TSFINNEWS_ICONS } from "../../../../lib/constants/index.js";
 import { uploadBufferToImgBB } from "../../../core/imgbb.js";
 import { formatDateLabel } from "../../../../lib/helpers/day.js";
+import { scrapperBrowser } from "../../../core/scrapper/index.js";
 
 export const generateFiiDiiChart = async (weeklyData: any[]) => {
   console.log("🎨 Generating Premium FII/DII Chart...");
-
+  const { page, context, browser } = await scrapperBrowser();
   const labels = weeklyData.map((d) => formatDateLabel(d.date, "DD MMM"));
   const fiiData = weeklyData.map((d) => d.fiiNetValue);
   const diiData = weeklyData.map((d) => d.diiNetValue);
-
-  const htmlContent = `
+  try {
+    const htmlContent = `
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -192,26 +193,29 @@ export const generateFiiDiiChart = async (weeklyData: any[]) => {
     </html>
   `;
 
-  const browser = await chromium.launch({ headless: true });
-  const context = await browser.newContext({
-    viewport: { width: 1200, height: 675 },
-    deviceScaleFactor: 2,
-  });
+    // 2. Load the HTML into the page
+    await page.setContent(htmlContent);
 
-  const page = await context.newPage();
-  await page.setContent(htmlContent, { waitUntil: "networkidle" });
+    const imageBuffer = await page.screenshot({
+      type: "jpeg", // Change this from default 'png'
+      animations: "disabled",
+      omitBackground: true, // Makes the edges clean if you want to overlay it
+    });
 
-  const imageBuffer = await page.screenshot({
-    type: "jpeg", // Change this from default 'png'
-    animations: "disabled",
-    omitBackground: true, // Makes the edges clean if you want to overlay it
-  });
+    console.log("📸 Screenshot captured in memory. Uploading directly...");
+    // 2. Upload the buffer and get the URL
+    const imageUrl = await uploadBufferToImgBB(imageBuffer);
 
-  await browser.close();
-
-  console.log("📸 Screenshot captured in memory. Uploading directly...");
-  // 2. Upload the buffer and get the URL
-  const imageUrl = await uploadBufferToImgBB(imageBuffer);
-
-  return imageUrl;
+    return imageUrl;
+  } catch (error) {
+    console.error(
+      "Error generating FII/DII chart image:",
+      (error as Error).message,
+    );
+    return "";
+  } finally {
+    await page?.close().catch(() => {});
+    await context?.close().catch(() => {});
+    await browser?.close().catch(() => {});
+  }
 };
