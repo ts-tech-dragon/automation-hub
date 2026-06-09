@@ -49,7 +49,7 @@ const monitorRunFiiDiiEngine = async () => {
   }
 
   let isCompleted = false;
-  const SLEEP_INTERVAL = 5 * 60 * 1000; // 5 minutes
+  const SLEEP_INTERVAL = 15 * 60 * 1000; // 15 minutes
 
   while (!isCompleted) {
     console.log("⏱️ Checking for FII/DII data...");
@@ -57,7 +57,7 @@ const monitorRunFiiDiiEngine = async () => {
     isCompleted = await runFiiDiiEngine();
 
     if (!isCompleted) {
-      console.log(`Sleeping for 5 minutes before next retry...`);
+      console.log(`Sleeping for 15 minutes before next retry...`);
       await new Promise((resolve) => setTimeout(resolve, SLEEP_INTERVAL));
     }
   }
