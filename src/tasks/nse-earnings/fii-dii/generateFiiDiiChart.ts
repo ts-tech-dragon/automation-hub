@@ -145,7 +145,7 @@ export const generateFiiDiiChart = async (weeklyData: any[]) => {
                 position: 'top',
                 labels: { 
                   color: '#e2e8f0', 
-                  font: { size: 16, family: 'Inter', weight: 'bold' },
+                  font: { size: 20, family: 'Inter', weight: 'bold' },
                   usePointStyle: true,
                   boxWidth: 12,
                   padding: 30 // 🌟 FIX: Spacing between legend items
@@ -153,7 +153,7 @@ export const generateFiiDiiChart = async (weeklyData: any[]) => {
               },
               datalabels: {
                 color: (context) => context.dataset.borderColor, 
-                font: { weight: 'bold', size: 16, family: 'Inter' },
+                font: { weight: 'bold', size: 20, family: 'Inter' },
                 align: (context) => context.datasetIndex === 0 ? 'top' : 'bottom', 
                 offset: 10, // Increased offset to push labels further from the dots
                 formatter: (value) => {
@@ -164,12 +164,12 @@ export const generateFiiDiiChart = async (weeklyData: any[]) => {
             scales: {
               y: {
                 grid: { color: 'rgba(255, 255, 255, 0.1)', drawBorder: false },
-                ticks: { color: '#94a3b8', font: { size: 14, family: 'Inter' } }
+                ticks: { color: '#94a3b8', font: { size: 24, family: 'Inter' } }
               },
               x: {
                 grid: { display: false },
                 offset: true, // 🌟 FIX: Pushes the first data point away from the Y-axis to prevent overlap
-                ticks: { color: '#e2e8f0', font: { size: 15, family: 'Inter', weight: 'bold' } }
+                ticks: { color: '#e2e8f0', font: { size: 24, family: 'Inter', weight: 'bold' } }
               }
             }
           }
