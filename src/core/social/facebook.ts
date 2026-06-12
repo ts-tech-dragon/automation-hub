@@ -344,6 +344,9 @@ export async function broadcastMultipleUpdates(
   imageUrlArr: string[],
   content: content,
 ) {
+  if (imageUrlArr.length === 1) {
+    return await broadcastUpdate(imageUrlArr[0] as string, content, true);
+  }
   try {
     console.log("🚀 Debugging Broadcast...");
 
@@ -351,8 +354,9 @@ export async function broadcastMultipleUpdates(
       const igId = await multiPostToInstagram(imageUrlArr, content);
       console.log("✅ IG SUCCESS ID:", igId);
     } catch (err: any) {
-      console.error("❌ IG FAILED:", err.response?.data || err.message);
-      sendErrorToDiscord(err, "POST TO Instagram");
+      const errMsg = err.response?.data?.error.error_user_msg || err.message;
+      console.error("❌ IG FAILED:", errMsg);
+      sendErrorToDiscord(errMsg, "POST TO Instagram");
     }
 
     // Try Threads LOG EVERYTHING
@@ -360,8 +364,9 @@ export async function broadcastMultipleUpdates(
       const igId = await multiPostToThreads(imageUrlArr, content);
       console.log("✅ Threads SUCCESS ID:", igId);
     } catch (err: any) {
-      console.error("❌ Threads FAILED:", err.response?.data || err.message);
-      sendErrorToDiscord(err, "POST TO Threads");
+      const errMsg = err.response?.data?.error.error_user_msg || err.message;
+      console.error("❌ Threads FAILED:", errMsg);
+      sendErrorToDiscord(errMsg, "POST TO Threads");
     }
 
     // Try Facebook LOG EVERYTHING
@@ -369,8 +374,9 @@ export async function broadcastMultipleUpdates(
       const igId = await postMultipleToFacebook(imageUrlArr, content);
       console.log("✅ Facebook SUCCESS ID:", igId);
     } catch (err: any) {
-      console.error("❌ Facebook FAILED:", err.response?.data || err.message);
-      sendErrorToDiscord(err, "POST TO Facebook");
+      const errMsg = err.response?.data?.error.error_user_msg || err.message;
+      console.error("❌ Facebook FAILED:", errMsg);
+      sendErrorToDiscord(errMsg, "POST TO Facebook");
     }
 
     try {
