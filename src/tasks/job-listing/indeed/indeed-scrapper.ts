@@ -117,7 +117,7 @@ export const runScrapeIndeed: (
             if (!isLocation) continue;
 
             const title = await card
-              .$eval("h2", (el) => el.innerText.trim())
+              .$eval("h3", (el) => el.innerText.trim())
               .catch(() => "");
 
             const company = await card
