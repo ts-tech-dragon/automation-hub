@@ -37,7 +37,7 @@ export const runDividendScrapper = async () => {
       .map((element: any) => {
         const obj: any = {};
         obj["dividend"] = getDividendAmount(element.subject);
-        obj["exDate"] = element.recDate;
+        obj["exDate"] = element.exDate;
         obj["symbol"] = element.symbol;
         obj["name"] = element.comp;
         return obj;
