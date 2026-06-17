@@ -28,7 +28,7 @@ jobs:
         # This is the "Gold Standard" for CI/CD
         run: npm ci
 
-      - name: 🕦 Run Fii Dii Data Engine
+      - name: 🕦 Run Dividend Engine
         env:
           X_SESSION_JSON: ${{ secrets.X_SESSION_JSON }}
           IMGBB_API_KEY: ${{secrets.IMGBB_API_KEY}}
