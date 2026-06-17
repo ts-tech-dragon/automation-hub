@@ -74,3 +74,18 @@ export const parseEpsPercent = (percentStr: string, asDecimal = false) => {
   // Return either the whole number or the decimal equivalent
   return asDecimal ? numericValue / 100 : numericValue;
 };
+
+export const getDividendAmount = (subject = "") => {
+  const regex = /(?:Rs|Re)\.?\s*(\d+(?:\.\d+)?)/gi;
+  if (!subject) return 0;
+
+  // Get all regex matches in the current subject string
+  const matches = [...subject.matchAll(regex)];
+
+  // Add up all the numbers found in this specific string
+  const stringTotal = matches.reduce((subSum, match) => {
+    return subSum + parseFloat(match[1] as string); // match[1] is the captured number
+  }, 0);
+
+  return Number(stringTotal.toFixed(2));
+};

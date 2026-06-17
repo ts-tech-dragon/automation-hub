@@ -80,7 +80,7 @@ async function runEarningsGenerator() {
       earningsURLArr,
       true,
     );
-    // await syncConcallDataToDB(earningResult);
+    await syncConcallDataToDB(earningResult);
 
     await closeDB();
   } catch (error) {

@@ -38,3 +38,41 @@ export const PRE_MARKET_EARNINGS_POSTS = [
     xCaption: `📈 OVERNIGHT INSIGHTS\n\n{{description}}`,
   },
 ];
+
+export const DIVIDEND_POST_DESCRIPTION = [
+  {
+    headline: "💸 Cash Flow is King",
+    caption:
+      "Dividends turn your portfolio into a paycheck. Discover which companies are sharing their profits with investors today.",
+    instagramCaption: `💸 ${toBold("CASH FLOW IS KING")} | ${TODAY}\n\n{{description}}`,
+    xCaption: `💸 Dividend Alert | ${TODAY}\n\n{{description}}`,
+  },
+  {
+    headline: "❄️ The Snowball Effect",
+    caption:
+      "Reinvesting dividends is the secret engine of wealth creation. Here are today's top dividend announcements to keep your snowball rolling.",
+    instagramCaption: `❄️ ${toBold("THE SNOWBALL EFFECT")} | ${TODAY}\n\n{{description}}`,
+    xCaption: `❄️ Dividend Alert | ${TODAY}\n\n{{description}}`,
+  },
+  {
+    headline: "⏰ Mark Your Calendars",
+    caption:
+      "Don't miss the cutoff! Check today's upcoming ex-dividend dates to ensure you are on the roster for the next payout.",
+    instagramCaption: `⏰ ${toBold("MARK YOUR CALENDARS")} | ${TODAY}\n\n{{description}}`,
+    xCaption: `⏰ Dividend Alert | ${TODAY}\n\n{{description}}`,
+  },
+  {
+    headline: "🎯 Yield with a Purpose",
+    caption:
+      "A high yield is great, but a sustainable yield is better. Review today's dividend declarations to find quality companies rewarding their shareholders.",
+    instagramCaption: `🎯 ${toBold("YIELD WITH A PURPOSE")} | ${TODAY}\n\n{{description}}`,
+    xCaption: `🎯 Dividend Alert | ${TODAY}\n\n{{description}}`,
+  },
+  {
+    headline: "🏖️ The Freedom Fund",
+    caption:
+      "Every dividend payment is a step closer to financial independence. See which stocks are generating reliable passive income today.",
+    instagramCaption: `🏖️ ${toBold("THE FREEDOM FUND")} | ${TODAY}\n\n{{description}}`,
+    xCaption: `🏖️ Dividend Alert | ${TODAY}\n\n{{description}}`,
+  },
+];

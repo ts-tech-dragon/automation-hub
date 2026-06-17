@@ -82,13 +82,16 @@ export const API_URLS = {
 const fbIconPath = path.join(process.cwd(), "assets/icons/fb_icon.png");
 const igIconPath = path.join(process.cwd(), "assets/icons/ig_icon.png");
 const thIconPath = path.join(process.cwd(), "assets/icons/th_icon.png");
+const xIconPath = path.join(process.cwd(), "assets/icons/x_icon.png");
 
 const fbBase64 = fs.readFileSync(fbIconPath).toString("base64");
 const igBase64 = fs.readFileSync(igIconPath).toString("base64");
 const thBase64 = fs.readFileSync(thIconPath).toString("base64");
+const xBase64 = fs.readFileSync(xIconPath).toString("base64");
 
 export const TSFINNEWS_ICONS = {
   facebook: fbBase64,
   instagram: igBase64,
   threads: thBase64,
+  x: xBase64,
 };

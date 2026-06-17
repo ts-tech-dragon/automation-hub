@@ -4,6 +4,7 @@ import timezone from "dayjs/plugin/timezone.js";
 import "dayjs/locale/en";
 import type { JobDataResponse } from "../../types/index.js";
 import { isEpsPositive } from "./insta-earning-results/index.js";
+import { getFormattedDateInIST } from "./day.js";
 
 dayjs.locale("en");
 // Extend dayjs with the plugins
@@ -305,5 +306,34 @@ export const fiiDiiDataFlowDescription = (fiiDiiData: any) => {
    Net: ₹${dii.netValue} Cr ${dii.netValue > 0 ? "▲" : "▼"}
   Stay tuned @tsfinnews! 🚀
   #nifty50 #fii #dii #stockmarket #trading`,
+  };
+};
+
+export const santizeDividendCaption = (
+  description: { instagramCaption: string; xCaption: string; headline: string },
+  results: [{ name: string; dividend: number; symbol: string }],
+) => {
+  const quote = results
+    .map((item) => `▫️ ${item.symbol} - ₹${item.dividend}`)
+    .join("\n");
+  const hashtags = results.map((item) => `#${item.symbol}`).join(" ");
+  const caption =
+    quote +
+    "\n" +
+    "👉 Follow @tsfinnews for dividend update! 🚀" +
+    "\n" +
+    "#dividend " +
+    hashtags;
+
+  const instagramCaption = description.instagramCaption
+    .replace(/{{description}}/g, caption)
+    .trim();
+  const xCaption = description.xCaption
+    .replace(/{{description}}/g, caption)
+    .trim();
+  return {
+    instagramCaption,
+    xCaption,
+    headline: `Dividend Alert - ${getFormattedDateInIST("DD-MMM-YYYY")}`,
   };
 };

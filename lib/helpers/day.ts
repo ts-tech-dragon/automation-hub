@@ -21,6 +21,19 @@ export const getFormattedDateInIST = (formate = "DD-MM-YYYY", daysAgo = 0) => {
   return targetDate;
 };
 
+export const getFormattedUpcomingDateInIST = (
+  formate = "DD-MM-YYYY",
+  daysAgo = 0,
+) => {
+  // Subtract specified days then format in IST
+  const targetDate = dayjs()
+    .tz("Asia/Kolkata")
+    .add(daysAgo, "day")
+    .format(formate);
+
+  return targetDate;
+};
+
 export const convertDateToIST = (date: string, formate = "DD-MMM-YYYY") => {
   // Because customParseFormat is active, dayjs perfectly reads "08-Jun-2026"
   // and applies strict UTC midnight to it!
