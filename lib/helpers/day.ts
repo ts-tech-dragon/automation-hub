@@ -43,3 +43,9 @@ export const convertDateToIST = (date: string, formate = "DD-MMM-YYYY") => {
 export const formatDateLabel = (date: string, formate = "DD MMM") => {
   return dayjs.utc(date).format(formate);
 };
+
+export const getDayOfWeek = () => {
+  const nowInIST = dayjs().tz("Asia/Kolkata");
+  const dayOfWeek = nowInIST.day();
+  return dayOfWeek;
+};

@@ -1,4 +1,5 @@
 import {
+  getDayOfWeek,
   getFormattedDateInIST,
   getFormattedUpcomingDateInIST,
 } from "../../../../lib/helpers/day.js";
@@ -9,7 +10,8 @@ import { scrapperBrowser } from "../../../core/scrapper/index.js";
 export const runDividendScrapper = async () => {
   const { page, context, browser } = await scrapperBrowser();
   try {
-    const date = getFormattedUpcomingDateInIST("DD-MM-YYYY", 1); // Ensure this returns DD-MM-YYYY
+    const dayCount = getDayOfWeek() === 5 ? 3 : 1;
+    const date = getFormattedUpcomingDateInIST("DD-MM-YYYY", dayCount); // Ensure this returns DD-MM-YYYY
     const url = `https://www.nseindia.com/api/corporates-corporateActions?index=equities&from_date=${date}&to_date=${date}&subject=Dividend`;
 
     // 1. Visit the site first to get the session/cookies
