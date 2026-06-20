@@ -380,6 +380,15 @@ export const gainersLosersDescription = (
   const loser3 = losers[2]?.cleanSymbol;
   return {
     headline: "",
+    xCaption: `Weekly Top Gainers and Losers for ${getFormattedDateInIST("DD-MMM", 5)} - ${getFormattedDateInIST("DD-MMM", 1)} is out!\n
+   😎 Top Gainers
+   ${gainer1} - ${gainers[0]?.change} %
+   ${gainer2} - ${gainers[1]?.change} %\n
+   😢 Top Losers
+   ${loser1} - ${losers[0]?.change} %
+   ${loser2} - ${losers[1]?.change} %\n
+  Stay tuned @tsfinnews! 🚀
+  #nifty50 #${gainer1} #${gainer1} #${loser1} #${loser2}`,
     caption: `Weekly Top Gainers and Losers for ${getFormattedDateInIST("DD-MMM-YYYY", 5)} - ${getFormattedDateInIST("DD-MMM-YYYY", 1)} is out!\n
    😎 Top Gainers
    ${gainer1} - ${gainers[0]?.change} %

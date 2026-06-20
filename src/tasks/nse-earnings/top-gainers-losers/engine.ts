@@ -39,8 +39,11 @@ async function runGainersLoserEngine() {
     });
     const { gainers, losers } = getToppersAndLossers(updatedData);
     const imageURL = await generateWeeklyMoversImage(gainers, losers);
-    const { headline, caption } = gainersLosersDescription(gainers, losers);
-    await broadcastUpdate(imageURL, { caption, xCaption: caption }, true);
+    const { headline, caption, xCaption } = gainersLosersDescription(
+      gainers,
+      losers,
+    );
+    await broadcastUpdate(imageURL, { caption, xCaption }, true);
     console.log("Successfully retrieved data:");
   } catch (error: any) {
     console.error("Error calling sheet API:", error.message);
