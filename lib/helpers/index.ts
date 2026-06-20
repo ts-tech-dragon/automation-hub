@@ -233,6 +233,52 @@ export const moveMouseRandomly = async (page: any) => {
   await page.mouse.move(x, y, { steps: 10 });
 };
 
+interface MoverStock {
+  "sr.": number;
+  stockName: string;
+  symbol: string;
+  currentPrice: number | string;
+  priceBeforeOneWeek: number | string;
+  Change?: number;
+  cleanName: string;
+  cleanSymbol: string;
+  change: Number;
+}
+export const getToppersAndLossers = (data: MoverStock[]) => {
+  const processedData = data.map((stock) => {
+    const rawChange = stock.Change !== undefined ? stock.Change : 0;
+    const formattedPercent = parseFloat((rawChange * 100).toFixed(2));
+
+    return {
+      ...stock,
+      cleanName: stock.stockName
+        .replace(
+          /\s+(Ltd|Limited|India|Company|Corporation|Holdings)\b.*/gi,
+          "",
+        )
+        .trim(),
+      cleanSymbol: stock.symbol.replace("NSE:", ""),
+      currentPrice:
+        typeof stock.currentPrice === "number"
+          ? stock.currentPrice
+          : parseFloat(stock.currentPrice || "0"),
+      change: formattedPercent,
+    };
+  });
+
+  const topGainers = [...processedData]
+    .sort((a, b) => b.change - a.change)
+    .slice(0, 5);
+
+  const topLosers = [...processedData]
+    .sort((a, b) => a.change - b.change)
+    .slice(0, 5);
+  return {
+    gainers: topGainers,
+    losers: topLosers,
+  };
+};
+
 export const sanitizeSocialPostDescription = (
   description: { instagramCaption: string; xCaption: string; headline: string },
   quote: string,
@@ -272,23 +318,6 @@ export const santizeEarningResultCaption = (
     .trim();
   return { instagramCaption, xCaption, headline: description.headline };
 };
-
-const mock = [
-  {
-    buyValue: "14636.7",
-    category: "DII",
-    date: "08-Jun-2026",
-    netValue: "5028.13",
-    sellValue: "9608.57",
-  },
-  {
-    buyValue: "8162.88",
-    category: "FII/FPI",
-    date: "08-Jun-2026",
-    netValue: "-5553.86",
-    sellValue: "13716.74",
-  },
-];
 
 export const fiiDiiDataFlowDescription = (fiiDiiData: any) => {
   const dii = fiiDiiData.find((item: any) => item.category === "DII");
@@ -335,5 +364,32 @@ export const santizeDividendCaption = (
     instagramCaption,
     xCaption,
     headline: `Dividend Alert - ${getFormattedDateInIST("DD-MMM-YYYY")}`,
+  };
+};
+
+export const gainersLosersDescription = (
+  gainers: MoverStock[],
+  losers: MoverStock[],
+) => {
+  const gainer1 = gainers[0]?.cleanSymbol;
+  const gainer2 = gainers[1]?.cleanSymbol;
+  const gainer3 = gainers[2]?.cleanSymbol;
+
+  const loser1 = losers[0]?.cleanSymbol;
+  const loser2 = losers[1]?.cleanSymbol;
+  const loser3 = losers[2]?.cleanSymbol;
+  return {
+    headline: "",
+    caption: `Weekly Top Gainers and Losers for ${getFormattedDateInIST("DD-MMM-YYYY", 5)} - ${getFormattedDateInIST("DD-MMM-YYYY", 1)} is out!\n
+   😎 Top Gainers
+   ${gainer1} - ${gainers[0]?.change} %
+   ${gainer2} - ${gainers[1]?.change} %
+   ${gainer3} - ${gainers[2]?.change} %\n
+   😢 Top Losers
+   ${loser1} - ${losers[0]?.change} %
+   ${loser2} - ${losers[1]?.change} %
+   ${loser3} - ${losers[2]?.change} %\n
+  Stay tuned @tsfinnews! 🚀
+  #nifty50 #${gainer1} #${gainer1} #${loser1} #${loser2}`,
   };
 };
