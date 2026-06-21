@@ -8,7 +8,7 @@ export const runFiiDiiScrapper = async () => {
     // const date = "08-Jun-2026";
     const date = getFormattedDateInIST("DD-MMM-YYYY");
     console.log("Target Date for FII/DII Scrapper:", date);
-    const url = `https://www.nseindia.com/api/fiidiiTradeNse`;
+    const url = `https://www.nseindia.com/api/fiidiiTradeReact`;
 
     // 1. Visit the site first to get the session/cookies
     await page.goto("https://www.nseindia.com/reports/fii-dii", {
