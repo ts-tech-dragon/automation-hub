@@ -404,7 +404,7 @@ export const gainersLosersDescription = (
 };
 
 export const globalIndexCloseDescription = (indiceData: any[]) => {
-  const date = getFormattedDateInIST("DD-MMM-YYYY", 1);
+  const date = getFormattedDateInIST("DD-MMM-YYYY");
   const country = indiceData[0].country;
 
   // Generate a clean summary of each indice's performance
