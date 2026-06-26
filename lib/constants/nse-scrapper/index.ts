@@ -1,6 +1,6 @@
-import { getTimeInIST } from "../../helpers/index.js";
+import { getFormattedDateInIST } from "../../helpers/day.js";
 import { toBold } from "../../helpers/morning-quote/index.js";
-const TODAY = getTimeInIST("DD MMMM YYYY");
+const TODAY = getFormattedDateInIST("DD MMMM YYYY");
 export const PRE_MARKET_EARNINGS_POSTS = [
   {
     headline: "🌅 Morning Prep: The After-Hours Wrap",
@@ -76,3 +76,27 @@ export const DIVIDEND_POST_DESCRIPTION = [
     xCaption: `🏖️ Dividend Alert | ${TODAY}\n\n{{description}}`,
   },
 ];
+
+export const GLOBAL_INDICE_FLAG = {
+  "South Korea":
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Flag_of_South_Korea.svg/960px-Flag_of_South_Korea.svg.png",
+  USA: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Flag_of_the_United_States_%28Pantone%29.svg/250px-Flag_of_the_United_States_%28Pantone%29.svg.png",
+  India:
+    "https://upload.wikimedia.org/wikipedia/en/thumb/4/41/Flag_of_India.svg/330px-Flag_of_India.svg.png",
+  China:
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Flag_of_the_People%27s_Republic_of_China.svg/3840px-Flag_of_the_People%27s_Republic_of_China.svg.png",
+  Japan:
+    "https://upload.wikimedia.org/wikipedia/en/thumb/9/9e/Flag_of_Japan.svg/1280px-Flag_of_Japan.svg.png",
+  UK: "https://upload.wikimedia.org/wikipedia/en/thumb/a/ae/Flag_of_the_United_Kingdom.svg/330px-Flag_of_the_United_Kingdom.svg.png",
+  DEFAULT:
+    "https://img.freepik.com/premium-vector/simple-black-flag-pole-icon_1108753-40467.jpg",
+};
+
+export const MARKET_CLOSING_TIMES = {
+  India: "15:30",
+  Japan: "11:30",
+  "South Korea": "11:30",
+  China: "12:30",
+  UK: "22:00",
+  USA: "01:30", // Next day
+};
