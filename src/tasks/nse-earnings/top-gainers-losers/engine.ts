@@ -8,7 +8,10 @@ import { broadcastUpdate } from "../../../core/social/facebook.js";
 import { ENV_VARS } from "../../../../lib/constants/index.js";
 
 async function runGainersLoserEngine() {
-  const url = ENV_VARS.STOCK_AGENT_GOOGLE_SHEET as string;
+  const scriptURL = ENV_VARS.STOCK_AGENT_GOOGLE_SHEET as string;
+
+  // Append the action you want to trigger
+  const url = `${scriptURL}?action=getWeeklyGainerLoser`;
 
   try {
     console.log("Fetching live data from Google Sheet API...");
