@@ -4,6 +4,7 @@ import { broadcastUpdate } from "../../../core/social/facebook.js";
 import { ENV_VARS } from "../../../../lib/constants/index.js";
 import { generateGlobalIndiceImage } from "./generateGlobalIndicePost.js";
 import { GLOBAL_INDICE_FLAG } from "../../../../lib/constants/nse-scrapper/index.js";
+import { globalIndexCloseDescription } from "../../../../lib/helpers/index.js";
 
 // index.ts
 const options = {
@@ -79,13 +80,11 @@ async function runGlobalIndiceEngine(countryName = "USA") {
     };
 
     const imageURL = await generateGlobalIndiceImage(imageData);
-    console.log("imageURL : ", imageURL);
-    // const { headline, caption, xCaption } = gainersLosersDescription(
-    //   gainers,
-    //   losers,
-    // );
-    // await broadcastUpdate(imageURL, { caption, xCaption }, true);
-    // console.log("Successfully retrieved data:");
+    const { headline, caption } = globalIndexCloseDescription(
+      imageData.indices,
+    );
+    await broadcastUpdate(imageURL, { caption, xCaption: caption }, true);
+    console.log("Successfully retrieved data:");
   } catch (error: any) {
     console.error("Error calling sheet API:", error.message);
   }

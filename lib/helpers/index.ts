@@ -402,3 +402,33 @@ export const gainersLosersDescription = (
   #nifty50 #${gainer1} #${gainer1} #${loser1} #${loser2}`,
   };
 };
+
+export const globalIndexCloseDescription = (indiceData: any[]) => {
+  const date = getFormattedDateInIST("DD-MMM-YYYY", 1);
+  const country = indiceData[0].country;
+
+  // Generate a clean summary of each indice's performance
+  const summary = indiceData
+    .map((item) => {
+      const change = (item.ForPreviousDay * 100).toFixed(2);
+      const sign = item.ForPreviousDay >= 0 ? "+" : "";
+      return `${item.indice}: ${sign}${change}%`;
+    })
+    .join("\n");
+
+  const headline = `${country} Global Market Update - ${date}`;
+
+  const caption = `${country} Market Closing Summary (${date}):
+
+${summary}
+
+Stay updated with global market trends! 🚀
+
+Follow @tsfinnews for more.
+#${country.toLowerCase().replace(/\s+/g, "")} #globalmarkets #stockmarket #trading #investing`;
+
+  return {
+    headline,
+    caption,
+  };
+};
