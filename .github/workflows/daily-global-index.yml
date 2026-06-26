@@ -5,7 +5,7 @@ on:
 
   # Trigger 2: For external API calls (Apps Script)
   repository_dispatch:
-    types: [daily_weekly_gainers_losers_trigger]
+    types: [daily_global_index_trigger]
 jobs:
   run-prep:
     runs-on: ubuntu-22.04
