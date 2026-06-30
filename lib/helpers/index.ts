@@ -432,3 +432,38 @@ Follow @tsfinnews for more.
     caption,
   };
 };
+
+export const generateListingsDescription = (listings: any[]) => {
+  const date = getFormattedDateInIST("DD-MMM-YYYY");
+
+  // 1. Take only the first 3 items from the dataset
+  const topListings = listings.slice(0, 3);
+
+  // 2. Map and clean the data for a neat social media summary
+  const summary = topListings
+    .map((item) => {
+      // Extract only the first two words of the company name
+      const shortCompanyName = item.companyName
+        ? item.companyName.split(/\s+/).slice(0, 2).join(" ")
+        : "Unknown Company";
+
+      return `🔹 ${shortCompanyName} (${item.symbol})`;
+    })
+    .join("\n");
+
+  const headline = `Today's IPO Listings - ${date}`;
+
+  const caption = `📊 Today's IPO Listings (${date}):
+
+${summary}
+
+Stay ahead of market debuts 🚀
+
+Follow @tsfinnews
+#nse #stockmarket #ipo #nifty`;
+
+  return {
+    headline,
+    caption,
+  };
+};
