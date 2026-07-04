@@ -233,6 +233,10 @@ export const moveMouseRandomly = async (page: any) => {
   await page.mouse.move(x, y, { steps: 10 });
 };
 
+export function isRealNumber(value: any) {
+  return !isNaN(parseFloat(value)) && isFinite(value);
+}
+
 interface MoverStock {
   "sr.": number;
   stockName: string;
@@ -246,9 +250,10 @@ interface MoverStock {
 }
 export const getToppersAndLossers = (data: MoverStock[]) => {
   const processedData = data.map((stock) => {
+    if (!isRealNumber(stock.currentPrice)) stock.currentPrice = 0;
+    if (!isRealNumber(stock.Change)) stock.Change = 0;
     const rawChange = stock.Change !== undefined ? stock.Change : 0;
     const formattedPercent = parseFloat((rawChange * 100).toFixed(2));
-
     return {
       ...stock,
       cleanName: stock.stockName

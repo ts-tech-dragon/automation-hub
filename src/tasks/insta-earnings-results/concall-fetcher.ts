@@ -1,6 +1,7 @@
 import type { Page } from "playwright";
 import { sortDataByMarketCap } from "../../../lib/helpers/nse-results/index.js";
 import { scrapperBrowser } from "../../core/scrapper/index.js";
+import { isRealNumber } from "../../../lib/helpers/index.js";
 
 export async function concallEarningsFetcher() {
   const { page, context, browser } = await scrapperBrowser();
@@ -109,7 +110,10 @@ export async function concallEarningsFetcher() {
             `💰 Market Cap for ${name}: ${marketCapValue} (${marketCapValueNUm})`,
           );
 
-          if (Boolean(marketCapValueNUm < 1000)) {
+          if (
+            !isRealNumber(marketCapValue) ||
+            Boolean(marketCapValueNUm < 1000)
+          ) {
             // FIX 2: Await the page closure
             await detailPage.close();
 
