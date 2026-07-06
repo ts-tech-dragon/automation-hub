@@ -6,6 +6,7 @@ import {
 import { delay, getTimeInIST } from "../../../../lib/helpers/index.js";
 import { getDividendAmount } from "../../../../lib/helpers/nse-results/index.js";
 import { scrapperBrowser } from "../../../core/scrapper/index.js";
+import { yahooFinance } from "../../../db/services/index.js";
 
 export const runDividendScrapper = async () => {
   const { page, context, browser } = await scrapperBrowser();
@@ -35,21 +36,49 @@ export const runDividendScrapper = async () => {
     }, url);
 
     console.log("✅ Data received:", data.length, "announcements found.");
-    const updatedData = data
-      .map((element: any) => {
-        const obj: any = {};
-        obj["dividend"] = getDividendAmount(element.subject);
-        obj["exDate"] = element.exDate;
-        obj["symbol"] = element.symbol;
-        obj["name"] = element.comp;
-        return obj;
-      })
-      .sort((a: any, b: any) => b.dividend - a.dividend); // This sorts in descending order
-    return updatedData;
+
+    // 1. Map creating an array of Promises
+    const promiseArray = data.map(async (element: any) => {
+      const obj: any = {};
+      const dividendAmt = getDividendAmount(element.subject);
+      const symbol = element.symbol;
+
+      obj["dividend"] = dividendAmt;
+      obj["dividendPercentage"] = await getDividedPercentageBySymbol(
+        symbol,
+        dividendAmt,
+      );
+      obj["exDate"] = element.exDate;
+      obj["symbol"] = symbol;
+      obj["name"] = element.comp;
+
+      return obj;
+    });
+
+    // 2. Wait for all promises to resolve in parallel
+    const resolvedData = await Promise.all(promiseArray);
+
+    // 3. Sort the final resolved data (convert string percentage to number for accurate sorting)
+    return resolvedData.sort(
+      (a: any, b: any) =>
+        Number(b.dividendPercentage) - Number(a.dividendPercentage),
+    );
   } catch (error) {
     console.log("❌ NSE Scrapper Error:", (error as Error).message);
+    return [];
   } finally {
     await context?.close().catch(() => {});
     await browser?.close().catch(() => {});
   }
 };
+
+async function getDividedPercentageBySymbol(symbol: string, dividend: number) {
+  dividend = Number(dividend);
+  // NSE symbols on Yahoo Finance need the ".NS" suffix
+  const querySymbol = `${symbol}.NS`;
+  const result = await yahooFinance.quote(querySymbol, {
+    fields: ["regularMarketPrice"],
+  });
+  const price = result.regularMarketPrice;
+  return ((dividend / price) * 100).toFixed(2);
+}

@@ -15,7 +15,9 @@ import type {
   IEarningsResult,
 } from "../models/index.js";
 
-const yahooFinance = new YahooFinance({ suppressNotices: ["yahooSurvey"] });
+export const yahooFinance = new YahooFinance({
+  suppressNotices: ["yahooSurvey"],
+});
 
 export const saveDailyResults = async (data: IEarningsResult[]) => {
   const db = await connectDB();

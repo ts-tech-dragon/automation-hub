@@ -13,19 +13,17 @@ export async function generateTop10DividendImage(
     symbol: string;
     name: string;
     exDate: string;
+    dividendPercentage: number;
   }[],
 ) {
   const { page, context, browser } = await scrapperBrowser();
 
   try {
-    // 1. Ensure we only take the top 10 and sort them by dividend (highest to lowest)
-    const top10Data = data.sort((a, b) => b.dividend - a.dividend).slice(0, 10);
-
     // 2. Find the maximum dividend to scale the bars correctly
-    const maxDividend = Math.max(...top10Data.map((d) => d.dividend));
+    const maxDividend = Math.max(...data.map((d) => d.dividend));
 
     // 3. Current Date for the subtitle
-    const dateStr = (top10Data[0] as any).exDate;
+    const dateStr = (data[0] as any).exDate;
 
     const htmlContent = `<!DOCTYPE html>
 <html>
@@ -126,10 +124,22 @@ export async function generateTop10DividendImage(
     }
 
     .dividend-value {
-      font-family: 'JetBrains Mono'; font-size: 28px; font-weight: 800;
-      display: flex; align-items: center; gap: 6px;
+      font-family: 'JetBrains Mono'; 
+      font-weight: 800;
+      display: flex; 
+      align-items: center; /* Align items horizontally */
+      gap: 12px;           /* Space between Price and Percentage */
+      white-space: nowrap;
     }
-    .currency { font-size: 20px; color: #38bdf8; opacity: 0.8; }
+    
+    .price-part { font-size: 28px; }
+    .percentage-part { 
+      font-size: 14px; 
+      background: rgba(255,255,255,0.05);
+      padding: 2px 8px;
+      border-radius: 4px;
+      color: #38bdf8; 
+    }
 
     .footer {
       width: 100%; display: flex; justify-content: space-between; align-items: center;
@@ -153,7 +163,7 @@ export async function generateTop10DividendImage(
   </div>
 
   <div class="leaderboard-container">
-    ${top10Data
+    ${data
       .map((stock, index) => {
         // Calculate percentage width relative to the highest dividend
         const fillPercentage = (stock.dividend / maxDividend) * 100;
@@ -170,7 +180,8 @@ export async function generateTop10DividendImage(
             <div class="name">${stock.name.replace(" Limited", "").replace(" Ltd", "")}</div>
           </div>
           <div class="dividend-value">
-            <span class="currency">₹</span>${Number(stock.dividend).toFixed(2)}
+            <span class="price-part"><span class="currency">₹</span>${Number(stock.dividend).toFixed(2)}</span>
+            <span class="percentage-part">${Number(stock.dividendPercentage).toFixed(2)}%</span>
           </div>
         </div>
       </div>

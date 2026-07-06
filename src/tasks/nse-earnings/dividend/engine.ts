@@ -27,7 +27,7 @@ const runDividendEngine = async () => {
   const fiveDividendData = dividendData.slice(0, 5);
   const { instagramCaption, xCaption, headline } = santizeDividendCaption(
     description,
-    fiveDividendData,
+    fiveDividendData as any,
   );
   await broadcastMultipleUpdates(diviendImgUrlArr, {
     caption: instagramCaption,

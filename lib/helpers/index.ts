@@ -345,7 +345,14 @@ export const fiiDiiDataFlowDescription = (fiiDiiData: any) => {
 
 export const santizeDividendCaption = (
   description: { instagramCaption: string; xCaption: string; headline: string },
-  results: [{ name: string; dividend: number; symbol: string }],
+  results: [
+    {
+      name: string;
+      dividend: number;
+      symbol: string;
+      dividendPercentage: number;
+    },
+  ],
 ) => {
   const quote = results
     .map((item) => `▫️ ${item.symbol} - ₹${item.dividend}`)
