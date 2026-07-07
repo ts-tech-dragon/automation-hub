@@ -1,3 +1,4 @@
+import YahooFinance from "yahoo-finance2";
 import {
   getDayOfWeek,
   getFormattedDateInIST,
@@ -6,7 +7,10 @@ import {
 import { delay, getTimeInIST } from "../../../../lib/helpers/index.js";
 import { getDividendAmount } from "../../../../lib/helpers/nse-results/index.js";
 import { scrapperBrowser } from "../../../core/scrapper/index.js";
-import { yahooFinance } from "../../../db/services/index.js";
+
+export const yahooFinance = new YahooFinance({
+  suppressNotices: ["yahooSurvey"],
+});
 
 export const runDividendScrapper = async () => {
   const { page, context, browser } = await scrapperBrowser();
