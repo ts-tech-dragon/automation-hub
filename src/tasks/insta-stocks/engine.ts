@@ -7,8 +7,9 @@ import { fetchIndianMarketNews } from "./newsFetcher.js";
 import { generateStockSummaryImage } from "./generator.js";
 import { mockGeminiSummaryResponse } from "../../../lib/constants/mockData.js";
 import { broadcastUpdate } from "../../core/social/facebook.js";
-import { generateProfessionalSlide } from "../../../lib/gen-image-drawer/dailyNiftyPost.js";
+import generateDailyMarketWrapImage from "../../../lib/gen-image-drawer/dailyNiftyPost.js";
 import { isMarketHoliday } from "../../../lib/helpers/insta-earning-results/index.js";
+import { TSFINNEWS_ICONS } from "../../../lib/constants/index.js";
 
 async function runWorkflow() {
   const isHoliday = isMarketHoliday();
@@ -29,7 +30,9 @@ async function runWorkflow() {
     }
 
     // console.log(`🎨 Generating Instagram Post for: ${content.headline}`);
-    const imagePath = await generateProfessionalSlide(content);
+    const imagePath = await generateDailyMarketWrapImage(content, {
+      icons: TSFINNEWS_ICONS, // facebook / instagram / threads / x
+    });
     // const imagePath = (await generateStockSummaryImage(
     //   marketData,
     //   newsHeadlines,
@@ -38,7 +41,7 @@ async function runWorkflow() {
 
     if (imagePath) {
       console.log(`✅ Success! Temp image created.`);
-      await broadcastUpdate(imagePath, content);
+      // await broadcastUpdate(imagePath, content);
       await sendTelegramStockImage(content, imagePath);
       return;
     }

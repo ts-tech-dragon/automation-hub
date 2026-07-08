@@ -5,26 +5,87 @@ export const getDailyStockSummaryPrompt = (
   rawNews: string,
 ) => {
   const today = getFormatedTodayDate();
-  const EVERYDAY_STOCK_SUMMARY_PROMPT = `
-      Create a JSON summary of the most important things that happened TODAY (${today}) in indian stock market (use the current date) including ${rawNews} and Nifty current price ${marketData?.nifty}, sensex current price ${marketData?.sensex}, brent crude oil current price ${marketData?.crudeOil}, inr current price ${marketData?.inr}, and india vix current price ${marketData?.indiaVix} which will reflect or affect the Indian stock market tomorrow morning. Focus on Indian market momentum + global momentum. This prompt will be run every night to quickly check market & global cues.
-NOTE: Do your reearch and use your real-time knowledge of today's closing data, news, FII/DII flows, global cues, commodities, geopolitics, earnings, RBI/policy updates, or any event that can move Nifty/Sensex at opening and incorporate that into the summary. Do NOT make up any news or data. Use only real, accurate information that you have access to right now.
-Respond STRICTLY with ONLY a valid JSON object (no extra text, no markdown, no explanations). Use real-time knowledge of today's closing data, news, FII/DII flows, global cues, commodities, geopolitics, earnings, RBI/policy updates, or any event that can move Nifty/Sensex at opening.
-The JSON must follow this exact structure:
 
-  {
-    "date": ${today},
-    "headline": "Catchy, high-impact headline summarizing the overall market sentiment in three or four words | ${today}",
-    "points": [
-      "1. Most important event/news today & its direct impact on Indian market tomorrow",
-      "2. Second most important event/news today & its direct impact on Indian market tomorrow",
-      "3. Third most important event/news today & its direct impact on Indian market tomorrow"
-    ],
-    "indian_momentum": "Concise 2-3 sentence summary of today's Indian market close (Nifty50, Sensex, BankNifty, sectoral winners/losers) + momentum & key support/resistance levels for tomorrow's open",
-    "global_momentum": "Concise 2-3 sentence summary of global cues (US markets close, Nasdaq/Dow futures, Asian markets, Europe, crude oil, gold, USDINR, VIX, FII flows) and how they will influence Indian opening",
-    "overall_impact": "One-sentence verdict on expected Indian market opening tomorrow (Gap-up / Flat / Gap-down / Volatile) with reasoning",
-    "caption": "Ready-to-post X.com caption in this format 'Index Value Change relative with (- or +) and emoji like 🔻🔼 \n' for all indices and values in next next lines + trending hashtags like #Nifty50 #Sensex #BankNifty (only 3 hashtags)"
-    `;
-  return EVERYDAY_STOCK_SUMMARY_PROMPT;
+  return `
+You are an expert Indian stock market analyst creating a professional Instagram "Market Wrap" infographic.
+
+Today's Date: ${today}
+
+Market Data:
+- Nifty 50: ${marketData?.nifty}
+- Sensex: ${marketData?.sensex}
+- Brent Crude: ${marketData?.crudeOil}
+- USD/INR: ${marketData?.inr}
+- India VIX: ${marketData?.indiaVix}
+
+News Feed:
+${rawNews}
+
+====================================================
+
+OBJECTIVE
+
+Create a concise, data-driven summary of EVERYTHING IMPORTANT that happened in today's Indian stock market.
+
+This is NOT a prediction for tomorrow.
+
+This is a MARKET WRAP summarizing today's session.
+
+Use only real and verified information.
+
+Do not invent any news or numbers.
+
+====================================================
+
+CONTENT GUIDELINES
+
+• Use today's market closing data.
+• Include the biggest Indian market news.
+• Include major global cues that affected today's market.
+• Mention important FII/DII activity if available.
+• Mention the best and worst performing sectors.
+• Mention important commodities or currency moves only if significant.
+• Avoid paragraphs.
+• Every sentence should be short and easy to read.
+• Keep all text optimized for an Instagram infographic.
+
+====================================================
+
+RESPOND ONLY AS JSON
+
+{
+  "date": "${today}",
+
+  "headline": "Powerful headline within 6-8 words summarizing today's market",
+
+  "points": [
+    "Biggest market-moving event today (max 12 words)",
+    "Second biggest event today (max 12 words)",
+    "Third biggest event today (max 12 words)",
+    "Best performing sector or stock (max 8 words)",
+    "Worst performing sector or stock (max 8 words)",
+    "Important global cue today (max 10 words)"
+  ],
+
+  "indian_momentum": "One short sentence (maximum 18 words) describing today's Indian market close including Nifty, Sensex and overall sentiment.",
+
+  "global_momentum": "One short sentence (maximum 18 words) summarizing today's global market, crude oil, USDINR and VIX.",
+
+  "overall_impact": "One sentence (maximum 12 words) summarizing today's overall market mood using Bullish, Bearish or Neutral.",
+
+  "caption": "Create an engaging X (Twitter) caption under 260 characters. Include Nifty, Sensex, Brent, USDINR and India VIX values with 🔼🔻 emojis. End with exactly three hashtags: #Nifty50 #Sensex #StockMarket"
+}
+
+IMPORTANT
+
+- Return ONLY valid JSON.
+- No markdown.
+- No explanations.
+- No extra keys.
+- Never predict tomorrow.
+- Never mention support/resistance.
+- Never mention expected opening.
+`;
 };
 
 export const generateStockInfographicPrompt = (
