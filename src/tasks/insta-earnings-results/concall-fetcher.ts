@@ -111,7 +111,7 @@ export async function concallEarningsFetcher() {
           );
 
           if (
-            !isRealNumber(marketCapValue) ||
+            !isRealNumber(marketCapValueNUm) ||
             Boolean(marketCapValueNUm < 1000)
           ) {
             // FIX 2: Await the page closure
