@@ -47,3 +47,11 @@ jobs:
           DISCORD_ERROR_LOGS_URL: ${{ secrets.DISCORD_ERROR_LOGS_URL }}
 
         run: npx tsx src/tasks/market-pulse/engine.ts
+
+      # 🌟 NEW: Upload debug screenshot if the task fails
+      - name: 📸 Upload Failure Screenshot
+        uses: actions/upload-artifact@v4
+        with:
+          name: x-failed-click-debug
+          path: x-failed-click-debug.png
+          retention-days: 3 # Automatically deletes the artifact after 3 days to save space
