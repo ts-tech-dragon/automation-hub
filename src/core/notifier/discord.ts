@@ -1,6 +1,9 @@
 import "dotenv/config";
 import axios from "axios";
 import { convertToDiscordMarkdown } from "../../../lib/helpers/interview-prep/index.js";
+// Add 'rawResponse' as an optional third parameter
+import fs from "fs";
+import path from "path";
 import { ENV_VARS } from "../../../lib/constants/index.js";
 
 type deepImagePayload = {
@@ -113,38 +116,37 @@ export async function sendDiscordInterviewProblem(probData: {
   }
 }
 
-// Add 'rawResponse' as an optional third parameter
 export async function sendErrorToDiscord(
   error: any,
   title = "",
   rawResponse?: string,
+  imagePath?: string, // 🌟 Optional parameter for the screenshot path
 ) {
   const webhookUrl = ENV_VARS.DISCORD_ERROR_LOGS_URL || "";
+  if (!webhookUrl) return;
+
   try {
     const fields = [
       {
         name: "Stack Trace",
-        // Substring to stay within Discord's 1024 character limit per field
         value: `\`\`\`${error?.stack?.substring(0, 1000) || "No stack trace available"}\`\`\``,
       },
       { name: "Timestamp", value: new Date().toISOString() },
     ];
 
-    // If a raw response is provided, add it as a new field
     if (rawResponse) {
       fields.push({
         name: "Raw Gemini Response",
-        // Format it as a code block for better readability
         value: `\`\`\`json\n${rawResponse.substring(0, 1000)}\n\`\`\``,
       });
     }
 
-    const payload = {
+    const payload: any = {
       username: "Error Logger",
       embeds: [
         {
           title: "🚨 Application Error" + (title ? `: ${title}` : ""),
-          description: `**Message:** ${error.message}`,
+          description: `**Message:** ${error?.message || error}`,
           color: 15158332,
           fields: fields,
           footer: { text: "Node.js Error Monitoring" },
@@ -152,7 +154,28 @@ export async function sendErrorToDiscord(
       ],
     };
 
-    await axios.post(webhookUrl, payload);
+    // 🌟 Check if an image path was provided and the file exists
+    if (imagePath && fs.existsSync(imagePath)) {
+      const fileName = path.basename(imagePath);
+
+      // Attach the image reference to the embed so Discord renders it inline
+      payload.embeds[0].image = {
+        url: `attachment://${fileName}`,
+      };
+
+      // Use FormData to send both the JSON payload and the file together
+      const formData = new FormData();
+      formData.append("payload_json", JSON.stringify(payload));
+
+      const fileBuffer = fs.readFileSync(imagePath);
+      const blob = new Blob([fileBuffer]);
+      formData.append("file", blob, fileName);
+
+      await axios.post(webhookUrl, formData);
+    } else {
+      // 🌟 Fallback: Works exactly as before if no image argument is passed
+      await axios.post(webhookUrl, payload);
+    }
   } catch (err) {
     console.error("Failed to send error to Discord:", (err as Error).message);
   }

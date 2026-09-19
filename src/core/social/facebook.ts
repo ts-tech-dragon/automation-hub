@@ -384,7 +384,7 @@ export async function broadcastMultipleUpdates(
       console.log("✅ X SUCCESS!");
     } catch (error) {
       console.error("❌ X FAILED:", (error as Error).message);
-      sendErrorToDiscord(error, "POST TO X");
+      sendErrorToDiscord(error, "POST TO X", "", "x-failed-click-debug.png");
     }
   } catch (error) {
     console.log("broadcastUpdate Error : ", (error as Error).message);
