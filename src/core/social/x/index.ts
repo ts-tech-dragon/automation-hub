@@ -1,6 +1,7 @@
 import { humanDelay, humanMouseMove } from "../../../../lib/helpers/human.js";
 import { typeHumanLike } from "../../../../lib/helpers/web-scrapper/index.js";
 import { ensureAuthFile, X_SESSION_PATH } from "../../auth-helper.js";
+import { sendErrorToDiscord } from "../../notifier/discord.js";
 import { scrapperBrowser } from "../../scrapper/index.js";
 import { expect } from "playwright/test";
 
@@ -129,6 +130,7 @@ export const postToX = async (
       // Fallback: Sometimes React drops the first click. Try clicking one more time.
       console.log("🔄 Retrying click...");
       await postButton.click({ force: true });
+      sendErrorToDiscord(e, "POST TO X", "", "x-failed-click-debug.png");
       await page.waitForTimeout(5000); // Wait for retry to process
     }
 
