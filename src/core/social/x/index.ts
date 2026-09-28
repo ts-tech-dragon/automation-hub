@@ -138,6 +138,8 @@ export const postToX = async (
     console.log("✅ Post published successfully!");
   } catch (error) {
     console.log(`❌ Post to X failed: ${(error as Error).message}`);
+    await page.screenshot({ path: "x-failed-click-debug.png" });
+    sendErrorToDiscord(error, "POST TO X", "", "x-failed-click-debug.png");
   } finally {
     // 🧹 CRITICAL CLEANUP: Prevent memory leaks
     console.log("🧹 Closing browser instance...");
