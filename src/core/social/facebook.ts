@@ -328,13 +328,13 @@ export async function broadcastUpdate(
       sendErrorToDiscord(err, "POST TO Facebook");
     }
 
-    try {
-      await postToX(content.xCaption || content.caption, publicURL);
-      console.log("✅ X SUCCESS!");
-    } catch (error) {
-      console.error("❌ X FAILED:", (error as Error).message);
-      sendErrorToDiscord(error, "POST TO X");
-    }
+    // try {
+    //   await postToX(content.xCaption || content.caption, publicURL);
+    //   console.log("✅ X SUCCESS!");
+    // } catch (error) {
+    //   console.error("❌ X FAILED:", (error as Error).message);
+    //   sendErrorToDiscord(error, "POST TO X");
+    // }
   } catch (error) {
     console.log("broadcastUpdate Error : ", (error as Error).message);
   }
@@ -379,13 +379,13 @@ export async function broadcastMultipleUpdates(
       sendErrorToDiscord(errMsg, "POST TO Facebook");
     }
 
-    try {
-      await postToX(content.xCaption || content.caption, imageUrlArr);
-      console.log("✅ X SUCCESS!");
-    } catch (error) {
-      console.error("❌ X FAILED:", (error as Error).message);
-      sendErrorToDiscord(error, "POST TO X", "", "x-failed-click-debug.png");
-    }
+    // try {
+    //   await postToX(content.xCaption || content.caption, imageUrlArr);
+    //   console.log("✅ X SUCCESS!");
+    // } catch (error) {
+    //   console.error("❌ X FAILED:", (error as Error).message);
+    //   sendErrorToDiscord(error, "POST TO X", "", "x-failed-click-debug.png");
+    // }
   } catch (error) {
     console.log("broadcastUpdate Error : ", (error as Error).message);
   }
