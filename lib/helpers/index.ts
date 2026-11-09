@@ -242,6 +242,7 @@ interface MoverStock {
   stockName: string;
   symbol: string;
   currentPrice: number | string;
+  todaychange: number | string;
   priceBeforeOneWeek: number | string;
   Change?: number;
   cleanName: string;
@@ -282,6 +283,37 @@ export const getToppersAndLossers = (data: MoverStock[]) => {
     gainers: topGainers,
     losers: topLosers,
   };
+};
+
+export const getToppersOfTheDay = (data: MoverStock[]) => {
+  const processedData = data.map((stock) => {
+    if (!isRealNumber(stock.currentPrice)) stock.currentPrice = 0;
+    if (!isRealNumber(stock.todaychange)) stock.todaychange = 0;
+    const rawChange: any =
+      stock.todaychange !== undefined ? stock.todaychange : 0;
+    const formattedPercent = parseFloat((rawChange * 100).toFixed(2));
+    return {
+      ...stock,
+      cleanName: stock.stockName
+        .replace(
+          /\s+(Ltd|Limited|India|Company|Corporation|Holdings)\b.*/gi,
+          "",
+        )
+        .trim(),
+      cleanSymbol: stock.symbol.replace("NSE:", ""),
+      currentPrice:
+        typeof stock.currentPrice === "number"
+          ? stock.currentPrice
+          : parseFloat(stock.currentPrice || "0"),
+      change: formattedPercent,
+    };
+  });
+
+  const topGainers = [...processedData]
+    .sort((a, b) => b.change - a.change)
+    .slice(0, 10);
+
+  return topGainers;
 };
 
 export const sanitizeSocialPostDescription = (
