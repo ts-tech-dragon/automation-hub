@@ -42,5 +42,6 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           DISCORD_ERROR_LOGS_URL: ${{secrets.DISCORD_ERROR_LOGS_URL }}
           MONGODB_URI: ${{secrets.MONGODB_URI }}
+          STOCK_AGENT_GOOGLE_SHEET: ${{secrets.STOCK_AGENT_GOOGLE_SHEET}}
 
         run: npx tsx src/tasks/nse-earnings/up-trend-finder/engine.ts
